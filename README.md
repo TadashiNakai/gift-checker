@@ -11,16 +11,38 @@
 
 ### Overview
 
-GIFT Checker is a single-file HTML tool that lets you syntax-check, preview, practice (simulate), and export question files written in Moodle's GIFT format — entirely in the browser. No data is ever sent to an external server. The UI is available in both Japanese and English.
+#### Preflight your GIFT questions before importing them into Moodle
 
-**Before** importing GIFT into Moodle, you can do the following in your browser:
+GIFT Checker is a single-file HTML tool for checking question files written in Moodle's GIFT format **before importing them into Moodle**.
 
-- Detect syntax errors (a pre-import check)
-- **Practice-simulate** all 9 question types (actually answer them, check answers, and review feedback)
-- Export a question sheet + answer key as **a single HTML file** (images, audio, and video can be embedded)
-- Save a results summary as HTML
-- Preview and edit GIFT containing rich text, images, audio, and video
-- Optionally reflect HTML tags in the question display and HTML output (raw HTML mode; dangerous tags and attributes are stripped)
+Just paste your GIFT text into the browser to find possible syntax issues, answer the questions as if taking a real quiz, and check how feedback and explanations will appear. You can also export a question sheet + answer key as a single HTML file.
+
+All processing is completed inside your browser, and your question data is never sent to an external server. The interface can be switched between Japanese and English.
+
+#### When to use it
+
+- You want to check notation mistakes or missing escapes before importing GIFT into Moodle
+- You want to catch import problems caused by control characters such as `=`, `~`, `{}`, and `#`
+- You want to answer the questions yourself and review the feedback before showing them to students
+- You want to inspect Moodle-exported GIFT containing `[moodle]`, `[html]`, `\n`, and similar markers in the browser
+- You want to check whether questions containing images, audio, or video are displayed as intended
+- You want not only to import questions into Moodle, but also to create a printable/distributable question-and-answer HTML file
+
+#### Main things you can do
+
+- Check GIFT syntax and jump to suspicious lines
+- Preview and practice-simulate all 9 GIFT question types
+- Check correct, incorrect, and partial-credit judgments, feedback, and overall explanations
+- Save a question sheet + answer key as a single HTML file
+- Save a practice-results summary as HTML
+- Display and export GIFT containing images, audio, and video
+- Handle Moodle-exported markers and escape forms such as `[moodle]`, `[html]`, `\n`, and escaped characters
+- Run entirely in the browser as a single file, with no external communication
+
+#### Note
+
+GIFT Checker is not intended to be a perfect reimplementation of Moodle's own import process.  
+It is a helper tool for **pre-import checking, test-running, and formatting teaching materials** before actually importing them into Moodle. Please confirm the final behavior in your own Moodle environment.
 
 ### Main features
 
