@@ -47,7 +47,7 @@
   header {
     background: var(--accent);
     color: #fff;
-    padding: 14px 24px;
+    padding: 7px 24px;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -67,21 +67,18 @@
     margin-left: 6px;
     vertical-align: middle;
   }
-  header .sub {
-    font-size: 0.78rem;
-    opacity: 0.75;
-    margin-top: 1px;
-  }
+  header .sub { display: none; }
 
   /* ─── Footer ─── */
   .site-footer {
     background: var(--accent);
     color: rgba(255,255,255,0.75);
     font-size: 0.78rem;
-    line-height: 1.9;
+    line-height: 1.35;
     text-align: center;
-    padding: 18px 24px;
+    padding: 8px 24px;
   }
+  .site-footer p { margin: 0; }
   .site-footer a {
     color: #fff;
     text-decoration: none;
@@ -90,7 +87,7 @@
   .site-footer a:hover { opacity: 0.8; text-decoration: underline; }
   .site-footer .sep { opacity: 0.4; margin: 0 4px; }
 
-  main { flex: 1; padding: 32px 24px; max-width: 820px; margin: 0 auto; width: 100%; }
+  main { flex: 1; padding: 24px; max-width: min(1400px, calc(100vw - 32px)); margin: 0 auto; width: 100%; }
 
   /* ─── Screen 1: Input ─── */
   .input-section label {
@@ -102,27 +99,73 @@
     letter-spacing: 0.08em;
     margin-bottom: 8px;
   }
-  .gift-textarea {
-    width: 100%;
-    height: 340px;
+  /* ─── リッチテキスト入力欄（rifff 由来） ─── */
+  .gift-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 8px;
+    background: var(--surface2);
     border: 1.5px solid var(--border);
-    border-radius: var(--radius);
+    border-bottom: none;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+  .gift-toolbar button {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: all 0.15s;
+  }
+  .gift-toolbar button:hover { color: var(--accent); border-color: var(--accent); background: #f0f5fb; }
+  .gift-toolbar button:active { transform: scale(0.94); }
+  .gift-toolbar .tb-hint {
+    margin-left: auto;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    opacity: 0.8;
+  }
+  .gift-editor {
+    width: 100%;
+    height: clamp(340px, 58vh, 760px);
+    min-height: 340px;
+    resize: vertical;
+    border: 1.5px solid var(--border);
+    border-radius: 0 0 var(--radius) var(--radius);
     background: var(--surface);
     font-family: var(--font-mono);
     font-size: 0.82rem;
     color: var(--text);
     padding: 14px;
-    resize: vertical;
     outline: none;
-    transition: border-color 0.15s;
+    overflow-y: auto;
     line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+    transition: border-color 0.15s, box-shadow 0.15s;
   }
-  .gift-textarea:focus { border-color: var(--accent); }
-  .gift-textarea.drag-over {
+  .gift-editor:focus { border-color: var(--accent); }
+  .gift-editor.drag-over {
     border-color: var(--accent);
     background: #eaf1f9;
     box-shadow: 0 0 0 3px rgba(45,90,142,0.15);
   }
+  .gift-editor.flash {
+    box-shadow: 0 0 0 3px rgba(45,90,142,0.30);
+    border-color: var(--accent);
+  }
+  .gift-editor sub, .gift-editor sup { line-height: 0; }
+  .gift-editor img { vertical-align: middle; }
+  .gift-editor audio, .gift-editor video { max-width:100%; vertical-align:middle; }
+  .question-text audio, .question-text video, .choice-text audio, .choice-text video, .overall-explanation audio, .overall-explanation video { max-width:100%; vertical-align:middle; margin:4px 0; }
   .drop-hint {
     display: none;
     position: absolute;
@@ -138,8 +181,21 @@
     pointer-events: none;
     z-index: 10;
   }
-  .gift-textarea.drag-over + .drop-hint { display: flex; }
+  .gift-editor.drag-over ~ .drop-hint { display: flex; }
   .textarea-wrap { position: relative; }
+  .editor-ph {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    color: var(--text-muted);
+    opacity: 0.5;
+    pointer-events: none;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+  .editor-ph small { display: block; margin-top: 4px; font-size: 0.72rem; }
+
 
   .parse-hint {
     margin-top: 8px;
@@ -312,6 +368,27 @@
     background: var(--accent);
     border-color: var(--accent);
     color: #fff;
+  }
+  .q-nav-btn.nav-correct:not(.current) { box-shadow: inset 0 -2.5px 0 var(--correct); }
+  .q-nav-btn.nav-wrong:not(.current)   { box-shadow: inset 0 -2.5px 0 var(--wrong); }
+  .q-nav-btn.nav-neutral:not(.current) { box-shadow: inset 0 -2.5px 0 var(--text-muted); }
+  /* ジャンプ・ステップ系ボタン（|< < > >|） */
+  .q-nav-btn.nav-jump {
+    min-width: 2.4em;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    letter-spacing: -0.04em;
+  }
+  .q-nav-btn.nav-jump:disabled {
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+  }
+  /* ジャンプ群と番号群の間の視覚的な隙間 */
+  .q-nav-sep {
+    display: inline-block;
+    width: 10px;
+    flex-shrink: 0;
   }
 
   .question-card {
@@ -684,6 +761,17 @@
   .score-mark.partial { color:#caa53a; }
   .score-mark.neutral { color:var(--text-muted); }
 
+
+  /* 言語切り替えトグル */
+  header { position: relative; }
+  .lang-toggle-btn {
+    position: absolute; top: 0; right: 0;
+    background: var(--surface2); color: var(--text);
+    border: 1.5px solid var(--border); border-radius: var(--radius);
+    padding: 6px 14px; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: background 0.15s, border-color 0.15s;
+  }
+  .lang-toggle-btn:hover { background: var(--surface); border-color: var(--accent); }
 </style>
 
 </head>
@@ -692,25 +780,39 @@
 <!-- ═══════════════ SCREEN 1: INPUT ═══════════════ -->
 <div id="screen-input" class="screen active">
   <header>
+    <button class="lang-toggle-btn" onclick="toggleLang()" data-i18n="lang.toggle">English</button>
     <div>
-      <div class="logo">GIFT Checker <span class="logo-ver">ver 0.05</span></div>
-      <div class="sub">GIFT 形式テキストの文法チェック・動作確認ツール</div>
+      <div class="logo">GIFT Checker <span class="logo-ver"></span></div>
+      <div class="sub" data-i18n="app.subtitle">GIFT 形式テキストの文法チェック・動作確認ツール</div>
     </div>
   </header>
   <main>
     <div class="input-section">
-      <label for="gift-input">GIFT 形式テキスト</label>
-      <div class="textarea-wrap">
-        <textarea id="gift-input" class="gift-textarea" placeholder="ここに GIFT 形式のテキストを貼り付けてください…"></textarea>
-        <div class="drop-hint">📄 ここにドロップして読み込む</div>
+      <label for="gift-input" id="input-label" data-i18n="input.label">GIFT 形式テキスト</label>
+      <div class="gift-toolbar">
+        <button type="button" data-cmd="bold" data-i18n-title="tb.bold" title="太字 Ctrl+B"><b>B</b></button>
+        <button type="button" data-cmd="italic" data-i18n-title="tb.italic" title="斜体 Ctrl+I"><i>I</i></button>
+        <button type="button" data-cmd="underline" data-i18n-title="tb.underline" title="下線 Ctrl+U"><u>U</u></button>
+        <button type="button" data-cmd="superscript" data-i18n-title="tb.sup" title="上付き"><sup>x²</sup></button>
+        <button type="button" data-cmd="subscript" data-i18n-title="tb.sub" title="下付き"><sub>x₂</sub></button>
+        <span class="tb-hint" data-i18n="tb.hint">Word などからの貼り付けで書式を保持／選択して B I U で手動適用</span>
       </div>
-      <div class="parse-hint">単一/複数選択・正誤・記述（短答）・マッチング・穴埋め・数値・記述式（Essay）・説明（Description）の各問題タイプに対応しています。テキストファイルをテキストエリアにドラッグ＆ドロップして読み込むこともできます。</div>
+      <div class="textarea-wrap">
+        <div id="gift-input" class="gift-editor" contenteditable="true" spellcheck="false"></div>
+        <div id="editor-ph" class="editor-ph"><span data-i18n="editor.ph">ここに GIFT 形式のテキストを貼り付けてください…</span>
+          <small data-i18n="editor.ph.small">太字・斜体・下線・上付き・下付きの書式は GIFT（[html] 形式）に反映されます</small>
+        </div>
+        <div class="drop-hint" data-i18n="drop.hint">📄 ここにドロップして読み込む</div>
+      </div>
+      <div class="parse-hint" data-i18n-html="parse.hint">単一/複数選択・正誤・記述（短答）・マッチング・穴埋め・数値・記述式（Essay）・説明（Description）の各問題タイプに対応しています。</div>
       <div id="parse-error" class="parse-error"></div>
       <div id="parse-warning" class="parse-warning"></div>
       <div class="action-row">
-        <button class="btn btn-primary btn-lg" onclick="loadList()">📋 問題一覧を確認</button>
-        <button class="btn btn-secondary btn-sm" onclick="loadDefault()">サンプルを読み込む</button>
+        <button class="btn btn-primary btn-lg" onclick="loadList()" data-i18n="btn.loadList">📋 問題一覧を確認</button>
+        <button class="btn btn-secondary btn-sm" onclick="loadDefault()" data-i18n="btn.loadDefault">サンプルを読み込む</button>
+        <button class="btn btn-secondary btn-sm" onclick="downloadGiftSource()" data-i18n="btn.download">⬇ GIFT 形式をダウンロード</button>
       </div>
+
     </div>
   </main>
 </div>
@@ -718,8 +820,9 @@
 <!-- ═══════════════ SCREEN 2: LIST ═══════════════ -->
 <div id="screen-list" class="screen">
   <header>
+    <button class="lang-toggle-btn" onclick="toggleLang()" data-i18n="lang.toggle">English</button>
     <div>
-      <div class="logo">GIFT Checker <span class="logo-ver">ver 0.05</span></div>
+      <div class="logo">GIFT Checker <span class="logo-ver"></span></div>
       <div id="list-header-sub" class="sub"></div>
     </div>
   </header>
@@ -728,23 +831,28 @@
     <div style="margin-top: 24px; border-top: 1px solid var(--border); padding-top: 20px;">
       <div class="toggle-row">
         <label class="toggle-switch"><input type="checkbox" id="shuffle-q-toggle"><span class="toggle-track"></span></label>
-        <label class="toggle-label" for="shuffle-q-toggle">問題順をシャッフルする</label>
+        <label class="toggle-label" for="shuffle-q-toggle" data-i18n="toggle.shuffleQ">問題順をシャッフルする</label>
       </div>
       <div class="toggle-row">
         <label class="toggle-switch"><input type="checkbox" id="shuffle-toggle"><span class="toggle-track"></span></label>
-        <label class="toggle-label" for="shuffle-toggle">選択肢をシャッフルする</label>
+        <label class="toggle-label" for="shuffle-toggle" data-i18n="toggle.shuffleC">選択肢をシャッフルする</label>
       </div>
       <div class="toggle-row">
         <label class="toggle-switch"><input type="checkbox" id="hint-toggle"><span class="toggle-track"></span></label>
-        <label class="toggle-label" for="hint-toggle">選択肢のヒントをマウスオーバーで表示する</label>
+        <label class="toggle-label" for="hint-toggle" data-i18n="toggle.hint">選択肢のヒントをマウスオーバーで表示する</label>
       </div>
       <div class="toggle-row">
         <label class="toggle-switch"><input type="checkbox" id="show-question-toggle"><span class="toggle-track"></span></label>
-        <label class="toggle-label" for="show-question-toggle">答え合わせ画面に問題文・選択肢も表示する</label>
+        <label class="toggle-label" for="show-question-toggle" data-i18n="toggle.showQ">答え合わせ画面に問題文・選択肢も表示する</label>
+      </div>
+      <div class="toggle-row">
+        <label class="toggle-switch"><input type="checkbox" id="rawhtml-toggle"><span class="toggle-track"></span></label>
+        <label class="toggle-label" for="rawhtml-toggle" data-i18n="toggle.rawHtml">HTMLタグをそのまま反映する（&lt;font&gt; などの色指定も有効化）</label>
       </div>
       <div class="action-row">
-        <button class="btn btn-primary btn-lg" onclick="startQuiz()">▶ 最初から問題を開始</button>
-        <button class="btn btn-secondary" onclick="goToInput()">← GIFT 入力画面に戻る</button>
+        <button class="btn btn-primary btn-lg" onclick="startQuiz()" data-i18n="btn.startQuiz">▶ 最初から問題を開始</button>
+        <button class="btn btn-secondary btn-lg" onclick="exportQuizHtml()" data-i18n="btn.exportHtml">⬇ 問題と解答をHTMLで保存</button>
+        <button class="btn btn-secondary" onclick="goToInput()" data-i18n="btn.backToInput">← GIFT 入力画面に戻る</button>
       </div>
     </div>
   </main>
@@ -753,8 +861,9 @@
 <!-- ═══════════════ SCREEN 3: QUESTION ═══════════════ -->
 <div id="screen-question" class="screen">
   <header>
+    <button class="lang-toggle-btn" onclick="toggleLang()" data-i18n="lang.toggle">English</button>
     <div>
-      <div class="logo">GIFT Checker <span class="logo-ver">ver 0.05</span></div>
+      <div class="logo">GIFT Checker <span class="logo-ver"></span></div>
       <div id="q-header-sub" class="sub"></div>
     </div>
   </header>
@@ -767,8 +876,9 @@
       <div id="q-text" class="question-text"></div>
       <div id="q-choices" class="choices"></div>
       <div class="question-actions">
-        <button id="btn-answer" class="btn btn-primary" onclick="submitAnswer()" disabled>答え合わせ</button>
-        <button class="btn btn-secondary btn-sm" onclick="goToList()">← 問題一覧に戻る</button>
+        <button id="btn-prev-from-question" class="btn btn-secondary" onclick="backToResultFromQuestion()" style="display:none" data-i18n="btn.prev">← 前の問題</button>
+        <button id="btn-answer" class="btn btn-primary" onclick="submitAnswer()" data-i18n="btn.answer" disabled>答え合わせ</button>
+        <button class="btn btn-secondary btn-sm" onclick="goToList()" data-i18n="btn.backToList">← 問題一覧に戻る</button>
       </div>
     </div>
   </main>
@@ -777,8 +887,9 @@
 <!-- ═══════════════ SCREEN 4: RESULT ═══════════════ -->
 <div id="screen-result" class="screen">
   <header>
+    <button class="lang-toggle-btn" onclick="toggleLang()" data-i18n="lang.toggle">English</button>
     <div>
-      <div class="logo">GIFT Checker <span class="logo-ver">ver 0.05</span></div>
+      <div class="logo">GIFT Checker <span class="logo-ver"></span></div>
       <div id="r-header-sub" class="sub"></div>
     </div>
   </header>
@@ -792,13 +903,14 @@
         <div id="result-body-content"></div>
         <div id="overall-feedback-wrap">
           <div class="divider"></div>
-          <div class="feedback-label overall-fb">問題全体の解説</div>
+          <div class="feedback-label overall-fb" data-i18n="fb.overall">問題全体の解説</div>
           <div id="overall-feedback" class="overall-explanation"></div>
         </div>
         <div class="result-nav" style="margin-top:20px; padding-top:16px; border-top:1px solid var(--border);">
-          <button id="btn-next" class="btn btn-primary" onclick="nextQuestion()">次の問題 →</button>
-          <button id="btn-to-score" class="btn btn-primary" onclick="showScoreScreen()" style="display:none">📊 結果まとめを見る</button>
-          <button class="btn btn-secondary btn-sm" onclick="goToList()">← 問題一覧に戻る</button>
+          <button id="btn-prev-from-result" class="btn btn-secondary" onclick="backToQuestionFromResult()" style="display:none" data-i18n="btn.backToQuestion">← 問題文に戻る</button>
+          <button id="btn-next" class="btn btn-primary" onclick="nextQuestion()" data-i18n="btn.next">次の問題 →</button>
+          <button id="btn-to-score" class="btn btn-primary" onclick="showScoreScreen()" style="display:none" data-i18n="btn.toScore">📊 結果まとめを見る</button>
+          <button class="btn btn-secondary btn-sm" onclick="goToList()" data-i18n="btn.backToList">← 問題一覧に戻る</button>
         </div>
       </div>
     </div>
@@ -808,8 +920,9 @@
 <!-- ═══════════════ SCREEN 5: SCORE ═══════════════ -->
 <div id="screen-score" class="screen">
   <header>
+    <button class="lang-toggle-btn" onclick="toggleLang()" data-i18n="lang.toggle">English</button>
     <div>
-      <div class="logo">GIFT Checker <span class="logo-ver">ver 0.05</span></div>
+      <div class="logo">GIFT Checker <span class="logo-ver"></span></div>
       <div id="score-header-sub" class="sub"></div>
     </div>
   </header>
@@ -820,8 +933,9 @@
     </div>
     <div id="score-list-wrap" style="margin-top:24px"></div>
     <div class="action-row" style="margin-top:20px">
-      <button class="btn btn-primary" onclick="restartQuiz()">もう一度最初から</button>
-      <button class="btn btn-secondary" onclick="goToList()">← 問題一覧に戻る</button>
+      <button class="btn btn-primary" onclick="restartQuiz()" data-i18n="btn.restart">もう一度最初から</button>
+      <button class="btn btn-secondary" onclick="exportResultHtml()" data-i18n="btn.exportResult">⬇ 結果をHTMLで保存</button>
+      <button class="btn btn-secondary" onclick="goToList()" data-i18n="btn.backToList">← 問題一覧に戻る</button>
     </div>
   </main>
 </div>
@@ -829,8 +943,9 @@
 <!-- ═══════════════ SCREEN 6: REVIEW DETAIL ═══════════════ -->
 <div id="screen-review" class="screen">
   <header>
+    <button class="lang-toggle-btn" onclick="toggleLang()" data-i18n="lang.toggle">English</button>
     <div>
-      <div class="logo">GIFT Checker <span class="logo-ver">ver 0.05</span></div>
+      <div class="logo">GIFT Checker <span class="logo-ver"></span></div>
       <div id="review-header-sub" class="sub"></div>
     </div>
   </header>
@@ -844,11 +959,11 @@
         <div id="review-body-content"></div>
         <div id="review-overall-wrap">
           <div class="divider"></div>
-          <div class="feedback-label overall-fb">問題全体の解説</div>
+          <div class="feedback-label overall-fb" data-i18n="fb.overall">問題全体の解説</div>
           <div id="review-overall" class="overall-explanation"></div>
         </div>
         <div style="margin-top:20px; padding-top:16px; border-top:1px solid var(--border);">
-          <button class="btn btn-secondary" onclick="showScreen('screen-score')">← 結果まとめに戻る</button>
+          <button class="btn btn-secondary" onclick="showScreen('screen-score')" data-i18n="btn.backToScore">← 結果まとめに戻る</button>
         </div>
       </div>
     </div>
@@ -860,142 +975,508 @@
 
 <script>
 
-const DEFAULT_GIFT = `$CATEGORY:歴史サンプル-全問題タイプ
+// ═══════════════════════════════════════════════
+//  バージョン（ここ1箇所で管理。全ヘッダーに反映される）
+// ═══════════════════════════════════════════════
+const APP_VERSION = '0.29';
+
+// ═══════════════════════════════════════════════
+//  i18n（日本語／英語の言語切り替え）
+// ═══════════════════════════════════════════════
+const I18N = {
+  ja: {
+    'app.subtitle': 'GIFT 形式テキストの文法チェック・動作確認ツール',
+    'input.label': 'GIFT 形式テキスト',
+    'input.label.loaded': 'GIFT 形式テキスト（読み込み済み: {name}）',
+    'tb.bold': '太字 Ctrl+B', 'tb.italic': '斜体 Ctrl+I', 'tb.underline': '下線 Ctrl+U',
+    'tb.sup': '上付き', 'tb.sub': '下付き',
+    'tb.hint': 'Word などからの貼り付けで書式を保持／選択して B I U で手動適用',
+    'editor.ph': 'ここに GIFT 形式のテキストを貼り付けてください…',
+    'editor.ph.small': '太字・斜体・下線・上付き・下付きの書式は GIFT（[html] 形式）に反映されます',
+    'drop.hint': '📄 ここにドロップして読み込む',
+    'parse.hint': '単一/複数選択・正誤・記述（短答）・マッチング・穴埋め・数値・記述式（Essay）・説明（Description）の各問題タイプに対応しています。テキストファイルを入力欄にドラッグ＆ドロップして読み込むこともできます。リッチテキスト（太字・斜体・下線・上付き・下付き）が含まれる場合は GIFT に <code>[html]</code> 形式の書式として出力され、プレビューにも反映されます。',
+    'btn.loadList': '📋 問題一覧を確認',
+    'btn.loadDefault': 'サンプルを読み込む',
+    'btn.download': '⬇ GIFT 形式をダウンロード',
+    'btn.startQuiz': '▶ 最初から問題を開始',
+    'btn.exportHtml': '⬇ 問題と解答をHTMLで保存',
+    'btn.exportResult': '⬇ 結果をHTMLで保存',
+    'export.docTitle': '問題と解答',
+    'export.questionsHeading': '問題',
+    'export.answersHeading': '解答',
+    'export.questionN': '問題 {n}',
+    'export.answerN': '解答 {n}',
+    'export.correct': '正解',
+    'export.acceptedAnswers': '正解として受理される解答',
+    'export.acceptedRange': '正解として受理される範囲',
+    'export.matchingPairs': '正しい組み合わせ',
+    'export.sampleAnswer': '解答例',
+    'export.explanation': '解説',
+    'export.choiceFeedback': '選択肢ごとの解説',
+    'export.tf.true': '○（正しい）',
+    'export.tf.false': '×（誤り）',
+    'export.noAnswer': '（この項目は説明文です。解答はありません）',
+    'export.optSep': '　',
+    'export.generatedBy': 'GIFT Checker で整形',
+    'resultExport.docTitle': '結果まとめ',
+    'resultExport.wrongHeading': '不正解だった問題',
+    'resultExport.ungradedHeading': '自動採点されなかった問題（記述式・説明）',
+    'resultExport.noWrong': '不正解の問題はありません。',
+    'resultExport.noUngraded': '自動採点されなかった問題はありません。',
+    'btn.backToInput': '← GIFT 入力画面に戻る',
+    'btn.answer': '答え合わせ',
+    'btn.backToList': '← 問題一覧に戻る',
+    'btn.next': '次の問題 →',
+    'btn.prev': '← 前の問題',
+    'btn.prevResult':   '← 前の解説に戻る',
+    'btn.prevQuestion': '← 前の問題に戻る',
+    'nav.first': '最初の問題へ',
+    'nav.prev':  '前の問題へ',
+    'nav.next':  '次の問題へ',
+    'nav.last':  '最後の問題へ',
+    'btn.backToQuestion': '← 問題文に戻る',
+    'btn.toScore': '📊 結果まとめを見る',
+    'btn.restart': 'もう一度最初から',
+    'btn.backToScore': '← 結果まとめに戻る',
+    'btn.showEssay': '解答例・解説を見る',
+    'btn.nextDesc': '次へ進む',
+    'toggle.shuffleQ': '問題順をシャッフルする',
+    'toggle.shuffleC': '選択肢をシャッフルする',
+    'toggle.hint': '選択肢のヒントをマウスオーバーで表示する',
+    'toggle.showQ': '答え合わせ画面に問題文・選択肢も表示する',
+    'toggle.rawHtml': 'HTMLタグをそのまま反映する（<font> などの色指定も有効化）',
+    'fb.overall': '問題全体の解説',
+    'list.subtitle': '問題一覧　{n} 問{cat}',
+    'list.th.no': 'No.', 'list.th.type': '種類', 'list.th.title': '問題タイトル',
+    'list.th.preview': '問題文（冒頭）', 'list.th.expl': '全体解説', 'list.th.result': '結果',
+    'q.subtitle': '問題 {num} / {total}{cat}',
+    'q.subtitle.review': '問題 {num} / {total}{cat}　（確認モード）',
+    'score.subtitle': '結果まとめ{cat}',
+    'review.section.q': '問題',
+    'review.section.choices': '選択肢',
+    'sec.yourChoice': 'あなたの選択',
+    'sec.correct': '正解',
+    'sec.correctAll': '正解（すべて）',
+    'sec.yourAnswer': 'あなたの解答',
+    'sec.acceptedAnswers': '正解として受理される解答',
+    'sec.acceptedRange': '正解として受理される範囲',
+    'sec.grading': '採点結果',
+    'fb.choiceExpl': '選択肢の解説',
+    'fb.expl': '解説',
+    'verdict.correct': '正解！',
+    'verdict.wrong': '不正解',
+    'verdict.partial': '部分正解',
+    'verdict.unanswered': '未回答',
+    'verdict.essay': '解答例・解説',
+    'verdict.description': '説明',
+    'verdict.confirm': '確認',
+    'ph.notChosen': '（未選択）',
+    'ph.noAnswer': '（無回答）',
+    'ph.descNote': '（説明文）',
+    'ph.untitled': '(無題)',
+    'tf.true': '○（正しい）',
+    'tf.false': '×（誤り）',
+    'opt.select': '— 選択 —',
+    'hint.numerical': '半角数字で入力してください。',
+    'hint.short': '正解と完全に一致するか判定します（前後の空白は無視）。',
+    'hint.essay': '記述式問題です。自動採点はされません。「解答例・解説を見る」で確認できます。',
+    'essay.placeholder': '解答を入力してください（自由記述）。',
+    'input.short': '答えを入力',
+    'input.numerical': '数値を入力',
+    'result.essayNote': '記述式問題のため自動採点はされません。下の全体解説（解答例）を参考に自己採点してください。',
+    'result.descNote': 'この項目は説明文です。解答はありません。',
+    'result.unansweredNote': 'この問題は未回答です。',
+    'matching.correctPrefix': '正：',
+    'score.comment.perfect': '全問正解！ 素晴らしい！',
+    'score.comment.good': 'よくできました！',
+    'score.comment.almost': 'もう少しです。',
+    'score.comment.review': '復習しましょう。',
+    'score.sublabel': '正解率 {pct}%　{comment}',
+    'err.empty': 'テキストが入力されていません。',
+    'err.noQuestions': 'GIFT 形式の問題が見つかりませんでした。形式を確認してください。',
+    'err.binary': '「{name}」はバイナリファイルのようです。テキストファイル（.gift / .txt など）をドロップしてください。',
+    'err.readFail': 'ファイルの読み込みに失敗しました（UTF-8 のテキストファイルを使用してください）。',
+    'err.readFail2': 'ファイルを読み込めませんでした。',
+    'warn.heading': '⚠️ 文法の疑いがある箇所が {n} か所見つかりました：',
+    'warn.continue': '修正後に再度「📋 問題一覧を確認」を押してください。　それでも続ける場合：制御文字（= ~ # { } :）を本文中で使うには <code>\\=</code> のようにバックスラッシュでエスケープするか、全角文字（＝ 〜 ＃ など）を使ってください。',
+    'warn.ctrlChar': '{line} 行目：選択肢テキスト内に未エスケープの制御文字 "{char}" があります。本文中で使う場合は "\\{char}" とエスケープするか、全角文字（例：＝ 〜 ｛ ｝）を使ってください。',
+    'warn.fbEquals': '{line} 行目：フィードバック（# 以降）に未エスケープの "{char}" があります。GIFT では選択肢内の "=" や "~" は新しい選択肢の開始と解釈されるため、本文・解説中で使う場合は "\{char}" とエスケープするか全角文字（＝ 〜）を使ってください。',
+    'warn.dupChoice': '{line} 行目：同じ選択肢「{text}」が重複しています。同一の選択肢や別解が2つ以上あると冗長で、採点や表示が意図しない結果になることがあります。',
+    'warn.multiBrace': '{line} 行目：1つの問題に複数の {…} があります。標準GIFTでは1問の空欄は1つだけで、2つ目以降はMoodleで空欄にならず {…} のまま本文に表示されます。複数の空欄を埋め込むにはCloze（穴埋め）記法（例：{1:SA:=答え}）が必要です。',
+    'qtitle.default': '問題 {n}',
+    'qtype.mc': '単一選択', 'qtype.multi': '複数選択', 'qtype.truefalse': '正誤',
+    'qtype.short': '記述（短答）', 'qtype.matching': 'マッチング', 'qtype.numerical': '数値',
+    'qtype.essay': '記述式', 'qtype.description': '説明',
+    'img.placeholder': '[画像]',
+    'list.rowStart': 'クリックしてこの問題を開始',
+    'list.rowReview': 'クリックして問題と解説を確認',
+    'lang.toggle': 'English'
+  },
+  en: {
+    'app.subtitle': 'Syntax checker and interactive quiz simulator for the Moodle GIFT format',
+    'input.label': 'GIFT format text',
+    'input.label.loaded': 'GIFT format text (loaded: {name})',
+    'tb.bold': 'Bold Ctrl+B', 'tb.italic': 'Italic Ctrl+I', 'tb.underline': 'Underline Ctrl+U',
+    'tb.sup': 'Superscript', 'tb.sub': 'Subscript',
+    'tb.hint': 'Paste from Word etc. keeps formatting / select text and apply B I U manually',
+    'editor.ph': 'Paste your GIFT format text here…',
+    'editor.ph.small': 'Bold, italic, underline, superscript and subscript are reflected in the GIFT output ([html] format)',
+    'drop.hint': '📄 Drop a file here to load it',
+    'parse.hint': 'Supports all question types: multiple choice / multiple answers, true-false, short answer, matching, missing word, numerical, essay, and description. You can also drag and drop a text file onto the input area to load it. Rich text (bold, italic, underline, superscript, subscript) is exported to GIFT as <code>[html]</code> formatting and is reflected in the preview.',
+    'btn.loadList': '📋 Review Question List',
+    'btn.loadDefault': 'Load sample',
+    'btn.download': '⬇ Download GIFT format',
+    'btn.startQuiz': '▶ Start from the first question',
+    'btn.exportHtml': '⬇ Save questions & answers as HTML',
+    'btn.exportResult': '⬇ Save results as HTML',
+    'export.docTitle': 'Questions and Answers',
+    'export.questionsHeading': 'Questions',
+    'export.answersHeading': 'Answers',
+    'export.questionN': 'Question {n}',
+    'export.answerN': 'Answer {n}',
+    'export.correct': 'Correct answer',
+    'export.acceptedAnswers': 'Accepted answers',
+    'export.acceptedRange': 'Accepted range',
+    'export.matchingPairs': 'Correct matches',
+    'export.sampleAnswer': 'Sample answer',
+    'export.explanation': 'Explanation',
+    'export.choiceFeedback': 'Per-choice feedback',
+    'export.tf.true': 'True',
+    'export.tf.false': 'False',
+    'export.noAnswer': '(This item is a description. There is no answer.)',
+    'export.optSep': ' ',
+    'export.generatedBy': 'Formatted with GIFT Checker',
+    'resultExport.docTitle': 'Results Summary',
+    'resultExport.wrongHeading': 'Questions you got wrong',
+    'resultExport.ungradedHeading': 'Questions not auto-graded (essay / description)',
+    'resultExport.noWrong': 'No incorrect answers.',
+    'resultExport.noUngraded': 'No ungraded questions.',
+    'btn.backToInput': '← Back to GIFT input',
+    'btn.answer': 'Check answer',
+    'btn.backToList': '← Back to question list',
+    'btn.next': 'Next question →',
+    'btn.prev': '← Previous question',
+    'btn.prevResult':   '← Back to previous result',
+    'btn.prevQuestion': '← Back to previous question',
+    'nav.first': 'First question',
+    'nav.prev':  'Previous question',
+    'nav.next':  'Next question',
+    'nav.last':  'Last question',
+    'btn.backToQuestion': '← Back to question',
+    'btn.toScore': '📊 View results summary',
+    'btn.restart': 'Start over',
+    'btn.backToScore': '← Back to results summary',
+    'btn.showEssay': 'Show sample answer & explanation',
+    'btn.nextDesc': 'Continue',
+    'toggle.shuffleQ': 'Shuffle question order',
+    'toggle.shuffleC': 'Shuffle answer choices',
+    'toggle.hint': 'Show choice hints on mouse hover',
+    'toggle.showQ': 'Also show question and choices on the answer screen',
+    'toggle.rawHtml': 'Render HTML tags as-is (enable color tags such as <font>)',
+    'fb.overall': 'Overall explanation',
+    'list.subtitle': 'Question list — {n} question(s){cat}',
+    'list.th.no': 'No.', 'list.th.type': 'Type', 'list.th.title': 'Question title',
+    'list.th.preview': 'Question (beginning)', 'list.th.expl': 'Overall', 'list.th.result': 'Result',
+    'q.subtitle': 'Question {num} / {total}{cat}',
+    'q.subtitle.review': 'Question {num} / {total}{cat}  (review mode)',
+    'score.subtitle': 'Results summary{cat}',
+    'review.section.q': 'Question',
+    'review.section.choices': 'Choices',
+    'sec.yourChoice': 'Your choice',
+    'sec.correct': 'Correct answer',
+    'sec.correctAll': 'Correct answers (all)',
+    'sec.yourAnswer': 'Your answer',
+    'sec.acceptedAnswers': 'Accepted answers',
+    'sec.acceptedRange': 'Accepted range',
+    'sec.grading': 'Grading result',
+    'fb.choiceExpl': 'Choice explanation',
+    'fb.expl': 'Explanation',
+    'verdict.correct': 'Correct!',
+    'verdict.wrong': 'Incorrect',
+    'verdict.partial': 'Partially correct',
+    'verdict.unanswered': 'Not answered',
+    'verdict.essay': 'Sample answer & explanation',
+    'verdict.description': 'Description',
+    'verdict.confirm': 'Review',
+    'ph.notChosen': '(not selected)',
+    'ph.noAnswer': '(no answer)',
+    'ph.descNote': '(description)',
+    'ph.untitled': '(untitled)',
+    'tf.true': 'True',
+    'tf.false': 'False',
+    'opt.select': '— select —',
+    'hint.numerical': 'Enter a number.',
+    'hint.short': 'Checked for an exact match with the correct answer (leading and trailing spaces ignored).',
+    'hint.essay': 'This is an essay question. It is not graded automatically. Use "Show sample answer & explanation" to check.',
+    'essay.placeholder': 'Type your answer here (free response).',
+    'input.short': 'Type your answer',
+    'input.numerical': 'Enter a number',
+    'result.essayNote': 'Essay questions are not graded automatically. Use the overall explanation (sample answer) below to mark your own work.',
+    'result.descNote': 'This item is a description. There is no answer.',
+    'result.unansweredNote': 'This question was not answered.',
+    'matching.correctPrefix': 'Correct: ',
+    'score.comment.perfect': 'Perfect score! Excellent!',
+    'score.comment.good': 'Well done!',
+    'score.comment.almost': 'Almost there.',
+    'score.comment.review': "Let's review.",
+    'score.sublabel': 'Score {pct}%  {comment}',
+    'err.empty': 'No text has been entered.',
+    'err.noQuestions': 'No GIFT format questions were found. Please check the format.',
+    'err.binary': '"{name}" appears to be a binary file. Please drop a text file (.gift / .txt etc.).',
+    'err.readFail': 'Failed to read the file (please use a UTF-8 text file).',
+    'err.readFail2': 'Could not read the file.',
+    'warn.heading': '⚠️ Found {n} possible syntax issue(s):',
+    'warn.continue': 'After fixing, press "📋 Review Question List" again.  To continue anyway: to use control characters (= ~ # { } :) in body text, escape them with a backslash like <code>\\=</code>, or use full-width characters (＝ 〜 ＃ etc.).',
+    'warn.ctrlChar': 'Line {line}: an unescaped control character "{char}" appears in the choice text. To use it in body text, escape it as "\\{char}", or use a full-width character (e.g. ＝ 〜 ｛ ｝).',
+    'warn.fbEquals': 'Line {line}: the feedback (after #) contains an unescaped "{char}". In GIFT, "=" or "~" inside an answer block starts a new choice, so in body or explanation text escape it as "\{char}" or use a full-width character (＝ 〜).',
+    'warn.dupChoice': 'Line {line}: the choice "{text}" is duplicated. Having two or more identical choices or accepted answers is redundant and may lead to unintended grading or display.',
+    'warn.multiBrace': 'Line {line}: this question has more than one {…} block. In standard GIFT a question has only one blank; any after the first are not treated as blanks by Moodle and appear as {…} in the body text. To embed multiple blanks, use Cloze notation (e.g. {1:SA:=answer}).',
+    'qtitle.default': 'Question {n}',
+    'qtype.mc': 'Multiple choice', 'qtype.multi': 'Multiple answers', 'qtype.truefalse': 'True/False',
+    'qtype.short': 'Short answer', 'qtype.matching': 'Matching', 'qtype.numerical': 'Numerical',
+    'qtype.essay': 'Essay', 'qtype.description': 'Description',
+    'img.placeholder': '[image]',
+    'list.rowStart': 'Click to start this question',
+    'list.rowReview': 'Click to view the question and explanation',
+    'lang.toggle': '日本語'
+  }
+};
+
+let currentLang = (function(){
+  // 1. 過去に手動で選んだ言語が localStorage にあれば最優先
+  try {
+    const saved = localStorage.getItem('giftchecker_lang');
+    if (saved === 'ja' || saved === 'en') return saved;
+  } catch(e) {}
+  // 2. なければブラウザの言語設定で判定（日本語なら ja、それ以外は en）
+  try {
+    const langs = (navigator.languages && navigator.languages.length)
+      ? navigator.languages : [navigator.language || navigator.userLanguage || ''];
+    const isJa = langs.some(l => /^ja\b/i.test(l || ''));
+    return isJa ? 'ja' : 'en';
+  } catch(e) { return 'en'; }
+})();
+
+// 翻訳取得（{key} プレースホルダーを vars で置換）
+function t(key, vars) {
+  let s = (I18N[currentLang] && I18N[currentLang][key]);
+  if (s == null) s = (I18N.ja[key] != null ? I18N.ja[key] : key);
+  if (vars) for (const k in vars) s = s.split('{'+k+'}').join(vars[k]);
+  return s;
+}
+
+function setLang(lang) {
+  if (lang !== 'ja' && lang !== 'en') return;
+  // 切り替え前に、入力欄の内容が「切り替え前の言語のサンプルそのまま」かどうかを判定する。
+  // ユーザーが編集していない場合のみ、新しい言語のサンプルへ差し替える（編集内容は保護する）。
+  const wasUnedited = (typeof giftEditor !== 'undefined' && giftEditor)
+    ? (getGiftText().trim() === (DEFAULT_GIFT_ALL[currentLang] || '').trim())
+    : false;
+  currentLang = lang;
+  try { localStorage.setItem('giftchecker_lang', lang); } catch(e) {}
+  document.documentElement.lang = lang;
+  applyStaticI18n();
+  if (wasUnedited) setGiftText(getDefaultGift());
+  rerenderActiveScreen();
+}
+
+// 言語切替時、表示中の動的画面（t() で生成した innerHTML）を再描画する。
+// data-i18n 属性を持たない動的コンテンツは applyStaticI18n では更新されないため。
+function rerenderActiveScreen() {
+  const active = document.querySelector('.screen.active');
+  if (!active) return;
+  switch (active.id) {
+    case 'screen-list':
+      if (parsedQuestions && parsedQuestions.length) renderList(parsedQuestions);
+      break;
+    case 'screen-question':
+      if (questions && questions.length) renderQuestion();
+      break;
+    case 'screen-result':
+      if (questions && questions.length && results[currentIdx]) { regradeAll(); showResultScreen(currentIdx); }
+      break;
+    case 'screen-score':
+      if (questions && questions.length) { regradeAll(); showScoreScreen(); }
+      break;
+    case 'screen-review':
+      if (questions && questions.length) { regradeAll(); showReviewDetail(currentReviewIdx); }
+      break;
+    // screen-input は静的要素（data-i18n）＋サンプル差し替えで対応済み
+  }
+}
+
+// 採点結果（chosenText など）は採点時の言語で文字列が焼き込まれるため、
+// 言語切替時に、保存済みの応答 resp（言語非依存）から採点し直して現在の言語へ更新する。
+// gradeAnswer は決定的なので、正誤判定は変わらず表示文字列だけが現在の言語になる。
+function regradeAll() {
+  if (!results || !questions) return;
+  results.forEach((r, i) => {
+    if (r && questions[i]) r.result = gradeAnswer(questions[i], r.resp);
+  });
+}
+
+function toggleLang() { setLang(currentLang === 'ja' ? 'en' : 'ja'); }
+
+// 選択肢などを列挙する際の区切り（日本語は読点、英語はカンマ＋空白）
+function joinSep() { return currentLang === 'ja' ? '、' : ', '; }
+// 補足（重みや解説）を囲む括弧（日本語は全角、英語は半角・前に半角空白）
+function paren(s) { return currentLang === 'ja' ? ('（' + s + '）') : (' (' + s + ')'); }
+
+// data-i18n / data-i18n-* 属性を持つ静的要素を一括更新
+function applyStaticI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.getAttribute('data-i18n'));
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    el.innerHTML = t(el.getAttribute('data-i18n-html'));
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    el.title = t(el.getAttribute('data-i18n-title'));
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    el.setAttribute('placeholder', t(el.getAttribute('data-i18n-ph')));
+  });
+}
+
+// バージョン番号を全ヘッダーの .logo-ver に反映する
+function applyVersion() {
+  document.querySelectorAll('.logo-ver').forEach(el => {
+    el.textContent = 'ver ' + APP_VERSION;
+  });
+}
+
+
+const DEFAULT_GIFT_ALL = {
+  ja: `$CATEGORY:サンプル問題-全問題タイプ
 
 // ───────────────────────────────────────────
 // 1. 単一選択（5択）
 // ───────────────────────────────────────────
-::単一選択5択-大化の改新::
-645年に起きた大化の改新で、中大兄皇子とともに蘇我入鹿を討った中心人物は誰か。
+::単一選択5択-惑星::
+太陽系で太陽に最も近い惑星はどれか。
 {
-    =中臣鎌足 #正解です。中臣鎌足は後に藤原姓を賜り、藤原氏の祖となりました。
-    ~聖徳太子 #不正解です。聖徳太子（厩戸皇子）は593年に摂政となった人物で、大化の改新より前の時代の人物です。
-    ~坂上田村麻呂 #不正解です。坂上田村麻呂は征夷大将軍として東北地方の蝦夷と戦った平安時代初期の武将です。
-    ~藤原道長 #不正解です。藤原道長は平安時代中期の摂関政治の全盛期を築いた人物です。
-    ~菅原道真 #不正解です。菅原道真は平安時代の学者・政治家で、左遷された後に学問の神として祀られました。
-    ####【解説】大化の改新（645年）は、中大兄皇子と中臣鎌足が蘇我入鹿を暗殺（乙巳の変）したことに始まります。その後、公地公民制などの改革が進められました。
+    =水星 #正解です。水星は太陽に最も近い惑星で、公転周期は約88日です。
+    ~金星 #不正解です。金星は太陽から2番目に近い惑星です。
+    ~地球 #不正解です。地球は太陽から3番目に近い惑星です。
+    ~火星 #不正解です。火星は太陽から4番目に近い惑星です。
+    ~木星 #不正解です。木星は太陽系最大の惑星で、太陽から5番目に位置します。
+    ####【解説】太陽系の惑星は太陽に近い順に、水星・金星・地球・火星・木星・土星・天王星・海王星と並んでいます。
 }
 
 // ───────────────────────────────────────────
-// 2. 単一選択（12択）
+// 2. 単一選択（多肢）
 // ───────────────────────────────────────────
-::単一選択12択-世界史条約::
-1648年に締結され、主権国家体制の出発点とされる条約はどれか。
+::単一選択-かけ算::
+7 × 8 はいくつか。
 {
-    =ウェストファリア条約 #正解です。三十年戦争を終結させたこの条約により、国家主権の概念が確立されました。
-    ~ユトレヒト条約 #不正解です。ユトレヒト条約（1713年）はスペイン継承戦争を終結させた条約です。
-    ~ウィーン条約 #不正解です。ウィーン会議（1814〜15年）はナポレオン戦争後のヨーロッパ秩序を再編した会議です。
-    ~ベルサイユ条約 #不正解です。ベルサイユ条約（1919年）は第一次世界大戦を公式に終結させた条約です。
-    ~パリ条約 #不正解です。パリ条約は複数存在しますが、1648年のものは歴史的に特に著名ではありません。
-    ~ロンドン条約 #不正解です。ロンドン条約も複数あり、1648年の主権国家体制の成立とは無関係です。
-    ~ポーツマス条約 #不正解です。ポーツマス条約（1905年）は日露戦争を終結させた条約です。
-    ~下関条約 #不正解です。下関条約（1895年）は日清戦争を終結させた条約です。
-    ~南京条約 #不正解です。南京条約（1842年）はアヘン戦争を終結させた条約です。
-    ~アイグン条約 #不正解です。アイグン条約（1858年）は清とロシアの国境を定めた条約です。
-    ~天津条約 #不正解です。天津条約は日清間・清英仏間など複数存在しますが、1648年のものではありません。
-    ~サンフランシスコ平和条約 #不正解です。サンフランシスコ平和条約（1951年）は第二次世界大戦後の日本の独立を回復させた条約です。
-    ####【解説】ウェストファリア条約（1648年）は三十年戦争（1618〜1648年）を終結させた講和条約です。この条約によって宗教・内政への不干渉と領土主権が認められ、近代的な国際秩序の基礎となりました。
+    =56 #正解です。7 × 8 \\= 56 です。
+    ~48 #不正解です。これは 6 × 8 の答えです。
+    ~54 #不正解です。これは 6 × 9 の答えです。
+    ~63 #不正解です。これは 7 × 9 の答えです。
+    ~64 #不正解です。これは 8 × 8 の答えです。
+    ~49 #不正解です。これは 7 × 7 の答えです。
+    ####【解説】7 の段のかけ算です。7 × 8 \\= 56 を覚えておきましょう。
 }
 
 // ───────────────────────────────────────────
 // 3. 複数正解（チェックボックス・重み付け）
 // ───────────────────────────────────────────
-::複数正解-江戸幕府三大改革::
-江戸幕府の「三大改革」に含まれるものをすべて選びなさい。
+::複数正解-偶数::
+次の数のうち、偶数をすべて選びなさい。
 {
-    ~%33.33%享保の改革 #正解の一つです。8代将軍徳川吉宗が主導した改革（1716〜1745年頃）です。
-    ~%33.33%寛政の改革 #正解の一つです。老中松平定信が主導した改革（1787〜1793年）です。
-    ~%33.33%天保の改革 #正解の一つです。老中水野忠邦が主導した改革（1841〜1843年）です。
-    ~%-33.33%文化の改革 #不正解です。「文化の改革」という名称の幕府改革は存在しません。
-    ####【解説】江戸幕府三大改革は①享保の改革（吉宗）②寛政の改革（松平定信）③天保の改革（水野忠邦）の3つです。いずれも財政難の克服と綱紀粛正を目的としていました。
+    ~%33.33%4 #正解の一つです。4 は 2 で割り切れる偶数です。
+    ~%33.33%10 #正解の一つです。10 は 2 で割り切れる偶数です。
+    ~%33.33%16 #正解の一つです。16 は 2 で割り切れる偶数です。
+    ~%-33.33%7 #不正解です。7 は奇数です。
+    ####【解説】偶数は 2 で割り切れる整数です。4・10・16 は偶数、7 は奇数です。
 }
 
 // ───────────────────────────────────────────
 // 4. 正誤（TRUE）
 // ───────────────────────────────────────────
-::正誤-ペリー来航::
-マシュー・ペリーが率いるアメリカ艦隊が浦賀に来航したのは1853年のことである。{T#不正解です。ペリーの浦賀来航は確かに1853年です。確認してください。#正解です。1853年（嘉永6年）6月、ペリーは4隻の黒船を率いて浦賀に来航し、幕府に開国を求めました。}
+::正誤-水の沸点::
+水は標準的な気圧のもとで、セ氏100度で沸騰する。{T#不正解です。水の沸点は確かに100度です。確認してください。#正解です。標準気圧（1気圧）のもとで、水はセ氏100度で沸騰します。}
 
 // ───────────────────────────────────────────
 // 5. 正誤（FALSE）
 // ───────────────────────────────────────────
-::正誤-フランス革命::
-フランス革命のきっかけとなったバスティーユ牢獄の襲撃は1789年8月に起きた。{FALSE#正解です。バスティーユ牢獄の襲撃は1789年7月14日です。現在もこの日はフランスの革命記念日とされています。#不正解です。バスティーユ牢獄の襲撃は1789年7月14日であり、8月ではありません。}
+::正誤-太陽::
+太陽は惑星の一つである。{FALSE#正解です。太陽は惑星ではなく恒星です。みずから光を放っています。#不正解です。太陽は恒星であり、惑星ではありません。}
 
 // ───────────────────────────────────────────
 // 6. 短答（別解あり）
 // ───────────────────────────────────────────
-::短答-征夷大将軍::
-1192年、源頼朝が朝廷から任命された武家政権の長としての称号は何か。
+::短答-三角形::
+3つの辺の長さがすべて等しい三角形を何というか。
 {
-    =征夷大将軍 #正解です。
-    =将軍 #正解です（略称として許容）。
-    ####【解説】源頼朝は1192年に征夷大将軍に任命され、鎌倉幕府を開きました。以後、武家政権の長の称号として定着しました。
+    =正三角形 #正解です。
+    =せいさんかくけい #正解です（ひらがな表記も許容）。
+    ####【解説】3辺の長さがすべて等しい三角形を正三角形といいます。3つの角もすべて60度で等しくなります。
 }
 
 // ───────────────────────────────────────────
 // 7. 短答（重み付き別解）
 // ───────────────────────────────────────────
-::短答-重み付き-資本論著者::
-1867年に『資本論』第1巻を刊行し、科学的社会主義の理論的基礎を築いた人物の名前を答えなさい。
+::短答-重み付き-水の化学式::
+水を表す化学式を答えなさい。
 {
-    =カール・マルクス #正解です。
-    =%80%マルクス #ほぼ正解です。フルネームが望ましいです。
-    =%50%カールマルクス #部分点です。中点（・）を忘れずに。
+    =H2O #正解です。
+    =%100%H₂O #正解です。
+    =%50%水 #部分点です。物質の名前ではなく、化学式で答えてください。
 }
 
 // ───────────────────────────────────────────
 // 8. マッチング
 // ───────────────────────────────────────────
-::マッチング-戦争と講和条約::
-次の戦争とその講和条約を正しく組み合わせなさい。
+::マッチング-単位と量::
+次の量とその単位を正しく組み合わせなさい。
 {
-    =日清戦争 -> 下関条約
-    =日露戦争 -> ポーツマス条約
-    =第一次世界大戦 -> ベルサイユ条約
-    =太平洋戦争 -> サンフランシスコ平和条約
-    ####【解説】各戦争の講和条約はいずれも近代史の重要事項です。ポーツマス条約はアメリカのセオドア・ルーズベルト大統領の仲介で締結されました。
+    =長さ -> メートル
+    =重さ -> グラム
+    =時間 -> 秒
+    =温度 -> セ氏度
+    ####【解説】長さはメートル（m）、重さはグラム（g）、時間は秒（s）、温度はセ氏度（℃）で表します。
 }
 
 // ───────────────────────────────────────────
 // 9. 穴埋め（Missing Word・単一空欄）
 // ───────────────────────────────────────────
-::穴埋め-明治維新::
-1868年、天皇親政の復活を宣言した政変を{~大政奉還 =王政復古 ~廃藩置県}の大号令という。
+::穴埋め-光合成::
+植物が日光を使って養分をつくるはたらきを{~呼吸 =光合成 ~蒸散}という。
 
 // ───────────────────────────────────────────
 // 10. 数値（許容誤差なし）
 // ───────────────────────────────────────────
-::数値-第一次世界大戦開戦年::
-第一次世界大戦が始まった年を西暦で答えなさい。{#1914:0 ####サラエボ事件（1914年6月28日）を直接のきっかけとして、同年8月に第一次世界大戦が勃発しました。}
+::数値-一辺の正方形::
+一辺が 5 cm の正方形の面積は何平方センチメートルか。{#25 ####正方形の面積は「一辺 × 一辺」で求めます。5 × 5 \\= 25 平方センチメートルです。}
 
 // ───────────────────────────────────────────
 // 11. 数値（範囲指定）
 // ───────────────────────────────────────────
-::数値-範囲-江戸幕府存続期間::
-江戸幕府が続いた期間はおよそ何年か。250〜270の範囲で答えなさい。{#250..270 ####江戸幕府は1603年（徳川家康が征夷大将軍に任命）から1868年（大政奉還・王政復古）まで約265年続きました。}
+::数値-範囲-円周率::
+円周率（π）のおよその値を、3.1 から 3.2 の範囲で答えなさい。{#3.1..3.2 ####円周率はおよそ 3.14159… と続く数で、約 3.14 として計算によく使われます。}
 
 // ───────────────────────────────────────────
 // 12. 数値（複数回答・部分点）
 // ───────────────────────────────────────────
-::数値-複数回答-ベルリンの壁崩壊年::
-ベルリンの壁が崩壊した年を西暦で答えなさい。{#
-    =1989:0 #正解です。1989年11月9日にベルリンの壁は崩壊しました。
-    =%50%1990:0 #部分点です。東西ドイツが統一されたのは1990年ですが、壁の崩壊は1989年です。
-    ####【解説】ベルリンの壁は1989年11月9日に崩壊し、翌1990年10月3日に東西ドイツが統一されました。
+::数値-複数回答-水の凝固点::
+水が凍る温度（凝固点）はセ氏何度か。{#
+    =0:0 #正解です。水はセ氏0度で凍ります。
+    =%50%32:0 #部分点です。32 はカ氏（華氏）での値です。セ氏では0度です。
+    ####【解説】水はセ氏0度（カ氏32度）で凍ります。
 }
 
 // ───────────────────────────────────────────
 // 13. 記述式（Essay）
 // ───────────────────────────────────────────
-::記述式-明治維新の意義::
-明治維新が日本の近代化に果たした役割について、政治・経済・社会の観点から200字程度で説明しなさい。{####【解答例】政治面では廃藩置県と中央集権化、憲法制定と議会開設により近代国家の基盤が整った。経済面では殖産興業政策により官営工場や鉄道が整備され、資本主義経済が形成された。社会面では四民平等が宣言され、学制公布により教育が普及した。これらの改革により、日本は短期間で西洋列強に対抗できる近代国家へと変貌を遂げた。}
+::記述式-水の循環::
+地球上の水がどのように循環しているか、「蒸発」「雲」「雨」という言葉を使って100字程度で説明しなさい。{####【解答例】海や川の水は太陽の熱で温められて蒸発し、水蒸気となって空にのぼる。水蒸気は上空で冷やされて小さな水のつぶとなり、集まって雲になる。雲の中の水のつぶが大きくなると、雨となって地上に降りそそぎ、再び海や川へと戻る。}
 
 // ───────────────────────────────────────────
 // 14. 説明（Description）
 // ───────────────────────────────────────────
-::説明-近現代史セクション::
-ここからは近現代史（19世紀以降）に関する問題です。年号と出来事の対応に注意して取り組んでください。
+::説明-算数セクション::
+ここからは算数に関する問題です。式の意味を考えながら取り組んでください。
 
 // ───────────────────────────────────────────
 // 15. エスケープ文字を含む選択問題
@@ -1003,20 +1484,1110 @@ const DEFAULT_GIFT = `$CATEGORY:歴史サンプル-全問題タイプ
 ::エスケープ-等式の選択::
 次の式のうち正しいものはどれか（「\\=」は等号を表す）。
 {
-    =明治元年 \\= 1868年 #正解です。明治元年は西暦1868年に相当します。
-    ~明治元年 \\= 1867年 #不正解です。1867年は慶応3年にあたります。
-    ~明治元年 \\= 1869年 #不正解です。1869年は明治2年です。
-    ####【解説】日本の元号と西暦の対応は歴史学習の基本です。明治は1868年（明治元年）から1912年（明治45年）まで続きました。
+    =2 + 3 \\= 5 #正解です。2 + 3 は 5 に等しくなります。
+    ~2 + 3 \\= 6 #不正解です。2 + 3 は 5 です。
+    ~2 + 3 \\= 4 #不正解です。2 + 3 は 5 です。
+    ####【解説】たし算の基本です。2 + 3 \\= 5 が正しい式です。
+}`,
+  en: `$CATEGORY:Sample Questions - All Question Types
+
+// ───────────────────────────────────────────
+// 1. Multiple choice (5 options)
+// ───────────────────────────────────────────
+::MC 5 options - Planet::
+Which planet is closest to the Sun in our solar system?
+{
+    =Mercury #Correct. Mercury is the closest planet to the Sun, with an orbital period of about 88 days.
+    ~Venus #Incorrect. Venus is the second planet from the Sun.
+    ~Earth #Incorrect. Earth is the third planet from the Sun.
+    ~Mars #Incorrect. Mars is the fourth planet from the Sun.
+    ~Jupiter #Incorrect. Jupiter is the largest planet, fifth from the Sun.
+    ####[Explanation] In order from the Sun, the planets are: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, and Neptune.
 }
-`;
+
+// ───────────────────────────────────────────
+// 2. Multiple choice (many options)
+// ───────────────────────────────────────────
+::MC - Multiplication::
+What is 7 × 8?
+{
+    =56 #Correct. 7 × 8 \\= 56.
+    ~48 #Incorrect. That is 6 × 8.
+    ~54 #Incorrect. That is 6 × 9.
+    ~63 #Incorrect. That is 7 × 9.
+    ~64 #Incorrect. That is 8 × 8.
+    ~49 #Incorrect. That is 7 × 7.
+    ####[Explanation] This is from the 7 times table. Remember that 7 × 8 \\= 56.
+}
+
+// ───────────────────────────────────────────
+// 3. Multiple answers (checkboxes, weighted)
+// ───────────────────────────────────────────
+::Multiple answers - Even numbers::
+Select all of the even numbers below.
+{
+    ~%33.33%4 #Correct. 4 is divisible by 2, so it is even.
+    ~%33.33%10 #Correct. 10 is divisible by 2, so it is even.
+    ~%33.33%16 #Correct. 16 is divisible by 2, so it is even.
+    ~%-33.33%7 #Incorrect. 7 is an odd number.
+    ####[Explanation] An even number is an integer divisible by 2. 4, 10, and 16 are even; 7 is odd.
+}
+
+// ───────────────────────────────────────────
+// 4. True/False (TRUE)
+// ───────────────────────────────────────────
+::TF - Boiling point::
+At standard atmospheric pressure, water boils at 100 degrees Celsius.{T#Incorrect. The boiling point of water really is 100 degrees. Please check again.#Correct. At standard pressure (1 atmosphere), water boils at 100 degrees Celsius.}
+
+// ───────────────────────────────────────────
+// 5. True/False (FALSE)
+// ───────────────────────────────────────────
+::TF - The Sun::
+The Sun is one of the planets.{FALSE#Correct. The Sun is not a planet but a star. It produces its own light.#Incorrect. The Sun is a star, not a planet.}
+
+// ───────────────────────────────────────────
+// 6. Short answer (with alternatives)
+// ───────────────────────────────────────────
+::Short answer - Triangle::
+What do you call a triangle whose three sides are all equal in length?
+{
+    =equilateral triangle #Correct.
+    =equilateral #Correct (short form accepted).
+    ####[Explanation] A triangle with three equal sides is called an equilateral triangle. All three of its angles are also equal, at 60 degrees each.
+}
+
+// ───────────────────────────────────────────
+// 7. Short answer (weighted alternatives)
+// ───────────────────────────────────────────
+::Short answer weighted - Chemical formula of water::
+What is the chemical formula for water?
+{
+    =H2O #Correct.
+    =%100%H₂O #Correct.
+    =%50%water #Partial credit. Please give the chemical formula, not the name of the substance.
+}
+
+// ───────────────────────────────────────────
+// 8. Matching
+// ───────────────────────────────────────────
+::Matching - Quantities and units::
+Match each quantity with its correct unit.
+{
+    =Length -> metre
+    =Mass -> gram
+    =Time -> second
+    =Temperature -> degree Celsius
+    ####[Explanation] Length is measured in metres (m), mass in grams (g), time in seconds (s), and temperature in degrees Celsius (°C).
+}
+
+// ───────────────────────────────────────────
+// 9. Missing word (single blank)
+// ───────────────────────────────────────────
+::Missing word - Photosynthesis::
+The process by which plants use sunlight to make food is called {~respiration =photosynthesis ~transpiration}.
+
+// ───────────────────────────────────────────
+// 10. Numerical (no tolerance)
+// ───────────────────────────────────────────
+::Numerical - Square area::
+What is the area, in square centimetres, of a square with a side length of 5 cm?{#25 ####The area of a square is "side × side". 5 × 5 \\= 25 square centimetres.}
+
+// ───────────────────────────────────────────
+// 11. Numerical (range)
+// ───────────────────────────────────────────
+::Numerical range - Pi::
+Give an approximate value of pi (π), as a number between 3.1 and 3.2.{#3.1..3.2 ####Pi is approximately 3.14159..., and is often used as about 3.14 in calculations.}
+
+// ───────────────────────────────────────────
+// 12. Numerical (multiple answers, partial credit)
+// ───────────────────────────────────────────
+::Numerical multiple - Freezing point::
+At what temperature, in degrees Celsius, does water freeze?{#
+    =0:0 #Correct. Water freezes at 0 degrees Celsius.
+    =%50%32:0 #Partial credit. 32 is the value in Fahrenheit. In Celsius it is 0 degrees.
+    ####[Explanation] Water freezes at 0 degrees Celsius (32 degrees Fahrenheit).
+}
+
+// ───────────────────────────────────────────
+// 13. Essay
+// ───────────────────────────────────────────
+::Essay - The water cycle::
+In about 50 words, explain how water moves around the Earth, using the words "evaporate", "cloud", and "rain".{####[Sample answer] Water in oceans and rivers is warmed by the Sun and evaporates, rising into the sky as water vapour. High up, the vapour cools into tiny droplets that gather to form clouds. When the droplets grow large enough, they fall as rain, returning to the oceans and rivers.}
+
+// ───────────────────────────────────────────
+// 14. Description
+// ───────────────────────────────────────────
+::Description - Arithmetic section::
+The following question is about arithmetic. Think carefully about what each equation means.
+
+// ───────────────────────────────────────────
+// 15. Multiple choice with escaped characters
+// ───────────────────────────────────────────
+::Escape - Choosing an equation::
+Which of the following equations is correct? (Here "\\=" represents an equals sign.)
+{
+    =2 + 3 \\= 5 #Correct. 2 + 3 equals 5.
+    ~2 + 3 \\= 6 #Incorrect. 2 + 3 is 5.
+    ~2 + 3 \\= 4 #Incorrect. 2 + 3 is 5.
+    ####[Explanation] This is basic addition. 2 + 3 \\= 5 is the correct equation.
+}`
+};
+function getDefaultGift() { return DEFAULT_GIFT_ALL[currentLang] || DEFAULT_GIFT_ALL.ja; }
+
+// ═══════════════════════════════════════════════
+//  リッチテキストエンジン（rifff 由来・移植）
+//  contenteditable から GIFT（[html] 書式埋め込み）への
+//  シリアライズ／プレビュー用の書式レンダリングを担う。
+// ═══════════════════════════════════════════════
+const giftEditor = document.getElementById('gift-input');
+
+const BASE_FMT = { bold:false, italic:false, underline:false, sup:false, sub:false };
+const BLOCK_EL = new Set(['div','p','h1','h2','h3','h4','h5','h6','li','blockquote','pre',
+                          'ul','ol','table','tr','td','th','section','article','header','footer']);
+const RE_WS_ONLY = /^[\r\n\t \u00a0]*$/;
+
+// ── 画像ストア ──
+// エディタ内の <img> は data-img-id だけを持ち、実データはここで管理する。
+// GIFT テキスト中では \uE001id\uE002 のプレースホルダーとして流れ、
+// buildExportGift() のタイミングだけ実際の <img> タグに展開する。
+const IMG_OPEN  = '\uE008';   // Unicode 私用領域 U+E008（パーサー用 E001-E007 と衝突しない）
+const IMG_CLOSE = '\uE009';   // Unicode 私用領域 U+E009
+const IMG_PH_RE = /\uE008([^\uE009]*)\uE009/g;
+const AUD_OPEN  = '\uE00A';   // audio placeholder
+const AUD_CLOSE = '\uE00B';
+const AUD_PH_RE = /\uE00A([^\uE00B]*)\uE00B/g;
+const VID_OPEN  = '\uE00C';   // video placeholder
+const VID_CLOSE = '\uE00D';
+const VID_PH_RE = /\uE00C([^\uE00D]*)\uE00D/g;
+const imgStore  = new Map();
+let   imgSeq    = 0;
+const audioStore = new Map();
+let   audioSeq   = 0;
+const videoStore = new Map();
+let   videoSeq   = 0;
+function imgNewId() { return 'img_' + (++imgSeq).toString().padStart(4, '0'); }
+function audioNewId() { return 'aud_' + (++audioSeq).toString().padStart(4, '0'); }
+function videoNewId() { return 'vid_' + (++videoSeq).toString().padStart(4, '0'); }
+function imgStoreHas(id) { return imgStore.has(id); }
+function imgStoreGet(id) { return imgStore.get(id); }
+function audioStoreHas(id) { return audioStore.has(id); }
+function audioStoreGet(id) { return audioStore.get(id); }
+function videoStoreHas(id) { return videoStore.has(id); }
+function videoStoreGet(id) { return videoStore.get(id); }
+function imgPh(id)  { return IMG_OPEN + id + IMG_CLOSE; }
+function audioPh(id) { return AUD_OPEN + id + AUD_CLOSE; }
+function videoPh(id) { return VID_OPEN + id + VID_CLOSE; }
+
+function imgRegister(src, opts = {}) {
+  const id = imgNewId();
+  imgStore.set(id, { src, height: opts.height || '', width: opts.width || '', style: opts.style || '' });
+  const el = document.createElement('img');
+  el.dataset.imgId = id;
+  // 問題表示画面の imgExpand() と同じ width / height / style をエディタ内にも適用する。
+  // これにより、リッチテキストボックス内の画像サイズが問題表示画面と一致しやすくなる。
+  if (opts.style) el.setAttribute('style', opts.style);
+  if (opts.height) el.setAttribute('height', opts.height);
+  if (opts.width) el.setAttribute('width', opts.width);
+  const st = el.getAttribute('style') || '';
+  const extras = [];
+  if (!/vertical-align\s*:/i.test(st)) extras.push('vertical-align:middle');
+  extras.push('cursor:default');
+  el.setAttribute('style', (st ? st.replace(/;?\s*$/, ';') : '') + extras.join(';'));
+  el.src = src;
+  return el;
+}
+
+function audioRegister(src, opts = {}) {
+  const id = audioNewId();
+  audioStore.set(id, { src, preload: opts.preload || 'auto', style: opts.style || '' });
+  const el = document.createElement('audio');
+  el.dataset.audioId = id;
+  el.controls = true;
+  el.preload = opts.preload || 'auto';
+  el.style.cssText = 'vertical-align:middle;max-width:100%;';
+  if (opts.style) el.setAttribute('style', opts.style);
+  el.src = src;
+  return el;
+}
+function videoRegister(src, opts = {}) {
+  const id = videoNewId();
+  videoStore.set(id, { src, preload: opts.preload || 'metadata', style: opts.style || '', width: opts.width || '', height: opts.height || '', poster: opts.poster || '' });
+  const el = document.createElement('video');
+  el.dataset.videoId = id;
+  el.controls = true;
+  el.preload = opts.preload || 'metadata';
+  el.style.cssText = 'vertical-align:middle;max-width:100%;';
+  if (opts.style) el.setAttribute('style', opts.style);
+  if (opts.width) el.setAttribute('width', opts.width);
+  if (opts.height) el.setAttribute('height', opts.height);
+  if (opts.poster) el.setAttribute('poster', opts.poster);
+  el.src = src;
+  return el;
+}
+
+function imgExpand(ph) {
+  return ph.replace(IMG_PH_RE, (_, id) => {
+    const d = imgStore.get(id);
+    if (!d) return '';
+    let tag = '<img src="' + d.src + '"';
+    if (d.style)  tag += ' style="'  + d.style.replace(/"/g, '&quot;') + '"';
+    if (d.height) tag += ' height="' + d.height + '"';
+    if (d.width)  tag += ' width="'  + d.width  + '"';
+    return tag + '>';
+  });
+}
+
+function audioExpand(ph) {
+  return ph.replace(AUD_PH_RE, (_, id) => {
+    const d = audioStore.get(id);
+    if (!d) return '';
+    let tag = '<audio controls';
+    if (d.preload) tag += ' preload="' + String(d.preload).replace(/"/g, '&quot;') + '"';
+    if (d.style) tag += ' style="' + d.style.replace(/"/g, '&quot;') + '"';
+    return tag + ' src="' + d.src + '"></audio>';
+  });
+}
+function videoExpand(ph) {
+  return ph.replace(VID_PH_RE, (_, id) => {
+    const d = videoStore.get(id);
+    if (!d) return '';
+    let tag = '<video controls';
+    if (d.preload) tag += ' preload="' + String(d.preload).replace(/"/g, '&quot;') + '"';
+    if (d.style) tag += ' style="' + d.style.replace(/"/g, '&quot;') + '"';
+    if (d.width) tag += ' width="' + String(d.width).replace(/"/g, '&quot;') + '"';
+    if (d.height) tag += ' height="' + String(d.height).replace(/"/g, '&quot;') + '"';
+    if (d.poster) tag += ' poster="' + String(d.poster).replace(/"/g, '&quot;') + '"';
+    return tag + ' src="' + d.src + '"></video>';
+  });
+}
+function giftUnescapeHtmlTag(tag) {
+  return String(tag || '').replace(/\\([=~#{}:\\])/g, '$1');
+}
+function getHtmlAttrFromTag(tag, name) {
+  const re = new RegExp('\\b' + name + '\\s*=\\s*(?:"([^"]*)"|\'([^\']*)\'|([^\\s>]+))', 'i');
+  const m = String(tag || '').match(re);
+  return m ? (m[1] != null ? m[1] : (m[2] != null ? m[2] : (m[3] || ''))) : '';
+}
+function getMediaSrcFromTag(tag, kind) {
+  const normalized = giftUnescapeHtmlTag(tag);
+  let src = getHtmlAttrFromTag(normalized, 'src');
+  if (!src) {
+    const sm = normalized.match(/<source\b[^>]*>/i);
+    if (sm) src = getHtmlAttrFromTag(sm[0], 'src');
+  }
+  const ok = src && new RegExp('^data:' + kind + '/', 'i').test(src);
+  return { normalized, src: ok ? src : '' };
+}
+function renderDataImageTag(tag) {
+  const normalized = giftUnescapeHtmlTag(tag);
+  const src = getHtmlAttrFromTag(normalized, 'src');
+  if (!/^data:image\//i.test(src)) return escHtml(tag);
+  let out = '<img src="' + escAttr(src) + '"';
+  const style=getHtmlAttrFromTag(normalized,'style'), height=getHtmlAttrFromTag(normalized,'height'), width=getHtmlAttrFromTag(normalized,'width');
+  if (style) out += ' style="' + escAttr(style) + '"';
+  if (height) out += ' height="' + escAttr(height) + '"';
+  if (width) out += ' width="' + escAttr(width) + '"';
+  return out + '>';
+}
+function renderDataAudioTag(tag) {
+  const r = getMediaSrcFromTag(tag, 'audio');
+  if (!r.src) return escHtml(tag);
+  const preload = getHtmlAttrFromTag(r.normalized, 'preload') || 'auto';
+  const style = getHtmlAttrFromTag(r.normalized, 'style');
+  let out = '<audio controls preload="' + escAttr(preload) + '"';
+  if (style) out += ' style="' + escAttr(style) + '"';
+  return out + ' src="' + escAttr(r.src) + '"></audio>';
+}
+function renderDataVideoTag(tag) {
+  const r = getMediaSrcFromTag(tag, 'video');
+  if (!r.src) return escHtml(tag);
+  const preload = getHtmlAttrFromTag(r.normalized, 'preload') || 'metadata';
+  const style = getHtmlAttrFromTag(r.normalized, 'style');
+  const width = getHtmlAttrFromTag(r.normalized, 'width');
+  const height = getHtmlAttrFromTag(r.normalized, 'height');
+  const poster = getHtmlAttrFromTag(r.normalized, 'poster');
+  let out = '<video controls preload="' + escAttr(preload) + '"';
+  if (style) out += ' style="' + escAttr(style) + '"';
+  if (width) out += ' width="' + escAttr(width) + '"';
+  if (height) out += ' height="' + escAttr(height) + '"';
+  if (/^data:image\//i.test(poster)) out += ' poster="' + escAttr(poster) + '"';
+  return out + ' src="' + escAttr(r.src) + '"></video>';
+}
+
+// エディタ内に実在する data-img-id だけを imgStore に残し、
+// 削除済み画像の data URL をメモリから解放する。
+function pruneImgStore() {
+  if (typeof giftEditor === 'undefined' || !giftEditor) return;
+  const live = new Set();
+  giftEditor.querySelectorAll('img[data-img-id]').forEach(el => {
+    const id = el.dataset.imgId;
+    if (id) live.add(id);
+  });
+  for (const id of [...imgStore.keys()]) {
+    if (!live.has(id)) imgStore.delete(id);
+  }
+}
+
+// 書式を表す HTML タグ（プレビュー／シリアライズで許可するもの）
+const FMT_TAG_RE = /<\/?(?:b|i|u|sub|sup)>|<font\b[^>]*>|<\/font>|<br\s*\/?>|<img\b[^>]*>|<audio\b[\s\S]*?<\/audio>|<video\b[\s\S]*?<\/video>|\uE008[^\uE009]*\uE009|\uE00A[^\uE00B]*\uE00B|\uE00C[^\uE00D]*\uE00D/g;
+const HAS_FMT_RE = /<\/?(?:b|i|u|sub|sup)>|<font\b[^>]*>|<\/font>|<br\s*\/?>|<img\b|<audio\b|<video\b|\uE008|\uE00A|\uE00C/;
+
+function getNodeFmt(node, parentFmt) {
+  const f = { ...parentFmt };
+  const tag = (node.tagName || '').toLowerCase();
+  if (['b','strong'].includes(tag)) f.bold = true;
+  if (['i','em'].includes(tag))     f.italic = true;
+  if (tag === 'u')   f.underline = true;
+  if (tag === 'sup') f.sup = true;
+  if (tag === 'sub') f.sub = true;
+  if (node.style) {
+    const fw = node.style.fontWeight;
+    if (fw === 'bold' || (parseInt(fw, 10) >= 600)) f.bold = true;
+    const fs = node.style.fontStyle;
+    if (fs === 'italic' || fs === 'oblique') f.italic = true;
+    if ((node.style.textDecoration || '').includes('underline')) f.underline = true;
+    if ((node.style.textDecorationLine || '').includes('underline')) f.underline = true;
+    const va = (node.style.verticalAlign || '').toLowerCase();
+    if (va === 'super' || va.includes('super')) f.sup = true;
+    if (va === 'sub' || va.includes('sub'))     f.sub = true;
+  }
+  return f;
+}
+
+// ── 貼り付け時のサニタイズ（rifff ver.1.8 由来） ──
+function sanitizeNode(node) {
+  const BLOCK_TAGS = ['div','p','h1','h2','h3','h4','h5','h6','li','blockquote','pre',
+                      'ul','ol','table','tr','td','th','thead','tbody','section','article',
+                      'header','footer','nav','main'];
+  const KEEP_TAGS  = ['b','strong','i','em','u','sup','sub','br','div','p','span'];
+
+  [...node.childNodes].forEach(c => {
+    if (c.nodeType === Node.TEXT_NODE) {
+      if (c.textContent.replace(/[\u00a0\s]/g,'') === '') {
+        const parent = c.parentNode;
+        if (parent) {
+          const parentTag = (parent.tagName || '').toLowerCase();
+          if (BLOCK_TAGS.includes(parentTag)) {
+            const hasSibling = [...parent.childNodes].some(
+              n => n !== c && (
+                (n.nodeType === Node.ELEMENT_NODE && (n.tagName || '').toLowerCase() !== 'br') ||
+                (n.nodeType === Node.TEXT_NODE && n.textContent.replace(/[\u00a0\s]/g,'').length > 0)
+              )
+            );
+            if (!hasSibling) c.textContent = '';
+          }
+        }
+      }
+      return;
+    }
+    if (c.nodeType !== Node.ELEMENT_NODE) { c.remove(); return; }
+
+    const tag = c.tagName.toLowerCase();
+    if (tag.includes(':')) { c.remove(); return; }
+    // data:image/ の <img> は保持する（コピー＆ペーストで画像を維持）。
+    // src・height・width・style 以外の属性は除去し、src が data:image/ でなければ削除。
+    if (tag === 'img') {
+      const src = c.getAttribute('src') || '';
+      if (!/^data:image\//i.test(src)) { c.remove(); return; }
+      const keep = {};
+      ['src','height','width','style'].forEach(a => {
+        const v = c.getAttribute(a); if (v != null) keep[a] = v;
+      });
+      [...c.attributes].forEach(a => c.removeAttribute(a.name));
+      Object.keys(keep).forEach(a => c.setAttribute(a, keep[a]));
+      return;
+    }
+    if (['style','script','meta','link','head','xml','title','colgroup','col'].includes(tag)) {
+      c.remove(); return;
+    }
+    if (tag === 'span') {
+      const rawStyle = c.getAttribute('style') || '';
+      if (rawStyle.includes('mso-spacerun')) { c.remove(); return; }
+    }
+
+    const bold   = ['b','strong'].includes(tag)
+                   || /^(bold|[6-9]\d{2}|1000)$/i.test(c.style?.fontWeight || '');
+    const italic = ['i','em'].includes(tag)
+                   || ['italic','oblique'].includes(c.style?.fontStyle || '');
+    const under  = tag === 'u'
+                   || (c.style?.textDecoration || '').includes('underline')
+                   || (c.style?.textDecorationLine || '').includes('underline');
+    const _va   = (c.style?.verticalAlign || '').toLowerCase();
+    const sup    = tag === 'sup' || _va === 'super' || _va === 'text-top' || _va.includes('super');
+    const sub    = tag === 'sub' || _va === 'sub'   || _va === 'text-bottom' || _va.includes('sub');
+
+    sanitizeNode(c);
+
+    if (BLOCK_TAGS.includes(tag)) {
+      const hasContent = c.textContent.replace(/[\u00a0\s]/g,'').length > 0 || c.querySelector('br');
+      if (!hasContent) { c.remove(); return; }
+    }
+
+    if (!KEEP_TAGS.includes(tag)) {
+      if (bold || italic || under || sup || sub) {
+        let wrapper;
+        if (sup)      wrapper = document.createElement('sup');
+        else if (sub) wrapper = document.createElement('sub');
+        else          wrapper = document.createElement('span');
+        if (bold)   wrapper.style.fontWeight     = 'bold';
+        if (italic) wrapper.style.fontStyle      = 'italic';
+        if (under)  wrapper.style.textDecoration = 'underline';
+        while (c.firstChild) wrapper.appendChild(c.firstChild);
+        c.parentNode.replaceChild(wrapper, c);
+      } else {
+        while (c.firstChild) c.parentNode.insertBefore(c.firstChild, c);
+        c.remove();
+      }
+    } else {
+      [...c.attributes].forEach(a => c.removeAttribute(a.name));
+      if (bold   && !['b','strong'].includes(tag)) c.style.fontWeight     = 'bold';
+      if (italic && !['i','em'].includes(tag))     c.style.fontStyle      = 'italic';
+      if (under  && tag !== 'u')                   c.style.textDecoration = 'underline';
+      if (sup && tag !== 'sup') c.style.verticalAlign = 'super';
+      if (sub && tag !== 'sub') c.style.verticalAlign = 'sub';
+      if (tag === 'span' && !c.getAttribute('style')) {
+        while (c.firstChild) c.parentNode.insertBefore(c.firstChild, c);
+        c.remove();
+      }
+    }
+  });
+}
+
+// ── DOM → 行ごとの書式付きトークン抽出（rifff 由来） ──
+function extractLines(el, pasteMode, preserveLineWS) {
+  const chars = [];
+  let atBlockStart = true;
+  const pushNL = (force = false) => {
+    if (chars.length === 0) return;
+    if (!force && chars[chars.length - 1].ch === '\n') return;
+    chars.push({ ch: '\n', ...BASE_FMT });
+  };
+  function walk(node, fmt) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const parent = node.parentNode;
+      if ((parent === el || (parent && BLOCK_EL.has((parent.tagName || '').toLowerCase()))) &&
+          RE_WS_ONLY.test(node.textContent)) return;
+      for (let ch of node.textContent) {
+        if (ch === '\r') continue;
+        if (ch === '\n' || ch === '\t') ch = ' ';
+        if (!preserveLineWS && (ch === ' ' || ch === '\u00a0') && atBlockStart) continue;
+        if (pasteMode && ch === ' ' && chars.length > 0) {
+          if (chars[chars.length - 1].ch === ' ') continue;
+        }
+        if (ch !== ' ') atBlockStart = false;
+        chars.push({ ch, ...fmt });
+      }
+      return;
+    }
+    if (node.nodeType !== Node.ELEMENT_NODE) return;
+    const tag = node.tagName.toLowerCase();
+    if (tag === 'img') {
+      // 画像はプレースホルダー \uE008id\uE009 を img トークンとして1つ挿入する。
+      // data-img-id がなければ（外部由来など）その場でストア登録する。
+      let id = node.dataset ? (node.dataset.imgId || '') : '';
+      if (!id) {
+        const src = node.getAttribute('src') || '';
+        if (/^data:image\//i.test(src)) {
+          const el2 = imgRegister(src, {
+            height: node.getAttribute('height') || '',
+            width:  node.getAttribute('width')  || '',
+            style:  node.getAttribute('style')  || '',
+          });
+          id = el2.dataset.imgId;
+        }
+      }
+      if (id && imgStore.has(id)) {
+        chars.push({ ch: imgPh(id), ...BASE_FMT, img:true });
+        atBlockStart = false;
+      }
+      return;
+    }
+    const newFmt = node === el ? { ...BASE_FMT } : getNodeFmt(node, fmt);
+    if (tag === 'br') { pushNL(true); atBlockStart = false; return; }
+    const isBlock = BLOCK_EL.has(tag);
+    if (isBlock && node !== el) { pushNL(); atBlockStart = true; }
+    const startLen = chars.length;
+    for (const child of node.childNodes) walk(child, newFmt);
+    if (isBlock && node !== el) { pushNL(chars.length === startLen); atBlockStart = true; }
+  }
+  walk(el, { ...BASE_FMT });
+  while (chars.length && chars[chars.length - 1].ch === '\n') chars.pop();
+  while (chars.length && chars[0].ch === '\n') chars.shift();
+  const lines = [];
+  let cur = [];
+  for (const t of chars) { if (t.ch === '\n') { lines.push(cur); cur = []; } else cur.push(t); }
+  lines.push(cur);
+  if (pasteMode && !preserveLineWS) {
+    for (const line of lines) { while (line.length && line[line.length-1].ch === ' ') line.pop(); }
+    for (const line of lines) { while (line.length && line[0].ch === ' ') line.shift(); }
+  }
+  for (const line of lines) for (const tok of line) if (tok.ch === '\u00a0') tok.ch = ' ';
+  return lines;
+}
+
+// ── トークン列 → 表示用クリーン HTML（貼り付け後の整形・rifff 由来） ──
+function tokensToCleanHTML(toks) {
+  const ESC2 = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  let html = '', bat = null;
+  const flush = () => {
+    if (!bat) return;
+    let s = ESC2(bat.t);
+    s = s.replace(/ (?= )/g, '&nbsp;');
+    if (bat.u)   s = '<u>'   + s + '</u>';
+    if (bat.i)   s = '<i>'   + s + '</i>';
+    if (bat.b)   s = '<b>'   + s + '</b>';
+    if (bat.sup) s = '<sup>' + s + '</sup>';
+    if (bat.sub) s = '<sub>' + s + '</sub>';
+    html += s; bat = null;
+  };
+  let lastNonSpace = -1;
+  for (let i = toks.length - 1; i >= 0; i--) { if (toks[i].ch !== ' ') { lastNonSpace = i; break; } }
+  let leadDone = false;
+  for (let i = 0; i < toks.length; i++) {
+    const tok = toks[i];
+    // 画像トークン → imgStore から実際の <img> タグに展開（コピー用HTMLに画像を埋め込む）
+    if (tok.img) {
+      flush();
+      html += imgExpand(tok.ch);
+      leadDone = true;
+      continue;
+    }
+    let ch = tok.ch;
+    if (!leadDone) { if (ch === ' ') { flush(); html += '&nbsp;'; continue; } else leadDone = true; }
+    if (i > lastNonSpace && ch === ' ') { flush(); html += '&nbsp;'; continue; }
+    const k = (tok.bold?'b':'')+(tok.italic?'i':'')+(tok.underline?'u':'')+(tok.sup?'^':'')+(tok.sub?'v':'');
+    if (bat && bat.k === k) bat.t += ch;
+    else { flush(); bat = { k, b:tok.bold, i:tok.italic, u:tok.underline, sup:tok.sup, sub:tok.sub, t:ch }; }
+  }
+  flush();
+  return html;
+}
+
+// ── エディタ内容 → 行配列（GIFT 文字列＋行頭ノード参照） ──
+//  各行を { runs, firstNode } で返す。runs はフォーマットでまとめた連続文字。
+function getEditorLines() {
+  const lines = [];
+  let runs = [], firstNode = null;
+  const sameFmt = (r, f) => r.b===f.bold && r.i===f.italic && r.u===f.underline && r.sup===f.sup && r.sub===f.sub;
+  function flushLine() { lines.push({ runs, firstNode }); runs = []; firstNode = null; }
+  function addText(str, fmt, node) {
+    for (let ch of str) {
+      if (ch === '\r') continue;
+      if (ch === '\n' || ch === '\t' || ch === '\u00a0') ch = ' ';
+      if (firstNode === null) firstNode = node;
+      const last = runs[runs.length-1];
+      if (last && sameFmt(last, fmt)) last.text += ch;
+      else runs.push({ text: ch, b:fmt.bold, i:fmt.italic, u:fmt.underline, sup:fmt.sup, sub:fmt.sub });
+    }
+  }
+  function rec(node, fmt) {
+    for (const child of node.childNodes) {
+      if (child.nodeType === Node.TEXT_NODE) {
+        addText(child.textContent, fmt, child);
+      } else if (child.nodeType === Node.ELEMENT_NODE) {
+        const tag = child.tagName.toLowerCase();
+        if (tag === 'audio') {
+          if (firstNode === null) firstNode = child;
+          let id = child.dataset.audioId || '';
+          if (!id) {
+            const r = getMediaSrcFromTag(child.outerHTML || '', 'audio');
+            if (r.src) {
+              const el = audioRegister(r.src, { preload: child.getAttribute('preload') || 'auto', style: child.getAttribute('style') || '' });
+              id = el.dataset.audioId;
+              child.dataset.audioId = id;
+            }
+          }
+          if (id && audioStore.has(id)) runs.push({ text: audioPh(id), b:false, i:false, u:false, sup:false, sub:false, raw:true });
+        }
+        else if (tag === 'video') {
+          if (firstNode === null) firstNode = child;
+          let id = child.dataset.videoId || '';
+          if (!id) {
+            const r = getMediaSrcFromTag(child.outerHTML || '', 'video');
+            if (r.src) {
+              const el = videoRegister(r.src, { preload: child.getAttribute('preload') || 'metadata', style: child.getAttribute('style') || '', width: child.getAttribute('width') || '', height: child.getAttribute('height') || '', poster: child.getAttribute('poster') || '' });
+              id = el.dataset.videoId;
+              child.dataset.videoId = id;
+            }
+          }
+          if (id && videoStore.has(id)) runs.push({ text: videoPh(id), b:false, i:false, u:false, sup:false, sub:false, raw:true });
+        }
+        else if (tag === 'img') {
+          // <img> → imgStore のIDを参照してプレースホルダーを出力
+          if (firstNode === null) firstNode = child;
+          let id = child.dataset.imgId || '';
+          if (!id) {
+            // data-img-id がない場合（外部から貼られた img 等）はその場でストア登録
+            const src = child.getAttribute('src') || '';
+            if (/^data:image\//i.test(src)) {
+              const el = imgRegister(src, {
+                height: child.getAttribute('height') || '',
+                width:  child.getAttribute('width')  || '',
+                style:  child.getAttribute('style')  || '',
+              });
+              id = el.dataset.imgId;
+              child.dataset.imgId = id;
+            }
+          }
+          if (id && imgStore.has(id)) {
+            runs.push({ text: imgPh(id), b:false, i:false, u:false, sup:false, sub:false, raw:true });
+          }
+        }
+        else if (tag === 'br') {
+          //（ブロック境界そのものが改行になるため、二重カウントを防ぐ）
+          const parentTag = node.tagName ? node.tagName.toLowerCase() : '';
+          const isFiller = node !== giftEditor && BLOCK_EL.has(parentTag) && child === node.lastChild;
+          if (isFiller) continue;
+          if (firstNode === null) firstNode = child; flushLine();
+        }
+        else if (BLOCK_EL.has(tag)) {
+          if (runs.length || firstNode) flushLine();
+          if (firstNode === null) firstNode = child;   // 空ブロック行のスクロール先
+          rec(child, fmt);
+          flushLine();
+        } else {
+          if (firstNode === null) firstNode = child;
+          rec(child, getNodeFmt(child, fmt));
+        }
+      }
+    }
+  }
+  rec(giftEditor, { ...BASE_FMT });
+  flushLine();
+  while (lines.length > 1 && lines[lines.length-1].runs.length === 0) lines.pop();
+  return lines;
+}
+
+// 1 行分の runs → GIFT 文字列（書式付き範囲は HTML タグで包む）
+function lineToGift(runs) {
+  let out = '';
+  for (const r of runs) {
+    if (r.raw) { out += r.text; continue; }          // <img> などの raw シリアライズ済み文字列
+    if (!(r.b || r.i || r.u || r.sup || r.sub)) { out += r.text; continue; }
+    let s = escHtml(r.text);
+    if (r.u)   s = '<u>'   + s + '</u>';
+    if (r.i)   s = '<i>'   + s + '</i>';
+    if (r.b)   s = '<b>'   + s + '</b>';
+    if (r.sup) s = '<sup>' + s + '</sup>';
+    if (r.sub) s = '<sub>' + s + '</sub>';
+    out += s;
+  }
+  return out;
+}
+
+// エディタ → GIFT テキスト（書式付き範囲はインライン HTML タグを含む）
+function getGiftText() {
+  return getEditorLines().map(l => lineToGift(l.runs)).join('\n');
+}
+
+// GIFT テキスト → エディタ（書式タグ・img タグを復元し、他はエスケープ）
+// 許可する書式タグ: <b> <i> <u> <sup> <sub> および <img src="data:image/...">
+// それ以外の文字列はリテラルとして escHtml する
+function setGiftText(str) {
+  const lines = String(str)
+    .replace(/\r\n/g, '\n').replace(/\r/g, '\n')
+    .split('\n');
+
+  // 1行を HTML 断片に変換：許可タグは素通し、img は登録、他はエスケープ
+  const ALLOWED_TAG_RE = /(<audio\b[\s\S]*?<\/audio>)|(<video\b[\s\S]*?<\/video>)|(<\/?(b|i|u|sup|sub)>)|(<img\b[^>]*>)/gi;
+  function lineToHtml(line) {
+    let out = '', last = 0, m;
+    ALLOWED_TAG_RE.lastIndex = 0;
+    while ((m = ALLOWED_TAG_RE.exec(line)) !== null) {
+      // タグ前のテキストをエスケープ
+      out += escHtml(line.slice(last, m.index));
+      if (m[1]) {
+        const r = getMediaSrcFromTag(m[1], 'audio');
+        if (r.src) {
+          const preload = getHtmlAttrFromTag(r.normalized, 'preload') || 'auto';
+          const st = getHtmlAttrFromTag(r.normalized, 'style');
+          out += '<span data-restore-audio="1" data-src="' + escAttr(r.src) + '"'
+               + (preload ? ' data-preload="' + escAttr(preload) + '"' : '')
+               + (st ? ' data-style="' + escAttr(st) + '"' : '') + '></span>';
+        } else out += escHtml(m[1]);
+      } else if (m[2]) {
+        const r = getMediaSrcFromTag(m[2], 'video');
+        if (r.src) {
+          const preload = getHtmlAttrFromTag(r.normalized, 'preload') || 'metadata';
+          const st = getHtmlAttrFromTag(r.normalized, 'style');
+          const w = getHtmlAttrFromTag(r.normalized, 'width');
+          const ht = getHtmlAttrFromTag(r.normalized, 'height');
+          const poster = getHtmlAttrFromTag(r.normalized, 'poster');
+          out += '<span data-restore-video="1" data-src="' + escAttr(r.src) + '"'
+               + (preload ? ' data-preload="' + escAttr(preload) + '"' : '')
+               + (st ? ' data-style="' + escAttr(st) + '"' : '')
+               + (w ? ' data-width="' + escAttr(w) + '"' : '')
+               + (ht ? ' data-height="' + escAttr(ht) + '"' : '')
+               + (/^data:image\//i.test(poster) ? ' data-poster="' + escAttr(poster) + '"' : '')
+               + '></span>';
+        } else out += escHtml(m[2]);
+      } else if (m[5]) {
+        const normalizedTag = giftUnescapeHtmlTag(m[5]);
+        const src = getHtmlAttrFromTag(normalizedTag, 'src');
+        if (/^data:image\//i.test(src)) {
+          const h  = getHtmlAttrFromTag(normalizedTag, 'height');
+          const w  = getHtmlAttrFromTag(normalizedTag, 'width');
+          const st = getHtmlAttrFromTag(normalizedTag, 'style');
+          out += '<span data-restore-img="1"'
+               + ' data-src="' + escAttr(src) + '"'
+               + (h ? ' data-height="' + h + '"' : '')
+               + (w ? ' data-width="'  + w + '"' : '')
+               + (st ? ' data-style="' + escAttr(st) + '"' : '')
+               + '></span>';
+        } else out += escHtml(m[5]);
+      } else {
+        // <b> <i> <u> <sup> <sub> はそのまま通す
+        out += m[0];
+      }
+      last = m.index + m[0].length;
+    }
+    out += escHtml(line.slice(last));
+    return out;
+  }
+
+  const htmlStr = lines.map(lineToHtml).join('<br>') || '<br>';
+  giftEditor.innerHTML = htmlStr;
+
+  // innerHTML セット後、仮スパンを本物の audio/video 要素に差し替える
+  giftEditor.querySelectorAll('span[data-restore-audio]').forEach(span => {
+    const el = audioRegister(span.dataset.src, { preload: span.dataset.preload || 'auto', style: span.dataset.style || '' });
+    span.replaceWith(el);
+  });
+  giftEditor.querySelectorAll('span[data-restore-video]').forEach(span => {
+    const el = videoRegister(span.dataset.src, { preload: span.dataset.preload || 'metadata', style: span.dataset.style || '', width: span.dataset.width || '', height: span.dataset.height || '', poster: span.dataset.poster || '' });
+    span.replaceWith(el);
+  });
+
+  // innerHTML セット後、仮スパンを本物の imgRegister 要素に差し替える
+  giftEditor.querySelectorAll('span[data-restore-img]').forEach(span => {
+    const el = imgRegister(span.dataset.src, {
+      height: span.dataset.height || '',
+      width:  span.dataset.width  || '',
+      style:  span.dataset.style  || '',
+    });
+    span.replaceWith(el);
+  });
+
+  updateEditorPlaceholder();
+}
+
+function updateEditorPlaceholder() {
+  const ph = document.getElementById('editor-ph');
+  if (ph) ph.style.display = (giftEditor.textContent.trim() === '' && !giftEditor.querySelector('img,audio,video')) ? 'block' : 'none';
+}
+
+// ── プレビュー用：許可タグだけを HTML として描画し、他は全てエスケープ ──
+//  書式タグの内側（depth>0）はシリアライズ時にエスケープ済みなので素通し、
+//  トップレベル（depth=0）のテキストはユーザー入力としてエスケープする。
+// 「HTMLタグをそのまま反映する」トグル（一覧画面）が ON かどうか。
+// ON のとき、renderRich は <font> など未知のタグもエスケープせず通す。
+function rawHtmlEnabled() {
+  const el = document.getElementById('rawhtml-toggle');
+  return !!(el && el.checked);
+}
+
+// raw HTML 反映時の最小限の無害化。
+// 見た目用のタグ（<font> <span style=...> <table> など）はそのまま通し、
+// スクリプト実行につながる要素・属性だけを取り除く：
+//   <script>/<style> ブロック、インライン on*= ハンドラ、javascript: URL。
+function sanitizeRawHtml(s) {
+  if (!s) return s;
+  return String(s)
+    .replace(/<\s*script\b[\s\S]*?(?:<\s*\/\s*script\s*>|$)/gi, '')
+    .replace(/<\s*style\b[\s\S]*?(?:<\s*\/\s*style\s*>|$)/gi, '')
+    .replace(/\son[a-z]+\s*=\s*"[^"]*"/gi, '')
+    .replace(/\son[a-z]+\s*=\s*'[^']*'/gi, '')
+    .replace(/\son[a-z]+\s*=\s*[^\s>]+/gi, '')
+    .replace(/(href|src)\s*=\s*("|')\s*javascript:[^"']*\2/gi, '$1=$2#$2');
+}
+
+
+// raw HTML モード用：Moodle XML などから来た &lt;b&gt; / &lt;font&gt; 形式の
+// HTML エンティティを、ブラウザに渡せる実タグへ戻す。
+// &amp;lt;...&amp;gt; のような二重エンコードにも数回まで対応する。
+// decode 後に表示へ渡す場合は必ず sanitizeRawHtml() を通すこと。
+function decodeHtmlEntitiesForRawHtml(s) {
+  if (s == null) return '';
+  let out = String(s);
+  const ta = document.createElement('textarea');
+  for (let i = 0; i < 4; i++) {
+    ta.innerHTML = out;
+    const next = ta.value;
+    if (next === out) break;
+    out = next;
+  }
+  return out;
+}
+
+function prepareRawHtmlForRender(s) {
+  // raw HTML モードでも、太字・斜体・下線・上付き・下付きなどの書式タグは
+  // ブラウザに実タグとして渡して描画させる。
+  // 1) &lt;b&gt; / &lt;i&gt; / &lt;u&gt; / &lt;sup&gt; / &lt;sub&gt; / &lt;font&gt; 等を実タグへ戻す
+  // 2) 内部メディアプレースホルダーを実タグへ展開する
+  // 3) script/style/on*= / javascript: は除去する
+  return sanitizeRawHtml(videoExpand(audioExpand(imgExpand(decodeHtmlEntitiesForRawHtml(s)))));
+}
+
+// 一覧・タイトル・ツールチップなど「文字だけ」が必要な箇所用。
+// raw HTML モードのON/OFFに関係なく、HTMLタグは外し、テキスト内容だけを返す。
+// 例：&amp;lt;font ...&amp;gt;f(x)&amp;lt;/font&amp;gt; → f(x)
+function stripHtmlToPlainText(str) {
+  if (str == null) return '';
+  let s = decodeHtmlEntitiesForRawHtml(String(str));
+  s = videoExpand(audioExpand(imgExpand(s)));
+  s = sanitizeRawHtml(s);
+
+  // メディアは textContent では消えるため、先に代替文字へ置換する。
+  s = s
+    .replace(IMG_PH_RE, t('img.placeholder'))
+    .replace(AUD_PH_RE, currentLang === 'ja' ? '[音声]' : '[audio]')
+    .replace(VID_PH_RE, currentLang === 'ja' ? '[動画]' : '[video]')
+    .replace(/<img\b[^>]*>/gi, t('img.placeholder'))
+    .replace(/<audio\b[\s\S]*?<\/audio>/gi, currentLang === 'ja' ? '[音声]' : '[audio]')
+    .replace(/<video\b[\s\S]*?<\/video>/gi, currentLang === 'ja' ? '[動画]' : '[video]');
+
+  // 改行・ブロック相当のタグはスペースにしてからタグを外す。
+  s = s
+    .replace(/<br\s*\/?>/gi, ' ')
+    .replace(/<\/(p|div|li|tr|td|th|h[1-6]|table|ul|ol|section|article|blockquote)>/gi, ' ');
+
+  const div = document.createElement('div');
+  div.innerHTML = s;
+  return (div.textContent || div.innerText || '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function renderRich(str) {
+  if (str == null) return '';
+  str = String(str);
+  const allowRaw = rawHtmlEnabled();
+
+  // raw HTML モード：任意のHTMLタグはブラウザに任せる。
+  // 同時に、従来の書式タグ（<b><i><u><sup><sub>）や、
+  // エンティティ化された &lt;b&gt; 等も実タグとして描画される。
+  // 改行はブラウザと同じく「空白」として扱い、<br> へは変換しない
+  // （[html] 内容では改行はレイアウトに影響せず、改行は <br> で明示するため）。
+  if (allowRaw) {
+    return prepareRawHtmlForRender(str);
+  }
+
+  // 通常モード：従来どおり、ツールが明示的に扱う書式タグだけを描画する。
+  // <font> など任意HTMLは実行せず、文字として表示する。
+  let out = '', depth = 0, last = 0, m;
+  FMT_TAG_RE.lastIndex = 0;
+  while ((m = FMT_TAG_RE.exec(str)) !== null) {
+    const between = str.slice(last, m.index);
+    out += (depth > 0 ? between : escHtml(between));
+    const rawTag = m[0];
+    const tagHead = rawTag.slice(0, 16).toLowerCase();
+    if (/^<br/.test(tagHead)) { out += '<br>'; }
+    else if (rawTag[0] === IMG_OPEN) { out += imgExpand(rawTag); }
+    else if (rawTag[0] === AUD_OPEN) { out += audioExpand(rawTag); }
+    else if (rawTag[0] === VID_OPEN) { out += videoExpand(rawTag); }
+    else if (/^<img\b/i.test(rawTag)) { out += renderDataImageTag(rawTag); }
+    else if (/^<audio\b/i.test(rawTag)) { out += renderDataAudioTag(rawTag); }
+    else if (/^<video\b/i.test(rawTag)) { out += renderDataVideoTag(rawTag); }
+    else if (/^<\/?font\b/i.test(rawTag)) {
+      out += escHtml(rawTag);
+    }
+    else {
+      const tag = rawTag.toLowerCase();
+      const closing = tag[1] === '/';
+      const name = tag.replace(/[<>/]/g, '');
+      out += '<' + (closing ? '/' : '') + name + '>';
+      depth += closing ? -1 : 1;
+      if (depth < 0) depth = 0;
+    }
+    last = m.index + m[0].length;
+  }
+  const tailRaw = str.slice(last);
+  out += (depth > 0 ? tailRaw : escHtml(tailRaw));
+  out = out.replace(/\n/g, '<br>');
+  return out;
+}
+
+// 書式タグを除去してプレーン文字列にする（タイトル・一覧・ツールチップ用）
+function stripRich(str) {
+  return stripHtmlToPlainText(str);
+}
+
+// ── 書式を含む問題ブロックに [html] マーカーを自動付与した GIFT を生成 ──
+function buildExportGift() {
+  pruneImgStore();             // 削除済み画像をストアから掃除
+  const raw = getGiftText();   // プレースホルダー (id) を含む内部テキスト
+  // 空行区切りでブロック化（コメント行・$CATEGORY 行は保持）
+  const blocks = raw.split(/\n[ \t]*\n/);
+  const withMarkers = blocks.map(insertHtmlMarker).join('\n\n');
+  // 最後にプレースホルダーを実際の <img>/<audio>/<video> タグへ展開して出力
+  return videoExpand(audioExpand(imgExpand(withMarkers)));
+}
+
+function insertHtmlMarker(block) {
+  if (!HAS_FMT_RE.test(block)) return block;
+  const lines = block.split('\n');
+  let i = 0; const lead = [];
+  while (i < lines.length &&
+         (/^[ \t]*\/\//.test(lines[i]) || /^[ \t]*\$CATEGORY:/i.test(lines[i]) || lines[i].trim() === '')) {
+    lead.push(lines[i]); i++;
+  }
+  let rest = lines.slice(i).join('\n');
+  // 既に書式マーカーが先頭付近にあれば触らない
+  const head = rest.replace(/^\s*::[\s\S]*?::\s*/, '').slice(0, 60);
+  if (/^\s*\[(html|moodle|plain|markdown)\]/i.test(rest) ||
+      /^\[(html|moodle|plain|markdown)\]/i.test(head)) {
+    return block;
+  }
+  const t = rest.match(/^(\s*::[\s\S]*?::\s*)/);
+  if (t) rest = t[1] + '[html]' + rest.slice(t[1].length);
+  else   rest = rest.replace(/^(\s*)/, '$1[html]');
+  return lead.length ? lead.join('\n') + '\n' + rest : rest;
+}
+
+// ── ツールバー（B / I / U / 上付き / 下付き） ──
+document.querySelectorAll('.gift-toolbar button').forEach(btn => {
+  btn.addEventListener('mousedown', e => {
+    e.preventDefault();
+    giftEditor.focus();
+    document.execCommand(btn.dataset.cmd);
+    updateEditorPlaceholder();
+  });
+});
+
+// ── 貼り付け・コピー・カット（rifff 由来のサニタイズ／書式保持） ──
+giftEditor.addEventListener('paste', handlePaste);
+giftEditor.addEventListener('copy',  handleCopyCut);
+giftEditor.addEventListener('cut',   handleCopyCut);
+giftEditor.addEventListener('input', updateEditorPlaceholder);
+
+function handleCopyCut(e) {
+  const ed = e.currentTarget;
+  const sel = window.getSelection();
+  if (!sel.rangeCount) return;
+  const frag = sel.getRangeAt(0).cloneContents();
+  const tmpDiv = document.createElement('div');
+  tmpDiv.appendChild(frag);
+  tmpDiv.style.cssText = 'position:absolute;visibility:hidden;white-space:pre-wrap';
+  document.body.appendChild(tmpDiv);
+  const lines = extractLines(tmpDiv);
+  document.body.removeChild(tmpDiv);
+  const plain = lines.map(l => l.map(tk => tk.img ? t('img.placeholder') : tk.ch).join('')).join('\n');
+  const html  = lines.map(tokensToCleanHTML).join('<br>');
+  e.clipboardData.setData('text/plain', plain);
+  e.clipboardData.setData('text/html', html);
+  e.preventDefault();
+  if (e.type === 'cut') document.execCommand('delete');
+}
+
+function handlePaste(e) {
+  e.preventDefault();
+  const ed = e.currentTarget;
+
+  // ── 画像アイテム優先 ──
+  const items = e.clipboardData ? [...e.clipboardData.items] : [];
+  const imgItem = items.find(it => it.kind === 'file' && it.type.startsWith('image/'));
+  if (imgItem) {
+    const file = imgItem.getAsFile();
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const src = ev.target.result;   // data:image/png;base64,...
+        const img = imgRegister(src);   // ストアに登録し DOM 要素を取得
+        const sel = window.getSelection();
+        if (sel && sel.rangeCount) {
+          const range = sel.getRangeAt(0);
+          range.deleteContents();
+          range.insertNode(img);
+          range.setStartAfter(img);
+          range.collapse(true);
+          sel.removeAllRanges();
+          sel.addRange(range);
+        } else {
+          ed.appendChild(img);
+        }
+        ed.dispatchEvent(new Event('input'));
+        updateEditorPlaceholder();
+      };
+      reader.readAsDataURL(file);
+      return;
+    }
+  }
+
+  // ── テキスト／HTML ペースト（既存処理） ──
+  const html  = e.clipboardData.getData('text/html');
+  const plain = e.clipboardData.getData('text/plain');
+  if (!html) {
+    const escaped = plain
+      .replace(/\r\n/g, '\n').replace(/\r/g, '\n')
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\n/g, '<br>');
+    document.execCommand('insertHTML', false, escaped);
+    ed.dispatchEvent(new Event('input'));
+    return;
+  }
+  const parsed = new DOMParser().parseFromString(html, 'text/html');
+  sanitizeNode(parsed.body);
+  const tmpDiv = document.createElement('div');
+  while (parsed.body.firstChild) tmpDiv.appendChild(document.adoptNode(parsed.body.firstChild));
+  tmpDiv.style.cssText = 'position:absolute;visibility:hidden;white-space:pre-wrap';
+  document.body.appendChild(tmpDiv);
+  const pastedLines = extractLines(tmpDiv, true);
+  document.body.removeChild(tmpDiv);
+  const isBlank = line => line.length === 0;
+  const cleaned = [];
+  let blankRun = 0;
+  for (const line of pastedLines) {
+    if (isBlank(line)) { blankRun++; if (blankRun <= 1) cleaned.push(line); }
+    else { blankRun = 0; cleaned.push(line); }
+  }
+  while (cleaned.length && isBlank(cleaned[0]))                cleaned.shift();
+  while (cleaned.length && isBlank(cleaned[cleaned.length-1])) cleaned.pop();
+  if (cleaned.length === 0) return;
+  const newHTML = cleaned.map(tokensToCleanHTML).join('<br>');
+  if (ed.textContent.trim() === '') ed.innerHTML = newHTML;
+  else document.execCommand('insertHTML', false, newHTML);
+  try {
+    const sel = window.getSelection(), range = document.createRange();
+    range.selectNodeContents(ed); range.collapse(false);
+    sel.removeAllRanges(); sel.addRange(range);
+  } catch(e2) {}
+  ed.dispatchEvent(new Event('input'));
+}
+
+// ── GIFT ソース表示パネル ──
+function downloadGiftSource() {
+  const text = buildExportGift();
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  // ファイル名に年月日時分秒を付与（例: quiz-20260621000312.gift）
+  const d = new Date();
+  const z = n => String(n).padStart(2, '0');
+  const ts = '' + d.getFullYear() + z(d.getMonth() + 1) + z(d.getDate())
+                + z(d.getHours()) + z(d.getMinutes()) + z(d.getSeconds());
+  a.href = url; a.download = 'quiz-' + ts + '.gift';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
 
 // ═══════════════════════════════════════════════
 //  GIFT パーサー（全問題タイプ対応）
 // ═══════════════════════════════════════════════
 const ESC = { '=':'\uE001', '~':'\uE002', '#':'\uE003', '{':'\uE004', '}':'\uE005', ':':'\uE006', '\\':'\uE007' };
 const UNESC = { '\uE001':'=', '\uE002':'~', '\uE003':'#', '\uE004':'{', '\uE005':'}', '\uE006':':', '\uE007':'\\' };
-function mask(str) { return str.replace(/\\([=~#{}:\\])/g, (m, c) => ESC[c]); }
+function mask(str) {
+  return str
+    .replace(/\\([=~#{}:\\])/g, (m, c) => ESC[c])   // 制御文字のエスケープを PUA へ退避
+    .replace(/\\n/g, '\n');                          // GIFT の改行エスケープ \n を実改行へ
+}
 function demask(str) { if (str == null) return ''; return str.replace(/[\uE001-\uE007]/g, c => UNESC[c] || c); }
+
+// 各解答（=/~ の直後）に付くフォーマット指定子を取り除く。
+// Moodle から書き出すと選択肢・マッチング項目・数値解答の先頭に
+// 本文と同じ [html]/[moodle]/[plain]/[markdown] が付与されるが、
+// これはメタ情報であり表示対象ではないため除去する。
+const ANS_FMT_RE = /^\s*\[(?:html|moodle|plain|markdown)\]\s*/i;
+function stripAnswerFormat(s) { return s == null ? s : s.replace(ANS_FMT_RE, ''); }
 
 function parseGIFT(rawText) {
   const questions = [];
@@ -1122,12 +2693,14 @@ function parseOptions(body) {
     const start = positions[i].idx;
     const end = (i+1 < positions.length) ? positions[i+1].idx : body.length;
     let seg = body.slice(start + 1, end);
+    seg = stripAnswerFormat(seg);                 // [html] 等が weight より前にある場合
     let weight = null;
     const w = seg.match(/^\s*%(-?\d+(?:\.\d+)?)%/);
     if (w) { weight = parseFloat(w[1]); seg = seg.slice(w[0].length); }
+    seg = stripAnswerFormat(seg);                 // [html] 等が weight より後にある場合
     let text = seg, feedback = '';
     const h = seg.indexOf('#');
-    if (h !== -1) { text = seg.slice(0, h); feedback = seg.slice(h + 1); }
+    if (h !== -1) { text = seg.slice(0, h); feedback = stripAnswerFormat(seg.slice(h + 1)); }
     options.push({ sign:positions[i].sign, weight, text:text.trim(), feedback:feedback.trim() });
   }
   return options;
@@ -1135,16 +2708,18 @@ function parseOptions(body) {
 
 function parseMatching(body, beforeTrim, title, format, generalFeedback) {
   const pairs = [];
+  const distractors = [];   // 左項目を持たない右候補（Moodle のダミー選択肢／余分な誤答）
   const re = /=([^=]*)/g; let m;
   while ((m = re.exec(body)) !== null) {
-    const it = m[1];
+    const it = stripAnswerFormat(m[1]);
     const arrow = it.indexOf('->');
     if (arrow === -1) continue;
     const left = demask(it.slice(0, arrow)).trim();
     const right = demask(it.slice(arrow + 2)).trim();
     if (left && right) pairs.push({ left, right });
+    else if (!left && right) distractors.push(right);
   }
-  return { type:'matching', title: title || makeTitle(demask(beforeTrim)), text: demask(beforeTrim), format, pairs, generalFeedback };
+  return { type:'matching', title: title || makeTitle(demask(beforeTrim)), text: demask(beforeTrim), format, pairs, distractors, generalFeedback };
 }
 
 function parseNumerical(body, beforeTrim, afterM, title, format, generalFeedback) {
@@ -1165,9 +2740,11 @@ function parseNumAnswer(str) {
   const h = str.indexOf('#');
   let core = str;
   if (h !== -1) { core = str.slice(0, h); feedback = demask(str.slice(h + 1).trim()); }
+  core = stripAnswerFormat(core);                 // [html] 等が weight より前にある場合
   let weight = null;
   const w = core.match(/^\s*%(-?\d+(?:\.\d+)?)%/);
   if (w) { weight = parseFloat(w[1]); core = core.slice(w[0].length); }
+  core = stripAnswerFormat(core);                 // [html] 等が weight より後にある場合
   core = core.trim();
   if (!core) return null;
   const range = core.match(/^(-?\d+(?:\.\d+)?)\.\.(-?\d+(?:\.\d+)?)$/);
@@ -1185,13 +2762,13 @@ function parseNumAnswer(str) {
 }
 
 function makeTitle(text) {
-  const t = (text||'').replace(/\s+/g,' ').trim();
-  return t.length > 40 ? t.slice(0,40)+'…' : (t || '(無題)');
+  const txt = stripRich(text||'').replace(/\s+/g,' ').trim();
+  return txt.length > 40 ? txt.slice(0,40)+'…' : (txt || t('ph.untitled'));
 }
 
 const TYPE_LABELS = {
-  mc:'単一選択', multi:'複数選択', truefalse:'正誤', short:'記述（短答）',
-  matching:'マッチング', numerical:'数値', essay:'記述式', description:'説明'
+  mc:'qtype.mc', multi:'qtype.multi', truefalse:'qtype.truefalse', short:'qtype.short',
+  matching:'qtype.matching', numerical:'qtype.numerical', essay:'qtype.essay', description:'qtype.description'
 };
 
 // ═══════════════════════════════════════════════
@@ -1204,6 +2781,7 @@ function checkGIFTSyntax(text) {
   for (let i = 0; i < lines.length; i++) {
     const raw = lines[i];
     if (/^[ \t]*\/\//.test(raw)) continue;
+    // 画像プレースホルダー id はパーサーに無害だがそのままスルーでよい
     const stripped = raw.replace(/\\./g, '  ');
     for (const ch of stripped) {
       if (ch === '{') { braceDepth++; insideBlock = true; }
@@ -1216,11 +2794,12 @@ function checkGIFTSyntax(text) {
     if (trimmed.startsWith('\\')) continue;
     if (trimmed.startsWith('=') || trimmed.startsWith('~')) {
       const withoutEscape = trimmed.replace(/\\./g, '\x00\x00');
+      // プレースホルダー id は制御文字を含まないためそのままスルー
       const bodyPart = withoutEscape.replace(/\s+#.*$/, '').slice(1);
       const ctrlMatch = bodyPart.match(/[=~{}]/);
       if (ctrlMatch) {
         const char = ctrlMatch[0];
-        warnings.push({ line:i, message:(i+1)+' 行目：選択肢テキスト内に未エスケープの制御文字 "'+char+'" があります。本文中で使う場合は "\\'+char+'" とエスケープするか、全角文字（例：＝ 〜 ｛ ｝）を使ってください。' });
+        warnings.push({ line:i, message:t('warn.ctrlChar', {line:(i+1), char:char}) });
       }
       continue;
     }
@@ -1246,6 +2825,7 @@ function checkGIFTSyntax(text) {
   // 標準GIFTでは1問につき空欄（回答ブロック）は1つ。複数並べても2つ目以降は
   // Moodleで空欄にならず {...} がそのまま本文に表示されてしまう（Cloze記法が別途必要）。
   checkMultipleBlocks(text, warnings);
+  checkDupAndFeedback(text, warnings);
   warnings.sort((a, b) => a.line - b.line);
   return warnings;
 }
@@ -1282,7 +2862,7 @@ function checkMultipleBlocks(text, warnings) {
       }
       warnings.push({
         line: secondLine,
-        message: (secondLine + 1) + ' 行目：1つの問題に複数の {…} があります。標準GIFTでは1問の空欄は1つだけで、2つ目以降はMoodleで空欄にならず {…} のまま本文に表示されます。複数の空欄を埋め込むにはCloze（穴埋め）記法（例：{1:SA:=答え}）が必要です。'
+        message: t('warn.multiBrace', {line:(secondLine + 1)})
       });
     }
     blockStart = -1; blockLines = [];
@@ -1299,15 +2879,84 @@ function checkMultipleBlocks(text, warnings) {
   flush();
 }
 
+// 選択肢行を解析し、(1) フィードバック内の未エスケープ = / ~ と
+// (2) 同一符号・同一テキストの選択肢／別解の重複を検出する。
+function checkDupAndFeedback(text, warnings) {
+  const lines = text.split('\n');
+  let insideBlock = false, braceDepth = 0;
+  // 現在の回答ブロック内で見た選択肢を記録（重複検出用）
+  let seen = new Map();          // key: sign + '\x00' + text  → 最初の行番号
+  const resetBlock = () => { seen = new Map(); };
+
+  for (let i = 0; i < lines.length; i++) {
+    const raw = lines[i];
+    if (/^[ \t]*\/\//.test(raw)) continue;
+
+    // ブレース深度を追跡（エスケープ \{ \} は無害化）
+    const forDepth = raw.replace(/\\[{}]/g, '  ');
+    const wasInside = insideBlock;
+    for (const ch of forDepth) {
+      if (ch === '{') { braceDepth++; insideBlock = true; }
+      else if (ch === '}') { braceDepth--; if (braceDepth <= 0) { braceDepth = 0; insideBlock = false; } }
+    }
+    // ブロックに入った／出た瞬間に重複記録をリセット
+    if (insideBlock && !wasInside) resetBlock();
+    if (!insideBlock && wasInside) resetBlock();
+    if (!insideBlock && !wasInside) continue;
+
+    const trimmed = raw.trimStart();
+    if (!(trimmed.startsWith('=') || trimmed.startsWith('~'))) continue;
+    // マッチング行（-> を含む）は対象外（別解・選択肢の概念が異なる）
+    if (/->/.test(trimmed)) continue;
+
+    // エスケープを退避（\= \~ \# などを無害なマーカーへ）
+    const masked = trimmed.replace(/\\./g, '\x01');
+    const sign = masked[0];
+    let segAfterSign = masked.slice(1);
+    // 重み %..% を除去
+    segAfterSign = segAfterSign.replace(/^\s*%-?\d+(?:\.\d+)?%/, '');
+    const hashIdx = segAfterSign.indexOf('#');
+    const bodyPart = (hashIdx === -1 ? segAfterSign : segAfterSign.slice(0, hashIdx));
+    const fbPart   = (hashIdx === -1 ? '' : segAfterSign.slice(hashIdx + 1));
+
+    // (1) フィードバック内の未エスケープ = / ~
+    const fbCtrl = fbPart.match(/[=~]/);
+    if (fbCtrl) {
+      warnings.push({ line:i, message:t('warn.fbEquals', {line:(i+1), char:fbCtrl[0]}) });
+    }
+
+    // (2) 選択肢・別解の重複（符号＋本文テキストが完全一致）
+    // 表示用テキストは元の文字列（エスケープ表記のまま）から重み・#以降を除いたもの
+    const dispRaw = trimmed.replace(/^[=~]/, '').replace(/^\s*%-?\d+(?:\.\d+)?%/, '');
+    const dispText = (dispRaw.indexOf('#') === -1 ? dispRaw : dispRaw.slice(0, dispRaw.indexOf('#'))).trim();
+    const key = sign + '\x00' + bodyPart.trim();
+    if (dispText !== '' && seen.has(key)) {
+      warnings.push({ line:i, message:t('warn.dupChoice', {line:(i+1), text:dispText}) });
+    } else if (dispText !== '') {
+      seen.set(key, i);
+    }
+  }
+}
+
 function jumpToLine(lineIndex) {
-  const ta = document.getElementById('gift-input');
-  const lines = ta.value.split('\n');
-  let pos = 0;
-  for (let i = 0; i < lineIndex && i < lines.length; i++) pos += lines[i].length + 1;
-  ta.focus();
-  ta.setSelectionRange(pos, pos + (lines[lineIndex] || '').length);
-  const lineHeight = parseInt(getComputedStyle(ta).lineHeight) || 20;
-  ta.scrollTop = Math.max(0, lineIndex * lineHeight - ta.clientHeight / 2);
+  const lines = getEditorLines();
+  giftEditor.focus();
+  const ln = lines[lineIndex];
+  const node = ln && ln.firstNode;
+  if (node) {
+    const el = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
+    if (el && el.scrollIntoView) el.scrollIntoView({ block: 'center' });
+    try {
+      const range = document.createRange();
+      if (node.nodeType === Node.TEXT_NODE) range.setStart(node, 0);
+      else range.setStartBefore(node);
+      range.collapse(true);
+      const sel = window.getSelection();
+      sel.removeAllRanges(); sel.addRange(range);
+    } catch(e) {}
+  }
+  giftEditor.classList.add('flash');
+  setTimeout(() => giftEditor.classList.remove('flash'), 600);
 }
 
 function shuffle(arr) {
@@ -1322,34 +2971,58 @@ function shuffle(arr) {
 let questions = [];
 let parsedQuestions = [];
 let currentIdx = 0;
-let score = 0;
-let results = [];   // 各問題の { q, result } を蓄積
+let results = [];   // questions と同じインデックスで { q, result, resp } を保持（未解答は undefined）
 let userResponse = null;   // 現在の問題への入力状態
+let currentReviewIdx = 0;  // レビュー画面で表示中の問題インデックス（言語切替時の再描画用）
+
+// 1問あたりの配点を返す。記述式（essay）と説明（description）は採点対象外のため 0 点。
+function getMaxScore(q) {
+  return (q.type === 'essay' || q.type === 'description') ? 0 : 1;
+}
+// questions 全体の配点合計（採点対象外の問題は分母に含めない）
+function calcTotalScore() {
+  return questions.reduce((sum, q) => sum + getMaxScore(q), 0);
+}
+// results 配列から獲得点数の合計を都度計算する（再解答時は最後に選んだ内容のみを集計する）
+function calcScore() {
+  return results.reduce((sum, r, i) => {
+    if (!r || !r.result) return sum;
+    const q = questions[i];
+    return sum + (r.result.correct === true ? getMaxScore(q) : 0);
+  }, 0);
+}
+// 上部ナビゲーションボタンの下線色分類: 'correct'（緑）/'wrong'（赤）/'neutral'（灰色＝配点なし）
+function navMarkClass(q, r) {
+  if (getMaxScore(q) === 0) return 'neutral';   // 記述式・説明は採点対象外
+  if (!r || !r.result) return null;             // 未解答は色付けしない
+  return (r.result.correct === true) ? 'correct' : 'wrong';
+}
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-function loadDefault() { document.getElementById('gift-input').value = DEFAULT_GIFT; }
+function loadDefault() { setGiftText(getDefaultGift()); }
 function goToInput() { showScreen('screen-input'); }
 function goToList() { showScreen('screen-list'); }
 
 function loadList() {
-  const text = document.getElementById('gift-input').value;
+  pruneImgStore();             // 削除済み画像をストアから掃除
+  const text = getGiftText();
   const errEl = document.getElementById('parse-error');
   const warnEl = document.getElementById('parse-warning');
   errEl.style.display = 'none'; warnEl.style.display = 'none';
-  if (!text.trim()) { errEl.textContent = 'テキストが入力されていません。'; errEl.style.display = 'block'; return; }
+  if (!text.trim()) { errEl.textContent = t('err.empty'); errEl.style.display = 'block'; return; }
   const syntaxWarnings = checkGIFTSyntax(text);
   if (syntaxWarnings.length > 0) {
     jumpToLine(syntaxWarnings[0].line);
-    let html = '⚠️ 文法の疑いがある箇所が ' + syntaxWarnings.length + ' か所見つかりました：<ul>';
+    let html = t('warn.heading', {n:syntaxWarnings.length}) + '<ul>';
     syntaxWarnings.forEach(w => { html += '<li><span class="warn-link" onclick="jumpToLine('+w.line+')">'+escHtml(w.message)+'</span></li>'; });
-    html += '</ul><div class="warn-continue">修正後に再度「📋 問題一覧を確認」を押してください。　それでも続ける場合：制御文字（= ~ # { } :）を本文中で使うには <code>\\=</code> のようにバックスラッシュでエスケープするか、全角文字（＝ 〜 ＃ など）を使ってください。</div>';
+    html += '</ul><div class="warn-continue">' + t('warn.continue') + '</div>';
     warnEl.innerHTML = html; warnEl.style.display = 'block'; return;
   }
   const parsed = parseGIFT(text);
-  if (parsed.length === 0) { errEl.textContent = 'GIFT 形式の問題が見つかりませんでした。形式を確認してください。'; errEl.style.display = 'block'; return; }
+  if (parsed.length === 0) { errEl.textContent = t('err.noQuestions'); errEl.style.display = 'block'; return; }
   parsedQuestions = parsed;
   renderList(parsed);
   showScreen('screen-list');
@@ -1357,15 +3030,17 @@ function loadList() {
 
 function renderList(parsed) {
   const cat = parsed[0]?.category || '';
-  document.getElementById('list-header-sub').textContent = '問題一覧　' + parsed.length + ' 問' + (cat ? '　|　' + cat : '');
-  let html = '<table class="list-table"><thead><tr><th style="width:3em">No.</th><th style="width:7em">種類</th><th>問題タイトル</th><th>問題文（冒頭）</th><th style="width:5em; text-align:center">全体解説</th></tr></thead><tbody>';
+  document.getElementById('list-header-sub').textContent = t('list.subtitle', {n:parsed.length, cat:(cat ? '　|　' + cat : '')});
+  let html = '<table class="list-table"><thead><tr><th style="width:3em">'+t('list.th.no')+'</th><th style="width:7em">'+t('list.th.type')+'</th><th>'+t('list.th.title')+'</th><th>'+t('list.th.preview')+'</th><th style="width:5em; text-align:center">'+t('list.th.expl')+'</th></tr></thead><tbody>';
   parsed.forEach((q, i) => {
-    const preview = q.text.length > 44 ? q.text.slice(0,44)+'…' : q.text;
+    // 問題一覧の『問題文（冒頭）』は、raw HTML モードのON/OFFに関係なくタグを外した文字だけで表示する。
+    const plain = stripHtmlToPlainText(q.text);
+    const preview = plain.length > 44 ? plain.slice(0,44)+'…' : plain;
     const hasExpl = q.generalFeedback ? '✓' : '—';
-    html += '<tr class="list-row" onclick="startFromIndex('+i+')" title="クリックしてこの問題を開始">'
+    html += '<tr class="list-row" onclick="startFromIndex('+i+')" title="'+escAttr(t('list.rowStart'))+'">'
       + '<td style="text-align:center; color:var(--text-muted)">' + (i+1) + '</td>'
-      + '<td><span class="type-badge t-'+q.type+'">'+TYPE_LABELS[q.type]+'</span></td>'
-      + '<td><span class="list-title">'+escHtml(q.title)+'</span></td>'
+      + '<td><span class="type-badge t-'+q.type+'">'+t(TYPE_LABELS[q.type])+'</span></td>'
+      + '<td><span class="list-title">'+escHtml(stripRich(q.title))+'</span></td>'
       + '<td style="color:var(--text-muted); font-size:0.85rem">'+escHtml(preview)+'</td>'
       + '<td style="text-align:center; color:'+(q.generalFeedback?'var(--correct)':'var(--border)')+'">'+hasExpl+'</td></tr>';
   });
@@ -1377,7 +3052,7 @@ function startFromIndex(idx) {
   const doShuffle = document.getElementById('shuffle-toggle').checked;
   questions = parsedQuestions.map(q => prepQuestion(q, doShuffle));
   assignOriginalIndices(questions);
-  currentIdx = idx; score = 0; results = [];
+  currentIdx = idx; results = new Array(questions.length);
   renderQuestion(); showScreen('screen-question');
 }
 function startQuiz() {
@@ -1386,7 +3061,7 @@ function startQuiz() {
   const ordered = doShuffleQ ? shuffle(parsedQuestions) : [...parsedQuestions];
   questions = ordered.map(q => prepQuestion(q, doShuffle));
   assignOriginalIndices(questions);
-  currentIdx = 0; score = 0; results = [];
+  currentIdx = 0; results = new Array(questions.length);
   renderQuestion(); showScreen('screen-question');
 }
 function restartQuiz() {
@@ -1395,7 +3070,7 @@ function restartQuiz() {
   const ordered = doShuffleQ ? shuffle(parsedQuestions) : [...parsedQuestions];
   questions = ordered.map(q => prepQuestion(q, doShuffle));
   assignOriginalIndices(questions);
-  currentIdx = 0; score = 0; results = [];
+  currentIdx = 0; results = new Array(questions.length);
   renderQuestion(); showScreen('screen-question');
 }
 
@@ -1406,6 +3081,194 @@ function prepQuestion(q, doShuffle) {
     if (copy.pairs) copy.pairs = shuffle(copy.pairs);
   }
   return copy;
+}
+
+// ═══════════════════════════════════════════════
+//  問題・解答を単一 HTML ファイルとして書き出す
+// ═══════════════════════════════════════════════
+// 選択肢番号を丸数字（①〜㊿）で返す。範囲外は (n) 表記。
+function circledNum(n) {
+  if (n >= 1 && n <= 20) return String.fromCodePoint(0x2460 + (n - 1));
+  if (n >= 21 && n <= 35) return String.fromCodePoint(0x3251 + (n - 21));
+  if (n >= 36 && n <= 50) return String.fromCodePoint(0x32B1 + (n - 36));
+  return '(' + n + ')';
+}
+function exportQuizHtml() {
+  // 一覧画面のシャッフル設定を反映した順序・選択肢で問題を準備する
+  const doShuffleQ = document.getElementById('shuffle-q-toggle').checked;
+  const doShuffleC = document.getElementById('shuffle-toggle').checked;
+  const ordered = doShuffleQ ? shuffle(parsedQuestions) : [...parsedQuestions];
+  const qs = ordered.map(q => prepQuestion(q, doShuffleC));
+
+  const esc = s => escHtml(s == null ? '' : String(s));
+  // renderRich はプレースホルダーを data URL の <img> に展開するため、画像も埋め込まれる
+  const rich = s => renderRich(s == null ? '' : String(s));
+
+  // マッチング問題は、右候補の提示順（丸数字の割り当て）を一度だけ決めて
+  // 問題側・解答側で共有する。rightOrder は right 文字列の配列（提示順）。
+  qs.forEach(q => {
+    if (q.type === 'matching' && q.pairs) {
+      const rights = q.pairs.map(p => p.right).concat(q.distractors || []);
+      q._rightOrder = doShuffleC ? shuffle(rights) : rights.slice();
+    }
+  });
+
+  // ── 前半：問題 ──
+  let qHtml = '';
+  qs.forEach((q, i) => {
+    const n = i + 1;
+    qHtml += '<div class="q-block">';
+    // 「問題N. 問題文」（タイトル・タイプ表示は省略）
+    qHtml += '<span class="q-num">' + esc(t('export.questionN', {n:n})) + '.</span> '
+           + '<span class="q-text">' + rich(q.text) + '</span>';
+    qHtml += exportQuestionBody(q, rich, esc);
+    qHtml += '</div>';
+  });
+
+  // ── 後半：解答 ──
+  let aHtml = '';
+  qs.forEach((q, i) => {
+    const n = i + 1;
+    aHtml += '<div class="a-block">';
+    aHtml += '<span class="a-num">' + esc(t('export.answerN', {n:n})) + '.</span> '
+           + exportAnswerBody(q, rich, esc);
+    if (q.generalFeedback) {
+      aHtml += '<span class="a-expl">' + paren(rich(q.generalFeedback)) + '</span>';
+    }
+    aHtml += '</div>';
+  });
+
+  const doc = exportHtmlShell(qHtml, aHtml);
+
+  // ダウンロード（ファイル名にタイムスタンプ）
+  const blob = new Blob([doc], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const d = new Date(); const z = x => String(x).padStart(2,'0');
+  const ts = '' + d.getFullYear() + z(d.getMonth()+1) + z(d.getDate())
+                + z(d.getHours()) + z(d.getMinutes()) + z(d.getSeconds());
+  a.href = url; a.download = 'quiz-' + ts + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+// 問題側：選択肢など（正解情報は出さない）。印刷向けに改行・インデントで省スペースに。
+function exportQuestionBody(q, rich, esc) {
+  let h = '';
+  const sep = t('export.optSep');   // 選択肢間の区切り（日本語=全角空白／英語=em space）
+  if (q.type === 'mc' || q.type === 'multi') {
+    // ①選択肢1　②選択肢2 … を区切りスペースで連結
+    const opts = q.choices.map((c, idx) =>
+      '<span class="opt">' + circledNum(idx + 1) + rich(c.text) + '</span>');
+    h += '<div class="opts-inline">' + opts.join(sep) + '</div>';
+  } else if (q.type === 'truefalse') {
+    const opts = [
+      '<span class="opt">' + circledNum(1) + esc(t('export.tf.true')) + '</span>',
+      '<span class="opt">' + circledNum(2) + esc(t('export.tf.false')) + '</span>'
+    ];
+    h += '<div class="opts-inline">' + opts.join(sep) + '</div>';
+  } else if (q.type === 'matching') {
+    // 左項目は丸囲み英字（Ⓐ Ⓑ …）、右候補は丸数字（① ② …）で提示する。
+    // 右候補の順序は q._rightOrder（問題・解答で共有）を使う。
+    const lefts = q.pairs.map(p => p.left);
+    const rights = q._rightOrder || q.pairs.map(p => p.right);
+    const leftOpts = lefts.map((l, idx) =>
+      '<span class="opt">' + circledLetter(idx) + rich(l) + '</span>');
+    const rightOpts = rights.map((r, idx) =>
+      '<span class="opt">' + circledNum(idx + 1) + rich(r) + '</span>');
+    h += '<div class="opts-inline">' + leftOpts.join(sep) + '</div>'
+       + '<div class="opts-inline pool">' + rightOpts.join(sep) + '</div>';
+  } else if (q.type === 'short' || q.type === 'numerical' || q.type === 'essay') {
+    h += '<span class="answer-blank">（　　　　　　）</span>';
+  }
+  return h;
+}
+
+// マッチング左側ラベルの丸囲み文字（Ⓐ, Ⓑ, Ⓒ …）
+function circledLetter(idx) {
+  if (idx >= 0 && idx < 26) return String.fromCodePoint(0x24B6 + idx);
+  return '(' + String.fromCharCode(0x41 + (idx % 26)) + ')';
+}
+
+// 解答側：正解・別解などを簡潔に1行で。選択肢は丸数字つきで正解を示す。
+function exportAnswerBody(q, rich, esc) {
+  let h = '';
+  const sep = t('export.optSep');   // 解答内の区切りも問題側と統一
+  if (q.type === 'mc' || q.type === 'multi') {
+    // 正解の選択肢を「①水星」のように丸数字つきで列挙
+    const cor = [];
+    q.choices.forEach((c, idx) => {
+      if (c.correct) cor.push('<span class="ans-opt">' + circledNum(idx + 1) + rich(c.text) + '</span>');
+    });
+    h += cor.join(sep);
+  } else if (q.type === 'truefalse') {
+    const idx = q.answer ? 1 : 2;
+    h += '<span class="ans-opt">' + circledNum(idx)
+       + esc(q.answer ? t('export.tf.true') : t('export.tf.false')) + '</span>';
+  } else if (q.type === 'short') {
+    const parts = (q.answers || []).map(a => {
+      const wt = (a.weight != null && a.weight !== 100) ? paren(a.weight + '%') : '';
+      return rich(a.text) + esc(wt);
+    });
+    h += parts.join(' / ');
+  } else if (q.type === 'numerical') {
+    const parts = (q.answers || []).map(a => {
+      const disp = a.display != null ? a.display : (a.value != null ? String(a.value) : '');
+      const wt = (a.weight != null && a.weight !== 100) ? paren(a.weight + '%') : '';
+      return esc(disp + wt);
+    });
+    h += parts.join(' / ');
+  } else if (q.type === 'matching') {
+    // 「Ⓐ→③セ氏度」形式。右候補の丸数字は q._rightOrder の位置から求める。
+    const rights = q._rightOrder || q.pairs.map(p => p.right);
+    const parts = q.pairs.map((p, idx) => {
+      const num = rights.indexOf(p.right);   // 提示順での位置（0-based）
+      const numMark = num >= 0 ? circledNum(num + 1) : '';
+      return '<span class="ans-opt">' + circledLetter(idx) + '→' + numMark + rich(p.right) + '</span>';
+    });
+    h += parts.join(sep);
+  } else if (q.type === 'essay') {
+    // 解答例は generalFeedback を解説として後段で出すため、ここでは空でよい
+    h += '<span class="a-note">' + esc(t('export.sampleAnswer')) + '</span>';
+  } else if (q.type === 'description') {
+    h += '<span class="a-note">' + esc(t('export.noAnswer')) + '</span>';
+  }
+  return h;
+}
+
+// 完全な単一 HTML ドキュメントを組み立てる（スタイル内包）
+function exportHtmlShell(qHtml, aHtml) {
+  const lang = currentLang;
+  const title = t('export.docTitle');
+  const css = [
+    'body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Noto Sans JP",sans-serif;',
+    'line-height:1.6;color:#1a1a1a;max-width:820px;margin:0 auto;padding:24px 20px;background:#fff}',
+    'h1{font-size:1.4rem;border-bottom:3px solid #2c5b8f;padding-bottom:6px;margin:0 0 12px}',
+    'h2{font-size:1.15rem;color:#2c5b8f;margin:24px 0 10px;border-bottom:1px solid #ccc;padding-bottom:4px}',
+    '.q-block,.a-block{margin:0 0 8px;padding:0}',
+    '.q-num,.a-num{font-weight:700;color:#2c5b8f}',
+    '.q-text{}',
+    // 選択肢は横並び。入りきらなければ折り返すが、各選択肢の間隔を詰める
+    '.opts-inline{margin:2px 0 2px 1.4em}',
+    '.opts-inline .opt{white-space:nowrap;display:inline-block}',
+    '.opts-inline.pool{color:#555}',
+    '.answer-blank{color:#888;margin-left:0.5em}',
+    '.ans-opt{font-weight:600}',
+    '.a-expl{color:#555;font-size:0.92em}',
+    '.a-note{color:#666;font-style:italic}',
+    'img{max-width:100%;height:auto!important;vertical-align:middle;object-fit:contain}',
+    '.foot{margin-top:28px;padding-top:10px;border-top:1px solid #ccc;font-size:.75rem;color:#999;text-align:center}',
+    // 印刷時の調整
+    '@media print{body{padding:0;max-width:none}h2{page-break-after:avoid}.q-block,.a-block{page-break-inside:avoid}}'
+  ].join('');
+  return '<!DOCTYPE html>\n<html lang="' + lang + '">\n<head>\n<meta charset="UTF-8">\n'
+    + '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+    + '<title>' + escHtml(title) + '</title>\n<style>' + css + '</style>\n</head>\n<body>\n'
+    + '<h1>' + escHtml(title) + '</h1>\n'
+    + '<h2>' + escHtml(t('export.questionsHeading')) + '</h2>\n' + qHtml
+    + '<h2>' + escHtml(t('export.answersHeading')) + '</h2>\n' + aHtml
+    + '<div class="foot">' + escHtml(t('export.generatedBy')) + '</div>\n'
+    + '</body>\n</html>';
 }
 
 // 各問題に元のパース順インデックスを付与
@@ -1421,43 +3284,81 @@ function assignOriginalIndices(qs) {
 function renderQuestion() {
   const q = questions[currentIdx];
   const total = questions.length, num = currentIdx + 1;
+  // この問題に解答済みであれば、前回の選択内容を復元して選び直せるようにする
+  const saved = results[currentIdx] ? results[currentIdx].resp : null;
   userResponse = null;
-  document.getElementById('q-header-sub').textContent = '問題 ' + num + ' / ' + total + (q.category ? '　|　'+q.category : '');
+  document.getElementById('q-header-sub').textContent = t('q.subtitle', {num:num, total:total, cat:(q.category ? '　|　'+q.category : '')});
 
   // ナビゲーションボタン列（元のパース順番号を表示）
   const navWrap = document.getElementById('q-nav-buttons');
   navWrap.innerHTML = '';
+
+  // ── ジャンプ・ステップボタン [|<] [<] [>] [>|] ──
+  const isFirst = currentIdx === 0;
+  const isLast  = currentIdx === questions.length - 1;
+  const jumpDefs = [
+    { label: '|◀', titleKey: 'nav.first', disable: isFirst, target: () => 0 },
+    { label: '◀',  titleKey: 'nav.prev',  disable: isFirst, target: () => currentIdx - 1 },
+    { label: '▶',  titleKey: 'nav.next',  disable: isLast,  target: () => currentIdx + 1 },
+    { label: '▶|', titleKey: 'nav.last',  disable: isLast,  target: () => questions.length - 1 },
+  ];
+  jumpDefs.forEach(def => {
+    const btn = document.createElement('button');
+    btn.className = 'q-nav-btn nav-jump';
+    btn.textContent = def.label;
+    btn.title = t(def.titleKey);
+    btn.disabled = def.disable;
+    btn.addEventListener('click', () => { currentIdx = def.target(); renderQuestion(); });
+    navWrap.appendChild(btn);
+  });
+
+  // ジャンプ群と番号群の間の隙間
+  const sep = document.createElement('span');
+  sep.className = 'q-nav-sep';
+  navWrap.appendChild(sep);
+
+  // ── 番号ボタン [1]…[N] ──
   questions.forEach((qq, i) => {
     const btn = document.createElement('button');
-    btn.className = 'q-nav-btn' + (i === currentIdx ? ' current' : '');
+    const markCls = navMarkClass(qq, results[i]);
+    btn.className = 'q-nav-btn' + (i === currentIdx ? ' current' : '') + (markCls ? ' nav-' + markCls : '');
     btn.textContent = (qq.originalIndex != null ? qq.originalIndex + 1 : i + 1);
-    btn.title = qq.title || ('問題 ' + (i + 1));
+    btn.title = qq.title || t('qtitle.default', {n:(i + 1)});
     btn.addEventListener('click', () => {
       currentIdx = i;
       renderQuestion();
     });
     navWrap.appendChild(btn);
   });
-  document.getElementById('q-tag').innerHTML = escHtml(q.title) + '<span class="type-badge t-'+q.type+'">'+TYPE_LABELS[q.type]+'</span>';
-  document.getElementById('q-text').textContent = q.text;
+  // 最初の問題以外では「前へ」ボタンを表示し、ラベルを動的に切り替える
+  const prevBtn = document.getElementById('btn-prev-from-question');
+  if (currentIdx > 0) {
+    prevBtn.style.display = 'inline-flex';
+    const prevAnswered = !!(results[currentIdx - 1]);
+    prevBtn.textContent = t(prevAnswered ? 'btn.prevResult' : 'btn.prevQuestion');
+  } else {
+    prevBtn.style.display = 'none';
+  }
+  document.getElementById('q-tag').innerHTML = escHtml(stripRich(q.title)) + '<span class="type-badge t-'+q.type+'">'+t(TYPE_LABELS[q.type])+'</span>';
+  document.getElementById('q-text').innerHTML = renderRich(q.text);
 
   const container = document.getElementById('q-choices');
   container.innerHTML = '';
   const answerBtn = document.getElementById('btn-answer');
   answerBtn.disabled = true;
-  answerBtn.textContent = '答え合わせ';
+  answerBtn.textContent = t('btn.answer');
 
-  if (q.type === 'mc' || q.type === 'multi') renderChoicesUI(q, container, q.type === 'multi');
-  else if (q.type === 'truefalse') renderTrueFalseUI(q, container);
-  else if (q.type === 'short') renderTextInputUI(q, container, '答えを入力');
-  else if (q.type === 'numerical') renderTextInputUI(q, container, '数値を入力');
-  else if (q.type === 'matching') renderMatchingUI(q, container);
-  else if (q.type === 'essay') renderEssayUI(q, container);
+  if (q.type === 'mc' || q.type === 'multi') renderChoicesUI(q, container, q.type === 'multi', saved);
+  else if (q.type === 'truefalse') renderTrueFalseUI(q, container, saved);
+  else if (q.type === 'short') renderTextInputUI(q, container, t('input.short'), saved);
+  else if (q.type === 'numerical') renderTextInputUI(q, container, t('input.numerical'), saved);
+  else if (q.type === 'matching') renderMatchingUI(q, container, saved);
+  else if (q.type === 'essay') renderEssayUI(q, container, saved);
   else if (q.type === 'description') renderDescriptionUI(q, container);
 }
 
-function renderChoicesUI(q, container, isMulti) {
-  userResponse = isMulti ? [] : null;
+function renderChoicesUI(q, container, isMulti, saved) {
+  userResponse = isMulti ? (Array.isArray(saved) ? [...saved] : []) : (typeof saved === 'number' ? saved : null);
   const hintEnabled = document.getElementById('hint-toggle').checked;
   q.choices.forEach((c, i) => {
     const label = document.createElement('label');
@@ -1468,8 +3369,10 @@ function renderChoicesUI(q, container, isMulti) {
     const hintIcon = (hintEnabled && c.feedback)
       ? '<span class="review-hint-icon" style="margin-left:auto">💬</span>' : '';
     label.innerHTML = '<span class="'+markerCls+'">'+inner+'</span>'
-      + '<span class="choice-text">'+escHtml(c.text)+'</span>'
+      + '<span class="choice-text">'+renderRich(c.text)+'</span>'
       + hintIcon;
+    // 既存の選択状態を復元
+    if (isMulti ? userResponse.includes(i) : userResponse === i) label.classList.add('selected');
     label.addEventListener('click', () => {
       if (isMulti) {
         const pos = userResponse.indexOf(i);
@@ -1485,7 +3388,7 @@ function renderChoicesUI(q, container, isMulti) {
     // ヒント表示（フィードバックがある場合のみ）
     if (hintEnabled && c.feedback) {
       label.addEventListener('mouseenter', e => {
-        _tooltip.textContent = c.feedback;
+        _tooltip.textContent = stripRich(c.feedback);
         _tooltip.classList.add('visible');
         positionTooltip(e);
       });
@@ -1494,15 +3397,20 @@ function renderChoicesUI(q, container, isMulti) {
     }
     container.appendChild(label);
   });
+  // 既存回答があれば「答え合わせ」ボタンを最初から有効にする
+  const answerBtn = document.getElementById('btn-answer');
+  answerBtn.disabled = isMulti ? userResponse.length === 0 : userResponse === null;
 }
 
-function renderTrueFalseUI(q, container) {
+function renderTrueFalseUI(q, container, saved) {
+  userResponse = (typeof saved === 'boolean') ? saved : null;
   const wrap = document.createElement('div');
   wrap.className = 'tf-buttons';
-  ['○（正しい）','×（誤り）'].forEach((lbl, i) => {
+  [t('tf.true'),t('tf.false')].forEach((lbl, i) => {
     const val = (i === 0);
     const btn = document.createElement('button');
     btn.className = 'tf-btn'; btn.textContent = lbl;
+    if (userResponse === val) btn.classList.add('selected');
     btn.addEventListener('click', () => {
       userResponse = val;
       wrap.querySelectorAll('.tf-btn').forEach(b=>b.classList.remove('selected'));
@@ -1512,13 +3420,15 @@ function renderTrueFalseUI(q, container) {
     wrap.appendChild(btn);
   });
   container.appendChild(wrap);
+  document.getElementById('btn-answer').disabled = (userResponse === null);
 }
 
-function renderTextInputUI(q, container, placeholder) {
+function renderTextInputUI(q, container, placeholder, saved) {
   const input = document.createElement('input');
   input.type = (q.type === 'numerical') ? 'text' : 'text';
   input.className = 'text-answer-input';
   input.placeholder = placeholder;
+  if (typeof saved === 'string') { input.value = saved; userResponse = saved; }
   input.addEventListener('input', () => {
     userResponse = input.value;
     document.getElementById('btn-answer').disabled = input.value.trim() === '';
@@ -1527,26 +3437,28 @@ function renderTextInputUI(q, container, placeholder) {
   container.appendChild(input);
   const hint = document.createElement('div');
   hint.className = 'input-hint';
-  hint.textContent = (q.type === 'numerical') ? '半角数字で入力してください。' : '正解と完全に一致するか判定します（前後の空白は無視）。';
+  hint.textContent = (q.type === 'numerical') ? t('hint.numerical') : t('hint.short');
   container.appendChild(hint);
+  document.getElementById('btn-answer').disabled = input.value.trim() === '';
   setTimeout(()=>input.focus(), 50);
 }
 
-function renderMatchingUI(q, container) {
-  userResponse = {};
-  const rights = shuffle(q.pairs.map(p => p.right));
+function renderMatchingUI(q, container, saved) {
+  userResponse = (saved && typeof saved === 'object') ? {...saved} : {};
+  const rights = shuffle(q.pairs.map(p => p.right).concat(q.distractors || []));
   const grid = document.createElement('div');
   grid.className = 'matching-grid';
   q.pairs.forEach((p, i) => {
     const row = document.createElement('div');
     row.className = 'matching-row';
     const left = document.createElement('div');
-    left.className = 'matching-left'; left.textContent = p.left;
+    left.className = 'matching-left'; left.innerHTML = renderRich(p.left);
     const arrow = document.createElement('span');
     arrow.className = 'matching-arrow'; arrow.textContent = '→';
     const sel = document.createElement('select');
     sel.className = 'matching-select';
-    sel.innerHTML = '<option value="">— 選択 —</option>' + rights.map(r => '<option value="'+escAttr(r)+'">'+escHtml(r)+'</option>').join('');
+    sel.innerHTML = '<option value="">'+t('opt.select')+'</option>' + rights.map(r => '<option value="'+escAttr(r)+'">'+escHtml(stripRich(r))+'</option>').join('');
+    if (userResponse[p.left]) sel.value = userResponse[p.left];
     sel.addEventListener('change', () => {
       userResponse[p.left] = sel.value;
       const allFilled = q.pairs.every(pp => userResponse[pp.left]);
@@ -1556,31 +3468,33 @@ function renderMatchingUI(q, container) {
     grid.appendChild(row);
   });
   container.appendChild(grid);
+  document.getElementById('btn-answer').disabled = !q.pairs.every(pp => userResponse[pp.left]);
 }
 
-function renderEssayUI(q, container) {
+function renderEssayUI(q, container, saved) {
   const ta = document.createElement('textarea');
   ta.className = 'essay-textarea';
-  ta.placeholder = '解答を入力してください（自由記述）。';
+  ta.placeholder = t('essay.placeholder');
+  if (typeof saved === 'string') { ta.value = saved; userResponse = saved; }
   ta.addEventListener('input', () => { userResponse = ta.value; });
   container.appendChild(ta);
   const hint = document.createElement('div');
   hint.className = 'input-hint';
-  hint.textContent = '記述式問題です。自動採点はされません。「解答例・解説を見る」で確認できます。';
+  hint.textContent = t('hint.essay');
   container.appendChild(hint);
   const btn = document.getElementById('btn-answer');
   btn.disabled = false;
-  btn.textContent = '解答例・解説を見る';
+  btn.textContent = t('btn.showEssay');
 }
 
 function renderDescriptionUI(q, container) {
   const note = document.createElement('div');
   note.className = 'description-note';
-  note.textContent = q.text || '（説明文）';
+  note.innerHTML = q.text ? renderRich(q.text) : t('ph.descNote');
   container.appendChild(note);
   const btn = document.getElementById('btn-answer');
   btn.disabled = false;
-  btn.textContent = '次へ進む';
+  btn.textContent = t('btn.nextDesc');
 }
 
 // ═══════════════════════════════════════════════
@@ -1589,9 +3503,18 @@ function renderDescriptionUI(q, container) {
 function submitAnswer() {
   const q = questions[currentIdx];
   const result = gradeAnswer(q, userResponse);
-  if (result.correct === true) score++;
-  results.push({ q, result });
-  const isLast = (currentIdx + 1 === questions.length);
+  results[currentIdx] = { q, result, resp: userResponse };
+  showResultScreen(currentIdx);
+}
+
+// 指定インデックスの問題の結果画面を表示する（採点済みであることが前提）
+// submitAnswer() からの遷移と、問題画面の「前の問題」ボタンからの遷移の両方で使う共通処理
+function showResultScreen(idx) {
+  const q = questions[idx];
+  const found = results[idx];
+  const result = found ? found.result : null;
+  if (!result) return; // 未解答の問題には結果画面を出さない（呼び出し側で防止する想定の保険）
+  const isLast = (idx + 1 === questions.length);
   renderResult(q, result);
   showScreen('screen-result');
   if (isLast) {
@@ -1603,6 +3526,7 @@ function submitAnswer() {
     document.getElementById('btn-next').style.display = 'inline-flex';
     document.getElementById('btn-to-score').style.display = 'none';
   }
+  document.getElementById('btn-prev-from-result').style.display = 'inline-flex';
 }
 
 function gradeAnswer(q, resp) {
@@ -1622,8 +3546,8 @@ function gradeAnswer(q, resp) {
     }
     case 'truefalse': {
       const correct = (resp === q.answer);
-      return { correct, chosenText: resp ? '○（正しい）' : '×（誤り）',
-               correctText: q.answer ? '○（正しい）' : '×（誤り）',
+      return { correct, chosenText: resp ? t('tf.true') : t('tf.false'),
+               correctText: q.answer ? t('tf.true') : t('tf.false'),
                chosenFeedback: correct ? q.rightFeedback : q.wrongFeedback };
     }
     case 'short': {
@@ -1667,22 +3591,22 @@ function gradeAnswer(q, resp) {
 // ═══════════════════════════════════════════════
 function renderResult(q, result) {
   const total = questions.length, num = currentIdx + 1, isLast = num === total;
-  document.getElementById('r-header-sub').textContent = '問題 ' + num + ' / ' + total + (q.category ? '　|　'+q.category : '');
+  document.getElementById('r-header-sub').textContent = t('q.subtitle', {num:num, total:total, cat:(q.category ? '　|　'+q.category : '')});
 
   const rh = document.getElementById('result-header');
   const badge = document.getElementById('result-badge');
   const verdict = document.getElementById('result-verdict');
 
   if (result.correct === true) {
-    rh.className = 'result-header correct'; badge.textContent = '✓'; verdict.textContent = '正解！';
+    rh.className = 'result-header correct'; badge.textContent = '✓'; verdict.textContent = t('verdict.correct');
   } else if (result.correct === false) {
-    rh.className = 'result-header wrong'; badge.textContent = '✗'; verdict.textContent = '不正解';
+    rh.className = 'result-header wrong'; badge.textContent = '✗'; verdict.textContent = t('verdict.wrong');
   } else if (result.correct === null && result.matched) {
-    rh.className = 'result-header correct'; badge.textContent = '△'; verdict.textContent = '部分正解';
+    rh.className = 'result-header correct'; badge.textContent = '△'; verdict.textContent = t('verdict.partial');
   } else {
     rh.className = 'result-header'; rh.style.background = 'var(--surface2)'; rh.style.borderColor = 'var(--border)';
     badge.textContent = 'ℹ'; badge.style.background = 'var(--text-muted)';
-    verdict.textContent = (q.type === 'essay') ? '解答例・解説' : (q.type === 'description' ? '説明' : '確認');
+    verdict.textContent = (q.type === 'essay') ? t('verdict.essay') : (q.type === 'description' ? t('verdict.description') : t('verdict.confirm'));
     verdict.style.color = 'var(--text)';
   }
   if (result.correct !== null || (result.correct===null && result.matched)) {
@@ -1694,9 +3618,9 @@ function renderResult(q, result) {
   const showQ = document.getElementById('show-question-toggle').checked;
   let prefix = '';
   if (showQ) {
-    prefix = '<div class="result-section-label">問題</div>'
+    prefix = '<div class="result-section-label">'+t('review.section.q')+'</div>'
       + '<div class="result-detail-box neutral" style="font-family:var(--font-display);line-height:1.75">'
-      + escHtml(q.text) + '</div>'
+      + renderRich(q.text) + '</div>'
       + buildReviewChoices(q, result, true);   // tooltip は常時有効
   }
   body.innerHTML = prefix + buildResultBody(q, result);
@@ -1704,7 +3628,7 @@ function renderResult(q, result) {
 
   // 全体解説
   const ofWrap = document.getElementById('overall-feedback-wrap');
-  if (q.generalFeedback) { ofWrap.style.display='block'; document.getElementById('overall-feedback').textContent = q.generalFeedback; }
+  if (q.generalFeedback) { ofWrap.style.display='block'; document.getElementById('overall-feedback').innerHTML = renderRich(q.generalFeedback); }
   else ofWrap.style.display = 'none';
 }
 
@@ -1718,7 +3642,7 @@ function buildReviewChoices(q, result, alwaysTooltip) {
     const chosenSet = q.type === 'multi'
       ? new Set((result.chosenList || []).map(c => c.text))
       : new Set(result.chosenText ? [result.chosenText] : []);
-    html += '<div class="result-section-label" style="margin-top:14px">選択肢</div><div class="review-choices">';
+    html += '<div class="result-section-label" style="margin-top:14px">'+t('review.section.choices')+'</div><div class="review-choices">';
     q.choices.forEach(c => {
       const isCorrect  = c.correct;
       const wasChosen  = chosenSet.has(c.text);
@@ -1731,16 +3655,16 @@ function buildReviewChoices(q, result, alwaysTooltip) {
         markHtml = '<span class="review-choice-mark neu">○</span>';
       }
       const hasFb  = !!(c.feedback);
-      const fbAttr = hasFb ? ' data-tooltip="' + escAttr(c.feedback) + '"' : '';
+      const fbAttr = hasFb ? ' data-tooltip="' + escAttr(stripRich(c.feedback)) + '"' : '';
       const hintIcon = (hasFb && hintEnabled) ? '<span class="review-hint-icon">💬</span>' : '';
       html += '<div class="review-choice ' + cls + (hasFb && hintEnabled ? ' has-feedback' : '') + '"' + fbAttr + '>'
-        + markHtml + '<span>' + escHtml(c.text) + '</span>' + hintIcon + '</div>';
+        + markHtml + '<span>' + renderRich(c.text) + '</span>' + hintIcon + '</div>';
     });
     html += '</div>';
   } else if (q.type === 'truefalse') {
-    const trueChosen = result.chosenText && result.chosenText.startsWith('○');
-    const opts = [{ label:'○（正しい）', val:true }, { label:'×（誤り）', val:false }];
-    html += '<div class="result-section-label" style="margin-top:14px">選択肢</div><div class="review-choices">';
+    const trueChosen = result.chosenText && result.chosenText === t('tf.true');
+    const opts = [{ label:t('tf.true'), val:true }, { label:t('tf.false'), val:false }];
+    html += '<div class="result-section-label" style="margin-top:14px">'+t('review.section.choices')+'</div><div class="review-choices">';
     opts.forEach(c => {
       const isCorrect = (c.val === q.answer);
       const wasChosen = (c.val === true) ? trueChosen : !trueChosen;
@@ -1750,7 +3674,7 @@ function buildReviewChoices(q, result, alwaysTooltip) {
       else { markHtml = '<span class="review-choice-mark neu">○</span>'; }
       const fb = isCorrect ? (q.rightFeedback||'') : (q.wrongFeedback||'');
       const hasFb = !!fb;
-      const fbAttr = hasFb ? ' data-tooltip="' + escAttr(fb) + '"' : '';
+      const fbAttr = hasFb ? ' data-tooltip="' + escAttr(stripRich(fb)) + '"' : '';
       const hintIcon = (hasFb && hintEnabled) ? '<span class="review-hint-icon">💬</span>' : '';
       html += '<div class="review-choice ' + cls + (hasFb && hintEnabled ? ' has-feedback' : '') + '"' + fbAttr + '>'
         + markHtml + '<span>' + escHtml(c.label) + '</span>' + hintIcon + '</div>';
@@ -1765,110 +3689,131 @@ function buildResultBody(q, r) {
   const sec = (label, content, cls) => '<div class="result-section-label">'+label+'</div><div class="result-detail-box '+(cls||'neutral')+'">'+content+'</div>';
 
   if (q.type === 'mc') {
-    html += sec('あなたの選択', escHtml(r.chosenText), r.correct ? 'ok' : 'ng');
-    if (!r.correct) html += sec('正解', r.correctChoices.map(c=>escHtml(c.text)).join('、'), 'ok');
-    if (r.chosenFeedback) html += fb('選択肢の解説', r.chosenFeedback);
+    html += sec(t('sec.yourChoice'), renderRich(r.chosenText), r.correct ? 'ok' : 'ng');
+    if (!r.correct) html += sec(t('sec.correct'), r.correctChoices.map(c=>renderRich(c.text)).join(joinSep()), 'ok');
+    if (r.chosenFeedback) html += fb(t('fb.choiceExpl'), r.chosenFeedback);
   }
   else if (q.type === 'multi') {
-    const chosenTxt = (r.chosenList.length ? r.chosenList.map(c=>escHtml(c.text)).join('、') : '（未選択）');
-    html += sec('あなたの選択', chosenTxt, r.correct ? 'ok' : 'ng');
-    html += sec('正解（すべて）', r.correctChoices.map(c=>escHtml(c.text)).join('、'), 'ok');
-    const fbs = r.chosenList.filter(c=>c.feedback).map(c=>'<div style="margin:4px 0"><b>'+escHtml(c.text)+'</b>：'+escHtml(c.feedback)+'</div>').join('');
-    if (fbs) html += fb('選択肢の解説', fbs, true);
+    const chosenTxt = (r.chosenList.length ? r.chosenList.map(c=>renderRich(c.text)).join(joinSep()) : t('ph.notChosen'));
+    html += sec(t('sec.yourChoice'), chosenTxt, r.correct ? 'ok' : 'ng');
+    html += sec(t('sec.correctAll'), r.correctChoices.map(c=>renderRich(c.text)).join(joinSep()), 'ok');
+    const fbs = r.chosenList.filter(c=>c.feedback).map(c=>'<div style="margin:4px 0"><b>'+renderRich(c.text)+'</b>：'+renderRich(c.feedback)+'</div>').join('');
+    if (fbs) html += fb(t('fb.choiceExpl'), fbs, true);
   }
   else if (q.type === 'truefalse') {
-    html += sec('あなたの選択', escHtml(r.chosenText), r.correct ? 'ok' : 'ng');
-    if (!r.correct) html += sec('正解', escHtml(r.correctText), 'ok');
-    if (r.chosenFeedback) html += fb('解説', r.chosenFeedback);
+    html += sec(t('sec.yourChoice'), escHtml(r.chosenText), r.correct ? 'ok' : 'ng');
+    if (!r.correct) html += sec(t('sec.correct'), escHtml(r.correctText), 'ok');
+    if (r.chosenFeedback) html += fb(t('fb.expl'), r.chosenFeedback);
   }
   else if (q.type === 'short') {
     const cls = r.correct === true ? 'ok' : (r.correct === null && r.matched ? 'neutral' : 'ng');
-    html += sec('あなたの解答', escHtml(r.chosenText || '（無回答）'), cls);
-    const accepted = r.acceptable.map(a => '<li>'+escHtml(a.text)+(a.weight!=null?'（'+a.weight+'%）':'')+'</li>').join('');
-    html += '<div class="result-section-label">正解として受理される解答</div><div class="result-detail-box ok"><ul class="accepted-list">'+accepted+'</ul></div>';
-    if (r.matched && r.matched.feedback) html += fb('解説', r.matched.feedback);
+    html += sec(t('sec.yourAnswer'), escHtml(r.chosenText || t('ph.noAnswer')), cls);
+    const accepted = r.acceptable.map(a => '<li>'+renderRich(a.text)+(a.weight!=null?paren(a.weight+'%'):'')+'</li>').join('');
+    html += '<div class="result-section-label">'+t('sec.acceptedAnswers')+'</div><div class="result-detail-box ok"><ul class="accepted-list">'+accepted+'</ul></div>';
+    if (r.matched && r.matched.feedback) html += fb(t('fb.expl'), r.matched.feedback);
   }
   else if (q.type === 'numerical') {
     const cls = r.correct === true ? 'ok' : (r.correct === null && r.matched ? 'neutral' : 'ng');
-    html += sec('あなたの解答', escHtml(r.chosenText || '（無回答）'), cls);
-    const accepted = r.acceptable.map(a => '<li>'+escHtml(a.display)+(a.weight!=null?'（'+a.weight+'%）':'')+'</li>').join('');
-    html += '<div class="result-section-label">正解として受理される範囲</div><div class="result-detail-box ok"><ul class="accepted-list">'+accepted+'</ul></div>';
-    if (r.matched && r.matched.feedback) html += fb('解説', r.matched.feedback);
+    html += sec(t('sec.yourAnswer'), escHtml(r.chosenText || t('ph.noAnswer')), cls);
+    const accepted = r.acceptable.map(a => '<li>'+escHtml(a.display)+(a.weight!=null?paren(a.weight+'%'):'')+'</li>').join('');
+    html += '<div class="result-section-label">'+t('sec.acceptedRange')+'</div><div class="result-detail-box ok"><ul class="accepted-list">'+accepted+'</ul></div>';
+    if (r.matched && r.matched.feedback) html += fb(t('fb.expl'), r.matched.feedback);
   }
   else if (q.type === 'matching') {
-    html += '<div class="result-section-label">採点結果</div><div class="result-detail-box '+(r.correct?'ok':'ng')+'">';
+    html += '<div class="result-section-label">'+t('sec.grading')+'</div><div class="result-detail-box '+(r.correct?'ok':'ng')+'">';
     r.rows.forEach(row => {
-      html += '<div class="matching-result-row"><span class="mr-left">'+escHtml(row.left)+'</span><span class="matching-arrow">→</span>'
-        + '<span>'+escHtml(row.givenRight || '（未選択）')+'</span>'
+      html += '<div class="matching-result-row"><span class="mr-left">'+renderRich(row.left)+'</span><span class="matching-arrow">→</span>'
+        + '<span>'+(row.givenRight ? renderRich(row.givenRight) : t('ph.notChosen'))+'</span>'
         + '<span class="mr-mark '+(row.ok?'ok':'ng')+'">'+(row.ok?'✓':'✗')+'</span>';
-      if (!row.ok) html += '<span style="color:var(--text-muted)">正：'+escHtml(row.correctRight)+'</span>';
+      if (!row.ok) html += '<span style="color:var(--text-muted)">'+t('matching.correctPrefix')+renderRich(row.correctRight)+'</span>';
       html += '</div>';
     });
     html += '</div>';
   }
   else if (q.type === 'essay') {
-    html += sec('あなたの解答', escHtml(r.chosenText || '（無回答）') || '（無回答）', 'neutral');
-    html += '<div class="result-detail-box neutral">記述式問題のため自動採点はされません。下の全体解説（解答例）を参考に自己採点してください。</div>';
+    html += sec(t('sec.yourAnswer'), escHtml(r.chosenText || t('ph.noAnswer')) || t('ph.noAnswer'), 'neutral');
+    html += '<div class="result-detail-box neutral">'+t('result.essayNote')+'</div>';
   }
   else if (q.type === 'description') {
-    html += '<div class="result-detail-box neutral">この項目は説明文です。解答はありません。</div>';
+    html += '<div class="result-detail-box neutral">'+t('result.descNote')+'</div>';
   }
   return html;
 }
 
 function fb(label, content, isHtml) {
-  return '<div class="feedback-label choice-fb">'+label+'</div><div class="feedback-box">'+(isHtml?content:escHtml(content))+'</div>';
+  return '<div class="feedback-label choice-fb">'+label+'</div><div class="feedback-box">'+(isHtml?content:renderRich(content))+'</div>';
 }
 
 function nextQuestion() { currentIdx++; renderQuestion(); showScreen('screen-question'); }
 
+// 問題画面（答え合わせ前）の「前の問題」ボタン用：一つ前の問題の結果画面に戻る
+// 一つ前の問題は必ず解答済み（解答しないと次の問題には進めない仕様のため）
+function backToResultFromQuestion() {
+  const prevIdx = currentIdx - 1;
+  if (prevIdx < 0) return;
+  if (results[prevIdx]) {
+    currentIdx = prevIdx;
+    showResultScreen(prevIdx);
+  } else {
+    // 念のための保険：万一未解答であれば問題画面のまま前の問題へ
+    currentIdx = prevIdx;
+    renderQuestion();
+    showScreen('screen-question');
+  }
+}
+
+// 結果画面の「問題文に戻る」ボタン用：同じ問題の問題文画面（選択済みの状態）に戻る
+function backToQuestionFromResult() {
+  renderQuestion();
+  showScreen('screen-question');
+}
+
+// 結果一覧での行クラス分類: 'correct'/'wrong'/'partial'/'neutral'（採点対象外含む）/'skipped'（未解答）
+function resultClass(r) {
+  if (!r) return 'skipped';
+  if (r.correct === true)  return 'correct';
+  if (r.correct === false) return 'wrong';
+  if (r.correct === null && r.matched) return 'partial';
+  return 'neutral';
+}
+
 function showScoreScreen() {
-  const total = questions.length;
+  const total = calcTotalScore();
   const cat = questions[0]?.category || '';
-  document.getElementById('score-header-sub').textContent = '結果まとめ' + (cat ? '　|　' + cat : '');
+  const score = calcScore();
+  document.getElementById('score-header-sub').textContent = t('score.subtitle', {cat:(cat ? '　|　' + cat : '')});
   document.getElementById('score-big-final').textContent = score + ' / ' + total;
 
-  const pct = Math.round(score / total * 100);
-  const comment = pct === 100 ? '全問正解！ 素晴らしい！' : pct >= 80 ? 'よくできました！' : pct >= 60 ? 'もう少しです。' : '復習しましょう。';
-  document.getElementById('score-sublabel').textContent = '正解率 ' + pct + '%　' + comment;
+  const pct = total > 0 ? Math.round(score / total * 100) : 0;
+  const comment = pct === 100 ? t('score.comment.perfect') : pct >= 80 ? t('score.comment.good') : pct >= 60 ? t('score.comment.almost') : t('score.comment.review');
+  document.getElementById('score-sublabel').textContent = t('score.sublabel', {pct:pct, comment:comment});
 
   const MARK     = { correct:'✓', wrong:'✗', partial:'△', neutral:'—', skipped:'－' };
   const MARK_CLS = { correct:'ok', wrong:'ng', partial:'partial', neutral:'neutral', skipped:'neutral' };
   const ROW_CLS  = { correct:'row-correct', wrong:'row-wrong', partial:'row-partial', neutral:'row-neutral', skipped:'row-neutral' };
 
-  function resultClass(r) {
-    if (!r) return 'skipped';
-    if (r.correct === true)  return 'correct';
-    if (r.correct === false) return 'wrong';
-    if (r.correct === null && r.matched) return 'partial';
-    return 'neutral';
-  }
-
-  // questions を軸に、results から対応する回答を検索（タイトル+テキストで照合）
-  function findResult(q) {
-    return results.find(r => r.q.title === q.title && r.q.text === q.text) || null;
-  }
-
   let html = '<table class="score-list-table"><thead><tr>'
     + '<th style="width:2.5em;text-align:center">No.</th>'
-    + '<th style="width:5.5em">種類</th>'
-    + '<th>問題タイトル</th>'
-    + '<th>問題文（冒頭）</th>'
-    + '<th style="width:5em;text-align:center">全体解説</th>'
-    + '<th style="width:3.5em;text-align:center">結果</th>'
+    + '<th style="width:5.5em">'+t('list.th.type')+'</th>'
+    + '<th>'+t('list.th.title')+'</th>'
+    + '<th>'+t('list.th.preview')+'</th>'
+    + '<th style="width:5em;text-align:center">'+t('list.th.expl')+'</th>'
+    + '<th style="width:3.5em;text-align:center">'+t('list.th.result')+'</th>'
     + '</tr></thead><tbody>';
 
   questions.forEach((q, i) => {
-    const found = findResult(q);
+    // results は questions と同じインデックスで保持しているため、直接参照する
+    const found = results[i] || null;
     const result = found ? found.result : null;
     const cls = resultClass(result);
-    const preview = q.text.length > 36 ? q.text.slice(0, 36) + '…' : q.text;
+    const previewSrc = stripRich(q.text);
+    const preview = previewSrc.length > 36 ? previewSrc.slice(0, 36) + '…' : previewSrc;
     const hasExpl = q.generalFeedback ? '✓' : '—';
     const origNum = q.originalIndex != null ? q.originalIndex + 1 : i + 1;
     // 全行クリック可能（未回答も問題・解説を確認できる）
-    html += '<tr class="' + ROW_CLS[cls] + ' list-row" onclick="showReviewDetail(' + i + ')" style="cursor:pointer" title="クリックして問題と解説を確認">'
+    html += '<tr class="' + ROW_CLS[cls] + ' list-row" onclick="showReviewDetail(' + i + ')" style="cursor:pointer" title="'+escAttr(t('list.rowReview'))+'">'
       + '<td style="text-align:center;color:var(--text-muted)">' + origNum + '</td>'
-      + '<td><span class="type-badge t-' + q.type + '">' + TYPE_LABELS[q.type] + '</span></td>'
+      + '<td><span class="type-badge t-' + q.type + '">' + t(TYPE_LABELS[q.type]) + '</span></td>'
       + '<td><span class="list-title">' + escHtml(q.title) + '</span></td>'
       + '<td style="color:var(--text-muted);font-size:0.85rem">' + escHtml(preview) + '</td>'
       + '<td style="text-align:center;color:' + (q.generalFeedback ? 'var(--correct)' : 'var(--border)') + '">' + hasExpl + '</td>'
@@ -1881,14 +3826,217 @@ function showScoreScreen() {
   showScreen('screen-score');
 }
 
+// ═══════════════════════════════════════════════
+//  結果の HTML エクスポート（得点率＋表 ／ 不正解問題 ／ 未採点問題）
+// ═══════════════════════════════════════════════
+
+// 得点率サマリー＋一覧表（screen-score の内容を静的 HTML として再構築）
+function buildResultExportSummaryHtml() {
+  const total = calcTotalScore();
+  const score = calcScore();
+  const cat = questions[0]?.category || '';
+  const pct = total > 0 ? Math.round(score / total * 100) : 0;
+  const comment = pct === 100 ? t('score.comment.perfect') : pct >= 80 ? t('score.comment.good') : pct >= 60 ? t('score.comment.almost') : t('score.comment.review');
+
+  const MARK     = { correct:'✓', wrong:'✗', partial:'△', neutral:'—', skipped:'－' };
+  const MARK_CLS = { correct:'ok', wrong:'ng', partial:'partial', neutral:'neutral', skipped:'neutral' };
+  const ROW_CLS  = { correct:'row-correct', wrong:'row-wrong', partial:'row-partial', neutral:'row-neutral', skipped:'row-neutral' };
+
+  let html = '<div class="score-summary"><div class="score-big">' + score + ' / ' + total + '</div>'
+    + '<div class="score-label">' + escHtml(t('score.sublabel', {pct:pct, comment:comment})) + '</div></div>';
+
+  html += '<table class="score-list-table" style="margin-top:20px"><thead><tr>'
+    + '<th style="width:2.5em;text-align:center">No.</th>'
+    + '<th style="width:5.5em">'+escHtml(t('list.th.type'))+'</th>'
+    + '<th>'+escHtml(t('list.th.title'))+'</th>'
+    + '<th>'+escHtml(t('list.th.preview'))+'</th>'
+    + '<th style="width:5em;text-align:center">'+escHtml(t('list.th.expl'))+'</th>'
+    + '<th style="width:3.5em;text-align:center">'+escHtml(t('list.th.result'))+'</th>'
+    + '</tr></thead><tbody>';
+
+  questions.forEach((q, i) => {
+    const found = results[i] || null;
+    const result = found ? found.result : null;
+    const cls = resultClass(result);
+    const previewSrc = stripRich(q.text);
+    const preview = previewSrc.length > 36 ? previewSrc.slice(0, 36) + '…' : previewSrc;
+    const hasExpl = q.generalFeedback ? '✓' : '—';
+    const origNum = q.originalIndex != null ? q.originalIndex + 1 : i + 1;
+    html += '<tr class="' + ROW_CLS[cls] + '">'
+      + '<td style="text-align:center;color:var(--text-muted)">' + origNum + '</td>'
+      + '<td><span class="type-badge t-' + q.type + '">' + escHtml(t(TYPE_LABELS[q.type])) + '</span></td>'
+      + '<td><span class="list-title">' + escHtml(q.title) + '</span></td>'
+      + '<td style="color:var(--text-muted);font-size:0.85rem">' + escHtml(preview) + '</td>'
+      + '<td style="text-align:center;color:' + (q.generalFeedback ? 'var(--correct)' : 'var(--border)') + '">' + hasExpl + '</td>'
+      + '<td class="score-mark ' + MARK_CLS[cls] + '" style="text-align:center">' + MARK[cls] + '</td>'
+      + '</tr>';
+  });
+  html += '</tbody></table>';
+  return html;
+}
+
+// 1問分の詳細（問題文・採点結果・問題全体の解説）を画面表示と同じ構成で組み立てる
+function buildResultExportDetailHtml(q, qIdx, result) {
+  let badge = '', verdict = '', headerCls = '';
+  if (!result) {
+    headerCls = 'neutral'; badge = '－'; verdict = t('verdict.unanswered');
+  } else if (result.correct === true) {
+    headerCls = 'correct'; badge = '✓'; verdict = t('verdict.correct');
+  } else if (result.correct === false) {
+    headerCls = 'wrong'; badge = '✗'; verdict = t('verdict.wrong');
+  } else if (result.correct === null && result.matched) {
+    headerCls = 'partial'; badge = '△'; verdict = t('verdict.partial');
+  } else {
+    headerCls = 'neutral'; badge = 'ℹ';
+    verdict = q.type === 'essay' ? t('verdict.essay') : q.type === 'description' ? t('verdict.description') : t('verdict.confirm');
+  }
+
+  const origNum = q.originalIndex != null ? q.originalIndex + 1 : qIdx + 1;
+  const qBlock = '<div class="result-section-label">'+escHtml(t('review.section.q'))+'</div>'
+    + '<div class="result-detail-box neutral" style="font-family:var(--font-display);line-height:1.75">'
+    + renderRich(q.text) + '</div>';
+
+  const choicesBlock = buildReviewChoices(q, result || {correct:null, chosenText:'', chosenList:[]}, true);
+
+  const bodyBlock = result
+    ? buildResultBody(q, result)
+    : '<div class="result-detail-box neutral" style="margin-top:10px">'+escHtml(t('result.unansweredNote'))+'</div>';
+
+  let overallBlock = '';
+  if (q.generalFeedback) {
+    overallBlock = '<div class="divider"></div>'
+      + '<div class="feedback-label overall-fb">'+escHtml(t('fb.overall'))+'</div>'
+      + '<div class="overall-explanation">' + renderRich(q.generalFeedback) + '</div>';
+  }
+
+  return '<div class="result-card" style="margin-bottom:20px">'
+    + '<div class="result-header ' + headerCls + '">'
+    + '<div class="result-badge">' + badge + '</div>'
+    + '<div><div class="result-verdict">No.' + origNum + '　' + escHtml(verdict) + '</div></div>'
+    + '</div>'
+    + '<div class="result-body">' + qBlock + choicesBlock + bodyBlock + overallBlock + '</div>'
+    + '</div>';
+}
+
+// 結果まとめ全体の HTML 文書を組み立てる
+function buildResultExportShell(summaryHtml, wrongHtml, ungradedHtml) {
+  const lang = currentLang;
+  const title = t('resultExport.docTitle');
+  const css = [
+    ':root{--bg:#f5f4f0;--surface:#ffffff;--surface2:#f0ede8;--border:#d8d3cb;--text:#1e1b17;--text-muted:#6b6460;',
+    '--accent:#2d5a8e;--accent-dark:#1d3f63;--correct:#1a6b3c;--correct-bg:#e8f5ee;--correct-border:#a3d4b5;',
+    '--wrong:#8b1a1a;--wrong-bg:#fdf0f0;--wrong-border:#e8b4b4;--neutral-bg:#f0ede8;',
+    '--font-display:"Noto Serif JP",Georgia,serif;--font-body:"Noto Sans JP","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;',
+    '--radius:6px;--shadow:0 1px 4px rgba(0,0,0,0.08);}',
+    '*{box-sizing:border-box;margin:0;padding:0}',
+    'body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.6;max-width:900px;margin:0 auto;padding:24px 20px}',
+    'h1{font-size:1.5rem;border-bottom:3px solid var(--accent);padding-bottom:8px;margin:0 0 20px}',
+    'h2{font-size:1.15rem;color:var(--accent-dark);margin:32px 0 14px;border-bottom:1px solid var(--border);padding-bottom:6px}',
+    '.score-summary{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;text-align:center;box-shadow:var(--shadow)}',
+    '.score-big{font-family:var(--font-display);font-size:2.4rem;font-weight:700;color:var(--accent-dark)}',
+    '.score-label{font-size:0.9rem;color:var(--text-muted);margin-top:6px}',
+    '.score-list-table{width:100%;border-collapse:collapse;font-size:0.88rem}',
+    '.score-list-table th{border:1px solid var(--border);padding:8px 12px;background:var(--surface2);text-align:left}',
+    '.score-list-table td{border:1px solid var(--border);padding:8px 12px;vertical-align:middle;background:var(--surface)}',
+    '.score-list-table tr.row-correct td{background:#f0faf4}',
+    '.score-list-table tr.row-wrong td{background:#fdf4f4}',
+    '.score-list-table tr.row-partial td{background:#fdf8ec}',
+    '.score-mark{font-size:1rem;font-weight:700;text-align:center}',
+    '.score-mark.ok{color:var(--correct)} .score-mark.ng{color:var(--wrong)} .score-mark.partial{color:#caa53a} .score-mark.neutral{color:var(--text-muted)}',
+    '.type-badge{display:inline-block;font-size:0.74rem;padding:2px 7px;border-radius:10px;background:var(--surface2);color:var(--text-muted);white-space:nowrap}',
+    '.list-title{font-weight:600}',
+    '.result-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}',
+    '.result-header{display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--surface2);border-bottom:1px solid var(--border)}',
+    '.result-header.correct{background:var(--correct-bg);border-color:var(--correct-border)}',
+    '.result-header.wrong{background:var(--wrong-bg);border-color:var(--wrong-border)}',
+    '.result-badge{width:36px;height:36px;border-radius:50%;background:var(--text-muted);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}',
+    '.result-header.correct .result-badge{background:var(--correct)}',
+    '.result-header.wrong .result-badge{background:var(--wrong)}',
+    '.result-verdict{font-family:var(--font-display);font-size:1.05rem;font-weight:700}',
+    '.result-header.correct .result-verdict{color:var(--correct)}',
+    '.result-header.wrong .result-verdict{color:var(--wrong)}',
+    '.result-body{padding:20px 24px}',
+    '.result-section-label{font-size:0.78rem;color:var(--text-muted);margin:14px 0 4px}',
+    '.result-section-label:first-child{margin-top:0}',
+    '.result-detail-box{border-radius:4px;padding:10px 14px;margin-bottom:4px}',
+    '.result-detail-box.ok{background:var(--correct-bg);border-left:3px solid var(--correct)}',
+    '.result-detail-box.ng{background:var(--wrong-bg);border-left:3px solid var(--wrong)}',
+    '.result-detail-box.neutral{background:var(--neutral-bg);border-left:3px solid var(--border)}',
+    '.accepted-list{margin:6px 0 0 0;padding-left:18px}',
+    '.accepted-list li{margin:3px 0}',
+    '.matching-result-row{display:flex;gap:10px;align-items:center;padding:6px 0;font-size:0.9rem;flex-wrap:wrap}',
+    '.matching-arrow{color:var(--text-muted)}',
+    '.mr-mark.ok{color:var(--correct)} .mr-mark.ng{color:var(--wrong)}',
+    '.feedback-label{display:inline-block;font-size:0.78rem;padding:2px 8px;border-radius:10px;margin:10px 0 4px}',
+    '.feedback-label.choice-fb{background:#e8e4dc;color:var(--text-muted)}',
+    '.feedback-label.overall-fb{background:#dde8f5;color:var(--accent-dark)}',
+    '.feedback-box{background:var(--surface2);border-radius:4px;padding:10px 14px;margin-bottom:4px}',
+    '.overall-explanation{background:#f4f8fd;border-left:3px solid var(--accent);border-radius:4px;padding:12px 16px}',
+    '.divider{height:1px;background:var(--border);margin:16px 0}',
+    '.review-choices{display:flex;flex-direction:column;gap:8px;margin:10px 0 18px}',
+    '.review-choice{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:4px;font-size:0.92rem}',
+    '.review-choice.is-correct{background:var(--correct-bg);border-color:var(--correct-border)}',
+    '.review-choice.is-wrong-chosen{background:var(--wrong-bg);border-color:var(--wrong-border)}',
+    '.review-choice-mark{font-weight:700;width:1.2em;text-align:center;flex-shrink:0}',
+    '.review-choice-mark.ok{color:var(--correct)} .review-choice-mark.ng{color:var(--wrong)} .review-choice-mark.neu{color:var(--border)}',
+    '.empty-note{color:var(--text-muted);font-size:0.9rem;padding:8px 2px}',
+    '.foot{margin-top:32px;padding-top:12px;border-top:1px solid var(--border);font-size:0.75rem;color:var(--text-muted);text-align:center}',
+    '@media print{body{padding:0;max-width:none}h2{page-break-after:avoid}.result-card{page-break-inside:avoid}}'
+  ].join('');
+
+  return '<!DOCTYPE html>\n<html lang="' + lang + '">\n<head>\n<meta charset="UTF-8">\n'
+    + '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+    + '<title>' + escHtml(title) + '</title>\n<style>' + css + '</style>\n</head>\n<body>\n'
+    + '<h1>' + escHtml(title) + '</h1>\n'
+    + summaryHtml + '\n'
+    + '<h2>' + escHtml(t('resultExport.wrongHeading')) + '</h2>\n' + wrongHtml + '\n'
+    + '<h2>' + escHtml(t('resultExport.ungradedHeading')) + '</h2>\n' + ungradedHtml + '\n'
+    + '<div class="foot">' + escHtml(t('export.generatedBy')) + '</div>\n'
+    + '</body>\n</html>';
+}
+
+// 結果まとめを単一 HTML ファイルとしてダウンロードする
+function exportResultHtml() {
+  const summaryHtml = buildResultExportSummaryHtml();
+
+  let wrongHtml = '', ungradedHtml = '';
+  questions.forEach((q, i) => {
+    const found = results[i] || null;
+    const result = found ? found.result : null;
+    const cls = resultClass(result);
+    if (getMaxScore(q) === 0) {
+      // 記述式・説明など、採点対象外の問題
+      ungradedHtml += buildResultExportDetailHtml(q, i, result);
+    } else if (cls === 'wrong' || cls === 'partial') {
+      // 不正解、または部分一致（得点に反映されない）だった問題
+      wrongHtml += buildResultExportDetailHtml(q, i, result);
+    }
+  });
+  if (!wrongHtml) wrongHtml = '<div class="empty-note">' + escHtml(t('resultExport.noWrong')) + '</div>';
+  if (!ungradedHtml) ungradedHtml = '<div class="empty-note">' + escHtml(t('resultExport.noUngraded')) + '</div>';
+
+  const htmlDoc = buildResultExportShell(summaryHtml, wrongHtml, ungradedHtml);
+  const blob = new Blob([htmlDoc], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const d = new Date();
+  const z = n => String(n).padStart(2, '0');
+  const ts = '' + d.getFullYear() + z(d.getMonth() + 1) + z(d.getDate())
+                + z(d.getHours()) + z(d.getMinutes()) + z(d.getSeconds());
+  a.href = url; a.download = 'result-' + ts + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 function showReviewDetail(qIdx) {
+  currentReviewIdx = qIdx;
   const q = questions[qIdx];
-  const found = results.find(r => r.q.title === q.title && r.q.text === q.text);
+  const found = results[qIdx] || null;
   const result = found ? found.result : null;
   const total = questions.length;
 
   document.getElementById('review-header-sub').textContent =
-    '問題 ' + (qIdx + 1) + ' / ' + total + (q.category ? '　|　' + q.category : '') + '　（確認モード）';
+    t('q.subtitle.review', {num:(qIdx + 1), total:total, cat:(q.category ? '　|　' + q.category : '')});
 
   // 正誤ヘッダー
   const rh = document.getElementById('review-header');
@@ -1898,26 +4046,26 @@ function showReviewDetail(qIdx) {
   if (!result) {
     rh.className = 'result-header'; rh.style.background = 'var(--surface2)'; rh.style.borderColor = 'var(--border)';
     badge.textContent = '－'; badge.style.background = 'var(--text-muted)';
-    verdict.textContent = '未回答'; verdict.style.color = 'var(--text)';
+    verdict.textContent = t('verdict.unanswered'); verdict.style.color = 'var(--text)';
   } else if (result.correct === true) {
-    rh.className = 'result-header correct'; badge.textContent = '✓'; verdict.textContent = '正解！';
+    rh.className = 'result-header correct'; badge.textContent = '✓'; verdict.textContent = t('verdict.correct');
   } else if (result.correct === false) {
-    rh.className = 'result-header wrong'; badge.textContent = '✗'; verdict.textContent = '不正解';
+    rh.className = 'result-header wrong'; badge.textContent = '✗'; verdict.textContent = t('verdict.wrong');
   } else if (result.correct === null && result.matched) {
     rh.className = 'result-header'; rh.style.background = '#fdf8ec'; rh.style.borderColor = '#e8d48a';
     badge.textContent = '△'; badge.style.background = '#caa53a';
-    verdict.textContent = '部分正解'; verdict.style.color = '#6b4f00';
+    verdict.textContent = t('verdict.partial'); verdict.style.color = '#6b4f00';
   } else {
     rh.className = 'result-header'; rh.style.background = 'var(--surface2)'; rh.style.borderColor = 'var(--border)';
     badge.textContent = 'ℹ'; badge.style.background = 'var(--text-muted)';
-    verdict.textContent = q.type === 'essay' ? '解答例・解説' : q.type === 'description' ? '説明' : '確認';
+    verdict.textContent = q.type === 'essay' ? t('verdict.essay') : q.type === 'description' ? t('verdict.description') : t('verdict.confirm');
     verdict.style.color = 'var(--text)';
   }
 
   // 問題文を冒頭に表示
-  const qBlock = '<div class="result-section-label">問題</div>'
+  const qBlock = '<div class="result-section-label">'+t('review.section.q')+'</div>'
     + '<div class="result-detail-box neutral" style="font-family:var(--font-display);line-height:1.75">'
-    + escHtml(q.text) + '</div>';
+    + renderRich(q.text) + '</div>';
 
   // 選択肢（確認モードでは常時 tooltip 有効）
   const choicesBlock = buildReviewChoices(q, result || {correct:null, chosenText:'', chosenList:[]}, true);
@@ -1925,7 +4073,7 @@ function showReviewDetail(qIdx) {
   // 本文（未回答の場合は「未回答」メッセージのみ）
   const bodyBlock = result
     ? buildResultBody(q, result)
-    : '<div class="result-detail-box neutral" style="margin-top:10px">この問題は未回答です。</div>';
+    : '<div class="result-detail-box neutral" style="margin-top:10px">'+t('result.unansweredNote')+'</div>';
 
   document.getElementById('review-body-content').innerHTML = qBlock + choicesBlock + bodyBlock;
   initReviewTooltips('review-body-content');
@@ -1934,7 +4082,7 @@ function showReviewDetail(qIdx) {
   const ow = document.getElementById('review-overall-wrap');
   if (q.generalFeedback) {
     ow.style.display = 'block';
-    document.getElementById('review-overall').textContent = q.generalFeedback;
+    document.getElementById('review-overall').innerHTML = renderRich(q.generalFeedback);
   } else {
     ow.style.display = 'none';
   }
@@ -1981,13 +4129,17 @@ function positionTooltip(e) {
   _tooltip.style.top  = Math.max(4, y) + 'px';
 }
 
-document.getElementById('gift-input').value = DEFAULT_GIFT;
+// 初期化：保存された言語を画面に適用してからサンプルを読み込む
+document.documentElement.lang = currentLang;
+applyStaticI18n();
+applyVersion();
+setGiftText(getDefaultGift());
 
 // ═══════════════════════════════════════════════
 //  トグル設定の保存・復元（localStorage）
 // ═══════════════════════════════════════════════
 (function() {
-  const TOGGLES = ['shuffle-q-toggle', 'shuffle-toggle', 'hint-toggle', 'show-question-toggle'];
+  const TOGGLES = ['shuffle-q-toggle', 'shuffle-toggle', 'hint-toggle', 'show-question-toggle', 'rawhtml-toggle'];
   const KEY = 'giftChecker_toggles';
   try {
     const saved = JSON.parse(localStorage.getItem(KEY) || '{}');
@@ -2050,7 +4202,7 @@ document.getElementById('gift-input').value = DEFAULT_GIFT;
     const binReader = new FileReader();
     binReader.onload = function(ev) {
       if (isBinary(ev.target.result)) {
-        errEl.textContent = '「' + file.name + '」はバイナリファイルのようです。テキストファイル（.gift / .txt など）をドロップしてください。';
+        errEl.textContent = t('err.binary', {name:file.name});
         errEl.style.display = 'block';
         return;
       }
@@ -2058,18 +4210,18 @@ document.getElementById('gift-input').value = DEFAULT_GIFT;
       textReader.onload = function(ev2) {
         let text = ev2.target.result;
         if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1); // UTF-8 BOM 除去
-        ta.value = text;
+        setGiftText(text);
         const label = document.querySelector('label[for="gift-input"]');
-        if (label) label.textContent = 'GIFT 形式テキスト（読み込み済み: ' + file.name + '）';
+        if (label) label.textContent = t('input.label.loaded', {name:file.name});
       };
       textReader.onerror = function() {
-        errEl.textContent = 'ファイルの読み込みに失敗しました（UTF-8 のテキストファイルを使用してください）。';
+        errEl.textContent = t('err.readFail');
         errEl.style.display = 'block';
       };
       textReader.readAsText(file, 'UTF-8');
     };
     binReader.onerror = function() {
-      errEl.textContent = 'ファイルを読み込めませんでした。';
+      errEl.textContent = t('err.readFail2');
       errEl.style.display = 'block';
     };
     binReader.readAsArrayBuffer(file);
@@ -2079,10 +4231,7 @@ document.getElementById('gift-input').value = DEFAULT_GIFT;
 </script>
 <!-- ═══════════════ FOOTER ═══════════════ -->
 <footer class="site-footer">
-  <p>
-    <a href="https://tools.nakaix.com/gift-checker/" target="_blank">GIFT Checker</a><span class="sep">|</span><a href="https://github.com/TadashiNakai/gift-checker" target="_blank">GitHub</a><br>
-    Concept &amp; Design: <a href="https://x.com/TadashiNakai" target="_blank">@TadashiNakai</a><span class="sep">|</span>Implementation: Claude (Anthropic)
-  </p>
+  <p><a href="https://tools.nakaix.com/gift-checker/" target="_blank">GIFT Checker</a><span class="sep">|</span><a href="https://github.com/TadashiNakai/gift-checker" target="_blank">GitHub</a><span class="sep">|</span>Concept &amp; Design: <a href="https://x.com/TadashiNakai" target="_blank">@TadashiNakai</a></p>
 </footer>
 
 </body>
