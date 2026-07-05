@@ -3036,16 +3036,25 @@ function downloadGiftSource() {
 }
 
 // GIFT テキストを .gift ファイルとしてダウンロードする
+// 既存ファイルを読み込んで編集した場合は、元のファイル名（拡張子含む）を活かし、
+// 拡張子の手前に -年月日-時分秒 を挿入する（例: 元quiz-20260628-004523.txt）。
+// prefix 指定時（TeX画像化など派生出力）や、ファイル未読み込みの初期状態では
+// 従来どおり quiz-年月日-時分秒.gift とする。
 function downloadGiftText(text, prefix) {
   const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  // ファイル名に年月日時分秒を付与（例: quiz-20260621-000312.gift）
   const d = new Date();
   const z = n => String(n).padStart(2, '0');
   const ts = '' + d.getFullYear() + z(d.getMonth() + 1) + z(d.getDate())
                 + '-' + z(d.getHours()) + z(d.getMinutes()) + z(d.getSeconds());
-  a.href = url; a.download = (prefix || 'quiz') + '-' + ts + '.gift';
+  let filename;
+  if (!prefix && loadedFileBaseName !== null) {
+    filename = loadedFileBaseName + '-' + ts + loadedFileExt;
+  } else {
+    filename = (prefix || 'quiz') + '-' + ts + '.gift';
+  }
+  a.href = url; a.download = filename;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
@@ -5437,6 +5446,11 @@ setGiftText(getDefaultGift());
 // ═══════════════════════════════════════════════
 //  ドラッグ＆ドロップ読み込み
 // ═══════════════════════════════════════════════
+// 読み込んだファイル名（拡張子除く／拡張子）。GIFT ダウンロード時の
+// ファイル名決定に使う。未読み込みなら null（初期状態の挙動を維持）。
+let loadedFileBaseName = null;
+let loadedFileExt = '';
+
 (function() {
   const ta = document.getElementById('gift-input');
   const errEl = document.getElementById('parse-error');
@@ -5484,6 +5498,15 @@ setGiftText(getDefaultGift());
         let text = ev2.target.result;
         if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1); // UTF-8 BOM 除去
         setGiftText(text);
+        // ダウンロード時のファイル名決定用に、拡張子とベース名を分けて記録する
+        const dotIdx = file.name.lastIndexOf('.');
+        if (dotIdx > 0) {
+          loadedFileBaseName = file.name.slice(0, dotIdx);
+          loadedFileExt = file.name.slice(dotIdx); // "." を含む
+        } else {
+          loadedFileBaseName = file.name;
+          loadedFileExt = '';
+        }
         const label = document.querySelector('label[for="gift-input"]');
         if (label) {
           // ファイル名部分は text-transform: uppercase の影響を受けないようスパンで囲む
