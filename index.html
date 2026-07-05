@@ -99,11 +99,6 @@
     letter-spacing: 0.08em;
     margin-bottom: 8px;
   }
-  /* ファイル名は大文字化しない */
-  .input-section label .label-filename {
-    text-transform: none;
-    letter-spacing: 0;
-  }
   /* ─── リッチテキスト入力欄（rifff 由来） ─── */
   .gift-toolbar {
     display: flex;
@@ -137,72 +132,6 @@
     font-size: 0.72rem;
     color: var(--text-muted);
     opacity: 0.8;
-  }
-  /* ─── ツールバー右端メニュー ─── */
-  .tb-menu-wrap {
-    position: relative;
-    margin-left: 4px;
-  }
-  .tb-menu-btn {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    width: 28px;
-    height: 28px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    transition: all 0.15s;
-  }
-  .tb-menu-btn:hover { color: var(--accent); border-color: var(--accent); background: #f0f5fb; }
-  .tb-menu {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: calc(100% + 4px);
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: 0 4px 14px rgba(0,0,0,0.13);
-    min-width: 160px;
-    list-style: none;
-    margin: 0;
-    padding: 4px 0;
-    z-index: 200;
-  }
-  .tb-menu.open { display: block; }
-  .tb-menu li button {
-    width: 100%;
-    background: none;
-    border: none;
-    text-align: left;
-    padding: 7px 16px;
-    font-size: 0.85rem;
-    color: var(--text);
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .tb-menu li button:hover { background: var(--surface2); color: var(--accent); }
-  .tb-menu-sep { height: 1px; background: var(--border); margin: 4px 0; }
-  /* トグル ON 状態のメニュー項目：チェックマーク＋アクセント色 */
-  .tb-menu li button::before {
-    content: '';
-    display: inline-block;
-    width: 1.2em;
-    text-align: left;
-  }
-  #menu-outline-btn.menu-checked {
-    color: var(--accent);
-    font-weight: 700;
-  }
-  #menu-outline-btn.menu-checked::before {
-    content: '✓';
-    color: var(--accent);
-    font-weight: 700;
   }
   .gift-editor {
     width: 100%;
@@ -254,87 +183,6 @@
   }
   .gift-editor.drag-over ~ .drop-hint { display: flex; }
   .textarea-wrap { position: relative; }
-  /* アウトライン表示時は横並びフレックス */
-  .textarea-wrap.outline-open { display: flex; align-items: stretch; gap: 0; }
-  /* アウトラインペイン */
-  .outline-pane {
-    width: 200px;
-    flex-shrink: 0;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius) 0 0 var(--radius);
-    border-right: none;
-    background: var(--surface2);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-  .outline-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 6px 10px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-  }
-  .outline-title {
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-muted);
-  }
-  .outline-close-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    line-height: 1;
-    padding: 0 2px;
-  }
-  .outline-close-btn:hover { color: var(--text); }
-  .outline-list {
-    flex: 1;
-    overflow-y: auto;
-    margin: 0;
-    padding: 6px 0;
-    list-style: none;
-  }
-  .outline-list li button {
-    width: 100%;
-    background: none;
-    border: none;
-    text-align: left;
-    padding: 5px 10px;
-    font-size: 0.78rem;
-    color: var(--text);
-    cursor: pointer;
-    line-height: 1.4;
-    word-break: break-all;
-    display: flex;
-    gap: 5px;
-    align-items: baseline;
-  }
-  .outline-list li button:hover { background: #dde9f5; color: var(--accent-dark); }
-  .outline-list li button.outline-active { background: var(--accent); color: #fff; }
-  .outline-num {
-    font-size: 0.68rem;
-    color: var(--text-muted);
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .outline-list li button.outline-active .outline-num { color: rgba(255,255,255,0.75); }
-  .outline-item-title { flex: 1; }
-  /* エディタ列：アウトライン開時は border-radius 左側をなくす */
-  .editor-col { flex: 1; min-width: 0; position: relative; }
-  .textarea-wrap.outline-open .editor-col .gift-editor {
-    border-radius: 0 0 var(--radius) var(--radius);
-  }
-  .textarea-wrap:not(.outline-open) .editor-col .gift-editor {
-    border-radius: 0 0 var(--radius) var(--radius);
-  }
-  /* drop-hint・fix-popup・editor-ph は editor-col 内なので position:absolute のまま */
-  .editor-col .drop-hint, .editor-col .fix-popup, .editor-col .editor-ph { position: absolute; }
   .editor-ph {
     position: absolute;
     top: 14px;
@@ -363,19 +211,7 @@
     color: var(--wrong);
     font-size: 0.85rem;
     display: none;
-    line-height: 1.65;
   }
-  .parse-error .issue-head { font-weight: 700; margin-bottom: 2px; }
-  .parse-error ul { margin: 6px 0 4px 18px; padding: 0; }
-  .parse-error li { margin: 2px 0; }
-  .parse-error .warn-link {
-    color: var(--wrong);
-    cursor: pointer;
-    text-decoration: underline;
-    font-weight: 600;
-  }
-  .parse-error .warn-link:hover { opacity: 0.8; }
-  .parse-error .warn-continue { margin-top: 8px; font-size: 0.82rem; }
   .parse-warning {
     margin-top: 10px;
     padding: 10px 14px;
@@ -401,94 +237,17 @@
     font-size: 0.82rem;
     color: #6b4f00;
   }
-  .parse-warning .issue-head { font-weight: 700; margin-bottom: 2px; }
-  .warn-actions { margin-top: 10px; }
-
-  /* ─── Fix Popup ─── */
-  .fix-popup {
-    position: relative;
-    margin-top: 4px;
-    background: var(--surface);
-    border: 1.5px solid var(--accent);
-    border-radius: var(--radius);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.13);
-    padding: 10px 14px 12px;
-    font-size: 0.85rem;
-    z-index: 100;
-  }
-  .fix-popup-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 6px;
-  }
-  .fix-popup-title {
-    font-weight: 700;
-    color: var(--accent);
-    font-size: 0.82rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-  .fix-popup-close {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--text-muted);
-    font-size: 1rem;
-    line-height: 1;
-    padding: 0 2px;
-  }
-  .fix-popup-close:hover { color: var(--text); }
-  .fix-popup-preview-row {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-    margin-bottom: 8px;
-    flex-wrap: wrap;
-  }
-  .fix-popup-preview-label {
-    color: var(--text-muted);
-    font-size: 0.78rem;
-    white-space: nowrap;
-  }
-  .fix-popup-preview {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    background: var(--surface2);
-    border-radius: 3px;
-    padding: 1px 5px;
-    color: var(--text);
-    word-break: break-all;
-    max-width: 100%;
-  }
-  .fix-popup-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .fix-btn {
-    padding: 4px 12px;
-    border-radius: var(--radius);
-    border: 1.5px solid var(--accent);
-    background: var(--surface);
-    color: var(--accent);
-    cursor: pointer;
-    font-size: 0.82rem;
-    font-weight: 600;
-    transition: background 0.12s, color 0.12s;
-  }
-  .fix-btn:hover { background: var(--accent); color: #fff; }
 
   /* ─── Buttons ─── */
   .btn {
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    padding: 7px 16px;
+    padding: 10px 22px;
     border: none;
     border-radius: var(--radius);
     font-family: var(--font-body);
-    font-size: 0.82rem;
+    font-size: 0.92rem;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.15s, transform 0.08s;
@@ -499,8 +258,7 @@
   .btn-primary:hover { background: var(--accent-dark); }
   .btn-secondary { background: var(--surface2); color: var(--text); border: 1.5px solid var(--border); }
   .btn-secondary:hover { background: var(--border); }
-  /* ボタンサイズは全ページで小サイズに統一。btn-lg / btn-sm は基本サイズと同一にする。 */
-  .btn-lg { padding: 7px 16px; font-size: 0.82rem; }
+  .btn-lg { padding: 13px 30px; font-size: 1rem; }
   .btn-sm { padding: 7px 16px; font-size: 0.82rem; }
 
   .action-row { margin-top: 20px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
@@ -711,36 +469,6 @@
     overflow: hidden;
     box-shadow: var(--shadow);
     margin-bottom: 20px;
-  }
-  .result-tag {
-    padding: 10px 24px 0;
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--accent);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .result-tag-num {
-    color: var(--text-muted);
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-  }
-  .result-tag-title {
-    color: var(--text);
-    font-weight: 600;
-    font-size: 0.78rem;
-    text-transform: none;
-    letter-spacing: 0;
-    font-family: var(--font-display);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 60vw;
   }
   .result-header {
     padding: 18px 24px;
@@ -1046,33 +774,6 @@
   .lang-toggle-btn:hover { background: var(--surface); border-color: var(--accent); }
 </style>
 
-
-<!-- TeX/LaTeX 数式レンダリング（MathJax）。設定 giftchecker_tex が ON のときだけ読み込む。
-     既定は OFF（ライブラリも読み込まず、TeX は生のテキストとして表示）。 -->
-<script>
-// TeX 表示が有効かどうか（ページ読み込み時点で確定。切替は再読み込みで反映）
-window.GC_TEX_ENABLED = (function() {
-  try { return localStorage.getItem('giftchecker_tex') === '1'; } catch(e) { return false; }
-})();
-if (window.GC_TEX_ENABLED) {
-  window.MathJax = {
-    tex: {
-      inlineMath: [['\\(', '\\)']],
-      displayMath: [['$$', '$$'], ['\\[', '\\]']],
-      processEscapes: true
-    },
-    options: {
-      skipHtmlTags: ['script','noscript','style','textarea','pre','code'],
-      ignoreHtmlClass: 'tex2jax_ignore|gift-editor'
-    },
-    startup: { typeset: false }
-  };
-  var _mjx = document.createElement('script');
-  _mjx.defer = true;
-  _mjx.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';
-  document.head.appendChild(_mjx);
-}
-</script>
 </head>
 <body>
 
@@ -1095,49 +796,20 @@ if (window.GC_TEX_ENABLED) {
         <button type="button" data-cmd="superscript" data-i18n-title="tb.sup" title="上付き"><sup>x²</sup></button>
         <button type="button" data-cmd="subscript" data-i18n-title="tb.sub" title="下付き"><sub>x₂</sub></button>
         <span class="tb-hint" data-i18n="tb.hint">Word などからの貼り付けで書式を保持／選択して B I U で手動適用</span>
-        <div class="tb-menu-wrap">
-          <button type="button" class="tb-menu-btn" onclick="toggleTbMenu(event)" title="メニュー" aria-label="メニュー">&#9776;</button>
-          <ul class="tb-menu" id="tb-menu" role="menu">
-            <li role="menuitem"><button type="button" onclick="openOutline();closeTbMenu()" id="menu-outline-btn" data-i18n="menu.outline">アウトライン表示</button></li>
-            <li class="tb-menu-sep" role="separator"></li>
-            <li role="menuitem"><button type="button" onclick="loadDefaultConfirm();closeTbMenu()" data-i18n="menu.loadDefault">サンプルを読み込む</button></li>
-            <li class="tb-menu-sep" role="separator"></li>
-            <li role="menuitem"><button type="button" onclick="exportGiftTexAsImages()" data-i18n="menu.exportTexImg">TeX を画像化して GIFT 出力</button></li>
-          </ul>
-        </div>
       </div>
       <div class="textarea-wrap">
-        <div id="outline-pane" class="outline-pane" style="display:none">
-          <div class="outline-header">
-            <span class="outline-title" data-i18n="outline.title">アウトライン</span>
-            <button type="button" class="outline-close-btn" onclick="closeOutline()" title="閉じる">✕</button>
-          </div>
-          <ol id="outline-list" class="outline-list"></ol>
-        </div>
-        <div id="editor-col" class="editor-col">
-          <div id="gift-input" class="gift-editor" contenteditable="true" spellcheck="false"></div>
-        <div id="fix-popup" class="fix-popup" style="display:none">
-          <div class="fix-popup-header">
-            <span class="fix-popup-title" data-i18n="fix.popup.title">修正候補</span>
-            <button class="fix-popup-close" onclick="closeFixPopup()" data-i18n="fix.popup.close">✕</button>
-          </div>
-          <div class="fix-popup-preview-row">
-            <span class="fix-popup-preview-label" data-i18n="fix.popup.preview">対象行：</span>
-            <code id="fix-popup-preview" class="fix-popup-preview"></code>
-          </div>
-          <div id="fix-popup-buttons" class="fix-popup-buttons"></div>
-        </div>
+        <div id="gift-input" class="gift-editor" contenteditable="true" spellcheck="false"></div>
         <div id="editor-ph" class="editor-ph"><span data-i18n="editor.ph">ここに GIFT 形式のテキストを貼り付けてください…</span>
           <small data-i18n="editor.ph.small">太字・斜体・下線・上付き・下付きの書式は GIFT（[html] 形式）に反映されます</small>
         </div>
         <div class="drop-hint" data-i18n="drop.hint">📄 ここにドロップして読み込む</div>
-        </div><!-- /editor-col -->
-      </div><!-- /textarea-wrap -->
+      </div>
       <div class="parse-hint" data-i18n-html="parse.hint">単一/複数選択・正誤・記述（短答）・マッチング・穴埋め・数値・記述式（Essay）・説明（Description）の各問題タイプに対応しています。</div>
       <div id="parse-error" class="parse-error"></div>
       <div id="parse-warning" class="parse-warning"></div>
       <div class="action-row">
         <button class="btn btn-primary btn-lg" onclick="loadList()" data-i18n="btn.loadList">📋 問題一覧を確認</button>
+        <button class="btn btn-secondary btn-sm" onclick="loadDefault()" data-i18n="btn.loadDefault">サンプルを読み込む</button>
         <button class="btn btn-secondary btn-sm" onclick="downloadGiftSource()" data-i18n="btn.download">⬇ GIFT 形式をダウンロード</button>
       </div>
 
@@ -1156,7 +828,7 @@ if (window.GC_TEX_ENABLED) {
   </header>
   <main>
     <div id="list-table-wrap"></div>
-    <div class="tex2jax_ignore" style="margin-top: 24px; border-top: 1px solid var(--border); padding-top: 20px;">
+    <div style="margin-top: 24px; border-top: 1px solid var(--border); padding-top: 20px;">
       <div class="toggle-row">
         <label class="toggle-switch"><input type="checkbox" id="shuffle-q-toggle"><span class="toggle-track"></span></label>
         <label class="toggle-label" for="shuffle-q-toggle" data-i18n="toggle.shuffleQ">問題順をシャッフルする</label>
@@ -1176,10 +848,6 @@ if (window.GC_TEX_ENABLED) {
       <div class="toggle-row">
         <label class="toggle-switch"><input type="checkbox" id="rawhtml-toggle"><span class="toggle-track"></span></label>
         <label class="toggle-label" for="rawhtml-toggle" data-i18n="toggle.rawHtml">HTMLタグをそのまま反映する（&lt;font&gt; などの色指定も有効化）</label>
-      </div>
-      <div class="toggle-row">
-        <label class="toggle-switch"><input type="checkbox" id="tex-toggle"><span class="toggle-track"></span></label>
-        <label class="toggle-label" for="tex-toggle" data-i18n="toggle.tex">TeX 数式を表示する（\( … \)、$$ … $$ をレンダリング／変更後は再読み込みが必要）</label>
       </div>
       <div class="action-row">
         <button class="btn btn-primary btn-lg" onclick="startQuiz()" data-i18n="btn.startQuiz">▶ 最初から問題を開始</button>
@@ -1227,7 +895,6 @@ if (window.GC_TEX_ENABLED) {
   </header>
   <main>
     <div id="result-card" class="result-card">
-      <div id="result-tag" class="result-tag"></div>
       <div id="result-header" class="result-header">
         <div id="result-badge" class="result-badge"></div>
         <div><div id="result-verdict" class="result-verdict"></div></div>
@@ -1311,7 +978,7 @@ if (window.GC_TEX_ENABLED) {
 // ═══════════════════════════════════════════════
 //  バージョン（ここ1箇所で管理。全ヘッダーに反映される）
 // ═══════════════════════════════════════════════
-const APP_VERSION = '0.32';
+const APP_VERSION = '0.29';
 
 // ═══════════════════════════════════════════════
 //  i18n（日本語／英語の言語切り替え）
@@ -1324,20 +991,10 @@ const I18N = {
     'tb.bold': '太字 Ctrl+B', 'tb.italic': '斜体 Ctrl+I', 'tb.underline': '下線 Ctrl+U',
     'tb.sup': '上付き', 'tb.sub': '下付き',
     'tb.hint': 'Word などからの貼り付けで書式を保持／選択して B I U で手動適用',
-    'menu.outline': 'アウトライン表示',
-    'menu.loadDefault': 'サンプルを読み込む',
-    'menu.exportTexImg': 'TeX を画像化して GIFT 出力',
-    'export.tex.none': '数式（TeX）が見つかりませんでした。\\( … \\)、$$ … $$、\\[ … \\] で囲まれた数式が対象です。',
-    'export.tex.disabled': 'TeX 表示が OFF です。この機能を使うには、一覧画面の設定で「TeX 数式を表示する」を ON にして再読み込みしてください。',
-    'export.tex.confirm': 'TeX 非対応の Moodle 向けに、{n} 個の数式を画像（PNG）に変換した GIFT ファイルを出力します。\nファイルサイズが大きくなる場合があります。続けますか？',
-    'export.tex.fail': '数式の画像化に失敗しました。ネットワーク接続（MathJax の読み込み）を確認してください。',
-    'confirm.loadDefault': 'エディタに入力済みのテキストがあります。サンプルを読み込むと上書きされます。続けますか？',
-    'outline.title': 'アウトライン',
-    'outline.noTitle': '（タイトルなし）',
     'editor.ph': 'ここに GIFT 形式のテキストを貼り付けてください…',
     'editor.ph.small': '太字・斜体・下線・上付き・下付きの書式は GIFT（[html] 形式）に反映されます',
     'drop.hint': '📄 ここにドロップして読み込む',
-    'parse.hint': '単一/複数選択・正誤・記述（短答）・マッチング・穴埋め・数値・記述式（Essay）・説明（Description）の各問題タイプに対応しています。TeX 数式は <code>\\( ... \\)</code>、<code>$$ ... $$</code>、<code>\\[ ... \\]</code> で囲むとプレビューで数式表示されます。入力欄では TeX コードのまま表示・編集できます。テキストファイルを入力欄にドラッグ＆ドロップして読み込むこともできます。リッチテキスト（太字・斜体・下線・上付き・下付き）が含まれる場合は GIFT に <code>[html]</code> 形式の書式として出力され、プレビューにも反映されます。',
+    'parse.hint': '単一/複数選択・正誤・記述（短答）・マッチング・穴埋め・数値・記述式（Essay）・説明（Description）の各問題タイプに対応しています。テキストファイルを入力欄にドラッグ＆ドロップして読み込むこともできます。リッチテキスト（太字・斜体・下線・上付き・下付き）が含まれる場合は GIFT に <code>[html]</code> 形式の書式として出力され、プレビューにも反映されます。',
     'btn.loadList': '📋 問題一覧を確認',
     'btn.loadDefault': 'サンプルを読み込む',
     'btn.download': '⬇ GIFT 形式をダウンロード',
@@ -1388,15 +1045,12 @@ const I18N = {
     'toggle.hint': '選択肢のヒントをマウスオーバーで表示する',
     'toggle.showQ': '答え合わせ画面に問題文・選択肢も表示する',
     'toggle.rawHtml': 'HTMLタグをそのまま反映する（<font> などの色指定も有効化）',
-    'toggle.tex': 'TeX 数式を表示する（\\( … \\)、$$ … $$ をレンダリング／変更後は再読み込みが必要）',
-    'tex.reloadNeeded': 'TeX 表示の設定を変更しました。反映するにはページを再読み込みしてください。今すぐ再読み込みしますか？',
     'fb.overall': '問題全体の解説',
     'list.subtitle': '問題一覧　{n} 問{cat}',
     'list.th.no': 'No.', 'list.th.type': '種類', 'list.th.title': '問題タイトル',
     'list.th.preview': '問題文（冒頭）', 'list.th.expl': '全体解説', 'list.th.result': '結果',
     'q.subtitle': '問題 {num} / {total}{cat}',
     'q.subtitle.review': '問題 {num} / {total}{cat}　（確認モード）',
-    'q.num': '問題 {num} / {total}',
     'score.subtitle': '結果まとめ{cat}',
     'review.section.q': '問題',
     'review.section.choices': '選択肢',
@@ -1443,27 +1097,12 @@ const I18N = {
     'err.binary': '「{name}」はバイナリファイルのようです。テキストファイル（.gift / .txt など）をドロップしてください。',
     'err.readFail': 'ファイルの読み込みに失敗しました（UTF-8 のテキストファイルを使用してください）。',
     'err.readFail2': 'ファイルを読み込めませんでした。',
-    'warn.heading': '⚠️ 文法の疑いがある箇所（警告）が {n} か所見つかりました：',
-    'warn.continue': '内容を確認して修正することをおすすめします。制御文字（= ~ # { } :）を本文中で使うには <code>\\=</code> のようにバックスラッシュでエスケープするか、全角文字（＝ 〜 ＃ など）を使ってください。',
-    'warn.proceed': '警告を承知で一覧を確認する →',
-    'err.heading': '⛔ インポートできない問題（エラー）が {n} か所見つかりました：',
-    'err.mustfix': 'これらは Moodle でエラーになるため、修正するまで一覧の確認に進めません。',
-    'err.strayClose': '{line} 行目：対応する「{」の無い余分な「}」があります。回答ブロックの開き括弧が抜けているか、本文で「}」を使う場合は「\\}」とエスケープしてください。',
-    'err.unclosedOpen': '{line} 行目：「{」が閉じられていません。回答ブロックを「}」で閉じるか、本文で「{」を使う場合は「\\{」とエスケープしてください。',
+    'warn.heading': '⚠️ 文法の疑いがある箇所が {n} か所見つかりました：',
+    'warn.continue': '修正後に再度「📋 問題一覧を確認」を押してください。　それでも続ける場合：制御文字（= ~ # { } :）を本文中で使うには <code>\\=</code> のようにバックスラッシュでエスケープするか、全角文字（＝ 〜 ＃ など）を使ってください。',
     'warn.ctrlChar': '{line} 行目：選択肢テキスト内に未エスケープの制御文字 "{char}" があります。本文中で使う場合は "\\{char}" とエスケープするか、全角文字（例：＝ 〜 ｛ ｝）を使ってください。',
     'warn.fbEquals': '{line} 行目：フィードバック（# 以降）に未エスケープの "{char}" があります。GIFT では選択肢内の "=" や "~" は新しい選択肢の開始と解釈されるため、本文・解説中で使う場合は "\{char}" とエスケープするか全角文字（＝ 〜）を使ってください。',
     'warn.dupChoice': '{line} 行目：同じ選択肢「{text}」が重複しています。同一の選択肢や別解が2つ以上あると冗長で、採点や表示が意図しない結果になることがあります。',
     'warn.multiBrace': '{line} 行目：1つの問題に複数の {…} があります。標準GIFTでは1問の空欄は1つだけで、2つ目以降はMoodleで空欄にならず {…} のまま本文に表示されます。複数の空欄を埋め込むにはCloze（穴埋め）記法（例：{1:SA:=答え}）が必要です。',
-    'warn.weightSum': '{line} 行目：複数正解問題で、正解選択肢の配点（%…%）の合計が {sum}% です。Moodle は合計 100% を要求するため、このままではインポート時にエラーになります。各配点を調整して合計を 100% に揃えてください（例：3択なら 33.33333%×3＝99.99999%、6択なら 16.66667%×6 など、Moodle 標準の分数を使用）。',
-    'fix.popup.title': '修正候補',
-    'fix.popup.preview': '対象行：',
-    'fix.popup.close': '✕',
-    'fix.escape': '「\\{char}」にエスケープ',
-    'fix.fullwidth': '全角「{wide}」に変換',
-    'fix.escapeAll': 'この行の {n} 個をすべてエスケープ',
-    'fix.fullwidthAll': 'この行の {n} 個をすべて全角に変換',
-    'fix.deleteLine': 'この行を削除（重複を除去）',
-    'warn.ctrlChar.multi': '（この行に {n} 個あります）',
     'qtitle.default': '問題 {n}',
     'qtype.mc': '単一選択', 'qtype.multi': '複数選択', 'qtype.truefalse': '正誤',
     'qtype.short': '記述（短答）', 'qtype.matching': 'マッチング', 'qtype.numerical': '数値',
@@ -1480,20 +1119,10 @@ const I18N = {
     'tb.bold': 'Bold Ctrl+B', 'tb.italic': 'Italic Ctrl+I', 'tb.underline': 'Underline Ctrl+U',
     'tb.sup': 'Superscript', 'tb.sub': 'Subscript',
     'tb.hint': 'Paste from Word etc. keeps formatting / select text and apply B I U manually',
-    'menu.outline': 'Outline view',
-    'menu.loadDefault': 'Load sample',
-    'menu.exportTexImg': 'Export GIFT with TeX as images',
-    'export.tex.none': 'No math (TeX) found. Targets are formulas wrapped in \\( … \\), $$ … $$, or \\[ … \\].',
-    'export.tex.disabled': 'TeX rendering is OFF. To use this feature, turn on "Render TeX math" in the settings on the list screen and reload.',
-    'export.tex.confirm': 'For Moodle without TeX support, export a GIFT file with {n} formula(s) converted to images (PNG).\nThe file may become large. Continue?',
-    'export.tex.fail': 'Failed to render math as images. Please check your network connection (MathJax loading).',
-    'confirm.loadDefault': 'The editor contains text. Loading the sample will overwrite it. Continue?',
-    'outline.title': 'Outline',
-    'outline.noTitle': '(no title)',
     'editor.ph': 'Paste your GIFT format text here…',
     'editor.ph.small': 'Bold, italic, underline, superscript and subscript are reflected in the GIFT output ([html] format)',
     'drop.hint': '📄 Drop a file here to load it',
-    'parse.hint': 'Supports all question types: multiple choice / multiple answers, true-false, short answer, matching, missing word, numerical, essay, and description. TeX math is rendered in previews when enclosed in <code>\\( ... \\)</code>, <code>$$ ... $$</code>, or <code>\\[ ... \\]</code>. In the input editor, TeX remains visible and editable as code. You can also drag and drop a text file onto the input area to load it. Rich text (bold, italic, underline, superscript, subscript) is exported to GIFT as <code>[html]</code> formatting and is reflected in the preview.',
+    'parse.hint': 'Supports all question types: multiple choice / multiple answers, true-false, short answer, matching, missing word, numerical, essay, and description. You can also drag and drop a text file onto the input area to load it. Rich text (bold, italic, underline, superscript, subscript) is exported to GIFT as <code>[html]</code> formatting and is reflected in the preview.',
     'btn.loadList': '📋 Review Question List',
     'btn.loadDefault': 'Load sample',
     'btn.download': '⬇ Download GIFT format',
@@ -1544,15 +1173,12 @@ const I18N = {
     'toggle.hint': 'Show choice hints on mouse hover',
     'toggle.showQ': 'Also show question and choices on the answer screen',
     'toggle.rawHtml': 'Render HTML tags as-is (enable color tags such as <font>)',
-    'toggle.tex': 'Render TeX math (\\( … \\), $$ … $$ / reload required after changing)',
-    'tex.reloadNeeded': 'TeX display setting changed. Reload the page to apply it. Reload now?',
     'fb.overall': 'Overall explanation',
     'list.subtitle': 'Question list — {n} question(s){cat}',
     'list.th.no': 'No.', 'list.th.type': 'Type', 'list.th.title': 'Question title',
     'list.th.preview': 'Question (beginning)', 'list.th.expl': 'Overall', 'list.th.result': 'Result',
     'q.subtitle': 'Question {num} / {total}{cat}',
     'q.subtitle.review': 'Question {num} / {total}{cat}  (review mode)',
-    'q.num': 'Q {num} / {total}',
     'score.subtitle': 'Results summary{cat}',
     'review.section.q': 'Question',
     'review.section.choices': 'Choices',
@@ -1599,27 +1225,12 @@ const I18N = {
     'err.binary': '"{name}" appears to be a binary file. Please drop a text file (.gift / .txt etc.).',
     'err.readFail': 'Failed to read the file (please use a UTF-8 text file).',
     'err.readFail2': 'Could not read the file.',
-    'warn.heading': '⚠️ Found {n} warning(s) — possible issues:',
-    'warn.continue': 'We recommend reviewing and fixing these. To use control characters (= ~ # { } :) in body text, escape them with a backslash like <code>\\=</code>, or use full-width characters (＝ 〜 ＃ etc.).',
-    'warn.proceed': 'Review the list anyway →',
-    'err.heading': '⛔ Found {n} error(s) that cannot be imported:',
-    'err.mustfix': 'These will fail to import into Moodle, so you cannot proceed to the list until they are fixed.',
-    'err.strayClose': 'Line {line}: a "}" has no matching "{". The answer block may be missing its opening brace, or escape it as "\\}" to use "}" in body text.',
-    'err.unclosedOpen': 'Line {line}: a "{" is never closed. Close the answer block with "}", or escape it as "\\{" to use "{" in body text.',
+    'warn.heading': '⚠️ Found {n} possible syntax issue(s):',
+    'warn.continue': 'After fixing, press "📋 Review Question List" again.  To continue anyway: to use control characters (= ~ # { } :) in body text, escape them with a backslash like <code>\\=</code>, or use full-width characters (＝ 〜 ＃ etc.).',
     'warn.ctrlChar': 'Line {line}: an unescaped control character "{char}" appears in the choice text. To use it in body text, escape it as "\\{char}", or use a full-width character (e.g. ＝ 〜 ｛ ｝).',
     'warn.fbEquals': 'Line {line}: the feedback (after #) contains an unescaped "{char}". In GIFT, "=" or "~" inside an answer block starts a new choice, so in body or explanation text escape it as "\{char}" or use a full-width character (＝ 〜).',
     'warn.dupChoice': 'Line {line}: the choice "{text}" is duplicated. Having two or more identical choices or accepted answers is redundant and may lead to unintended grading or display.',
     'warn.multiBrace': 'Line {line}: this question has more than one {…} block. In standard GIFT a question has only one blank; any after the first are not treated as blanks by Moodle and appear as {…} in the body text. To embed multiple blanks, use Cloze notation (e.g. {1:SA:=answer}).',
-    'warn.weightSum': 'Line {line}: in this multiple-answer question, the positive grades (%…%) of the correct choices sum to {sum}%. Moodle requires a total of 100%, so importing this will cause an error. Adjust the grades so they total 100% (e.g. for 3 choices use 33.33333%×3 = 99.99999%, for 6 use 16.66667%×6 — using Moodle standard fractions).',
-    'fix.popup.title': 'Fix suggestion',
-    'fix.popup.preview': 'Line:',
-    'fix.popup.close': '✕',
-    'fix.escape': 'Escape as "\\{char}"',
-    'fix.fullwidth': 'Replace with full-width "{wide}"',
-    'fix.escapeAll': 'Escape all {n} on this line',
-    'fix.fullwidthAll': 'Convert all {n} to full-width',
-    'fix.deleteLine': 'Delete this line (remove duplicate)',
-    'warn.ctrlChar.multi': ' ({n} on this line)',
     'qtitle.default': 'Question {n}',
     'qtype.mc': 'Multiple choice', 'qtype.multi': 'Multiple answers', 'qtype.truefalse': 'True/False',
     'qtype.short': 'Short answer', 'qtype.matching': 'Matching', 'qtype.numerical': 'Numerical',
@@ -1666,9 +1277,6 @@ function setLang(lang) {
   document.documentElement.lang = lang;
   applyStaticI18n();
   if (wasUnedited) setGiftText(getDefaultGift());
-  // どの画面で切り替えても、保存済みの採点結果を現在の言語で再生成しておく
-  //（正誤判定は不変。後から結果画面へ戻ったときに旧言語の文字列が残らないようにする）
-  regradeAll();
   rerenderActiveScreen();
 }
 
@@ -1737,34 +1345,6 @@ function applyVersion() {
   });
 }
 
-// ═══════════════════════════════════════════════
-//  TeX/LaTeX 数式レンダリング（MathJax）
-//  Moodle のエディタと同じく、\( ... \)、$$ ... $$、\[ ... \] を数式として表示する。
-//  ただし入力エディタ（テキストボックス）内は TeX コードのまま表示・編集できるようにする。
-// ═══════════════════════════════════════════════
-let mathTypesetTimer = null;
-function scheduleMathTypeset(root) {
-  if (!root) root = document.querySelector('.screen.active') || document.body;
-  // 入力画面・入力エディタ内では MathJax を実行しない（TeXコードをそのまま編集するため）
-  if (root.id === 'screen-input' || root.closest?.('#screen-input') || root.classList?.contains('gift-editor')) return;
-  if (mathTypesetTimer) clearTimeout(mathTypesetTimer);
-  mathTypesetTimer = setTimeout(() => typesetMath(root), 0);
-}
-function typesetMath(root) {
-  root = root || document.querySelector('.screen.active') || document.body;
-  // 入力画面・入力エディタ内では MathJax を実行しない（TeXコードをそのまま編集するため）
-  if (!root || root.id === 'screen-input' || root.closest?.('#screen-input') || root.classList?.contains('gift-editor')) return;
-  if (!window.MathJax || !MathJax.typesetPromise) return;
-  try {
-    if (MathJax.typesetClear) MathJax.typesetClear([root]);
-    MathJax.typesetPromise([root]).catch(err => console.warn('MathJax typeset failed:', err));
-  } catch (err) {
-    console.warn('MathJax typeset failed:', err);
-  }
-}
-window.addEventListener('load', () => scheduleMathTypeset(document.querySelector('.screen.active') || document.body));
-
-
 
 const DEFAULT_GIFT_ALL = {
   ja: `$CATEGORY:サンプル問題-全問題タイプ
@@ -1804,10 +1384,10 @@ const DEFAULT_GIFT_ALL = {
 ::複数正解-偶数::
 次の数のうち、偶数をすべて選びなさい。
 {
-    ~%33.33333%4 #正解の一つです。4 は 2 で割り切れる偶数です。
-    ~%33.33333%10 #正解の一つです。10 は 2 で割り切れる偶数です。
-    ~%33.33333%16 #正解の一つです。16 は 2 で割り切れる偶数です。
-    ~%-33.33333%7 #不正解です。7 は奇数です。
+    ~%33.33%4 #正解の一つです。4 は 2 で割り切れる偶数です。
+    ~%33.33%10 #正解の一つです。10 は 2 で割り切れる偶数です。
+    ~%33.33%16 #正解の一つです。16 は 2 で割り切れる偶数です。
+    ~%-33.33%7 #不正解です。7 は奇数です。
     ####【解説】偶数は 2 で割り切れる整数です。4・10・16 は偶数、7 は奇数です。
 }
 
@@ -1908,17 +1488,6 @@ const DEFAULT_GIFT_ALL = {
     ~2 + 3 \\= 6 #不正解です。2 + 3 は 5 です。
     ~2 + 3 \\= 4 #不正解です。2 + 3 は 5 です。
     ####【解説】たし算の基本です。2 + 3 \\= 5 が正しい式です。
-}
-
-// ───────────────────────────────────────────
-// 16. TeX 数式を含む問題（プレビューで数式表示）
-// ───────────────────────────────────────────
-::数式（TeX）の表示例::ミカエリス・メンテン式 \\( v_0 = \\frac{V_{\\max}\\,[{\\rm S}]}{K_{\\rm M} + [{\\rm S}]} \\) で、基質濃度 \\([{\\rm S}]\\) が \\(K_{\\rm M}\\) に等しいとき、反応速度 \\(v_0\\) は最大速度 \\(V_{\\max}\\) の何倍になるか。
-{
-    =0.5 #正解です。
-    ~1
-    ~2
-    ####\\([{\\rm S}] = K_{\\rm M}\\) のとき $$ v_0 = \\frac{V_{\\max}\\,K_{\\rm M}}{K_{\\rm M} + K_{\\rm M}} = \\frac{V_{\\max}}{2} $$ となり、\\(V_{\\max}\\) の半分です。ここでは \\(K_{\\rm M} \\neq 0\\) を仮定します。数式は \\( ... \\)、$$ ... $$、\\[ ... \\] で囲むとプレビューで表示されます。
 }`,
   en: `$CATEGORY:Sample Questions - All Question Types
 
@@ -1957,10 +1526,10 @@ What is 7 × 8?
 ::Multiple answers - Even numbers::
 Select all of the even numbers below.
 {
-    ~%33.33333%4 #Correct. 4 is divisible by 2, so it is even.
-    ~%33.33333%10 #Correct. 10 is divisible by 2, so it is even.
-    ~%33.33333%16 #Correct. 16 is divisible by 2, so it is even.
-    ~%-33.33333%7 #Incorrect. 7 is an odd number.
+    ~%33.33%4 #Correct. 4 is divisible by 2, so it is even.
+    ~%33.33%10 #Correct. 10 is divisible by 2, so it is even.
+    ~%33.33%16 #Correct. 16 is divisible by 2, so it is even.
+    ~%-33.33%7 #Incorrect. 7 is an odd number.
     ####[Explanation] An even number is an integer divisible by 2. 4, 10, and 16 are even; 7 is odd.
 }
 
@@ -2061,17 +1630,6 @@ Which of the following equations is correct? (Here "\\=" represents an equals si
     ~2 + 3 \\= 6 #Incorrect. 2 + 3 is 5.
     ~2 + 3 \\= 4 #Incorrect. 2 + 3 is 5.
     ####[Explanation] This is basic addition. 2 + 3 \\= 5 is the correct equation.
-}
-
-// ───────────────────────────────────────────
-// 16. Question with TeX math (rendered in preview)
-// ───────────────────────────────────────────
-::TeX math example::In the Michaelis-Menten equation \\( v_0 = \\frac{V_{\\max}\\,[{\\rm S}]}{K_{\\rm M} + [{\\rm S}]} \\), when the substrate concentration \\([{\\rm S}]\\) equals \\(K_{\\rm M}\\), the rate \\(v_0\\) becomes what fraction of the maximum rate \\(V_{\\max}\\)?
-{
-    =0.5 #Correct.
-    ~1
-    ~2
-    ####When \\([{\\rm S}] = K_{\\rm M}\\), $$ v_0 = \\frac{V_{\\max}\\,K_{\\rm M}}{K_{\\rm M} + K_{\\rm M}} = \\frac{V_{\\max}}{2} $$ so it is half of \\(V_{\\max}\\) (assuming \\(K_{\\rm M} \\neq 0\\)). Wrap math in \\( ... \\), $$ ... $$, or \\[ ... \\] to render it in the preview.
 }`
 };
 function getDefaultGift() { return DEFAULT_GIFT_ALL[currentLang] || DEFAULT_GIFT_ALL.ja; }
@@ -2711,8 +2269,6 @@ function setGiftText(str) {
   });
 
   updateEditorPlaceholder();
-  // アウトライン表示中であれば内容を更新する（ファイル読み込み・サンプル読み込み時）
-  updateOutline();
 }
 
 function updateEditorPlaceholder() {
@@ -2721,10 +2277,8 @@ function updateEditorPlaceholder() {
 }
 
 // ── プレビュー用：許可タグだけを HTML として描画し、他は全てエスケープ ──
-//  書式タグの内側（depth>0）はシリアライズ時に実体参照へエスケープ済みのため、
-//  実体参照（&amp; など）は保持しつつ、生の < > のみ無害化して挿入する
-//  （素通しにすると、エスケープを経ていないテキスト中の <svg onload=...> 等が
-//  実タグとして挿入されるため）。トップレベル（depth=0）は全てエスケープする。
+//  書式タグの内側（depth>0）はシリアライズ時にエスケープ済みなので素通し、
+//  トップレベル（depth=0）のテキストはユーザー入力としてエスケープする。
 // 「HTMLタグをそのまま反映する」トグル（一覧画面）が ON かどうか。
 // ON のとき、renderRich は <font> など未知のタグもエスケープせず通す。
 function rawHtmlEnabled() {
@@ -2738,28 +2292,13 @@ function rawHtmlEnabled() {
 //   <script>/<style> ブロック、インライン on*= ハンドラ、javascript: URL。
 function sanitizeRawHtml(s) {
   if (!s) return s;
-  // inert な <template> でパースし、要素・属性単位で無害化する。
-  // 正規表現方式では <img src=x/onerror=...> のように属性区切りが空白でない
-  // 有効な HTML や、実体参照・空白入りの javascript: URL を除去できないため。
-  const tpl = document.createElement('template');
-  tpl.innerHTML = String(s);
-  tpl.content.querySelectorAll('script, style').forEach(el => el.remove());
-  const URL_ATTRS = ['href', 'src', 'xlink:href', 'action', 'formaction', 'data'];
-  const walker = document.createTreeWalker(tpl.content, NodeFilter.SHOW_ELEMENT);
-  const els = [];
-  while (walker.nextNode()) els.push(walker.currentNode);
-  for (const el of els) {
-    for (const attr of [...el.attributes]) {
-      const name = attr.name.toLowerCase();
-      if (name.startsWith('on') || name === 'srcdoc') { el.removeAttribute(attr.name); continue; }
-      if (URL_ATTRS.includes(name)) {
-        // ブラウザは URL 中の制御文字・空白を無視するため、除去してから判定する
-        const v = String(attr.value || '').replace(/[\u0000-\u0020\u00a0]/g, '').toLowerCase();
-        if (v.startsWith('javascript:') || v.startsWith('vbscript:')) el.setAttribute(attr.name, '#');
-      }
-    }
-  }
-  return tpl.innerHTML;
+  return String(s)
+    .replace(/<\s*script\b[\s\S]*?(?:<\s*\/\s*script\s*>|$)/gi, '')
+    .replace(/<\s*style\b[\s\S]*?(?:<\s*\/\s*style\s*>|$)/gi, '')
+    .replace(/\son[a-z]+\s*=\s*"[^"]*"/gi, '')
+    .replace(/\son[a-z]+\s*=\s*'[^']*'/gi, '')
+    .replace(/\son[a-z]+\s*=\s*[^\s>]+/gi, '')
+    .replace(/(href|src)\s*=\s*("|')\s*javascript:[^"']*\2/gi, '$1=$2#$2');
 }
 
 
@@ -2836,12 +2375,10 @@ function renderRich(str) {
   // 通常モード：従来どおり、ツールが明示的に扱う書式タグだけを描画する。
   // <font> など任意HTMLは実行せず、文字として表示する。
   let out = '', depth = 0, last = 0, m;
-  // depth>0 用：実体参照を保持したまま、生の < > だけをタグとして解釈されないようにする
-  const escLtGt = x => x.replace(/</g, '&lt;').replace(/>/g, '&gt;');
   FMT_TAG_RE.lastIndex = 0;
   while ((m = FMT_TAG_RE.exec(str)) !== null) {
     const between = str.slice(last, m.index);
-    out += (depth > 0 ? escLtGt(between) : escHtml(between));
+    out += (depth > 0 ? between : escHtml(between));
     const rawTag = m[0];
     const tagHead = rawTag.slice(0, 16).toLowerCase();
     if (/^<br/.test(tagHead)) { out += '<br>'; }
@@ -2865,7 +2402,7 @@ function renderRich(str) {
     last = m.index + m[0].length;
   }
   const tailRaw = str.slice(last);
-  out += (depth > 0 ? escLtGt(tailRaw) : escHtml(tailRaw));
+  out += (depth > 0 ? tailRaw : escHtml(tailRaw));
   out = out.replace(/\n/g, '<br>');
   return out;
 }
@@ -2878,13 +2415,11 @@ function stripRich(str) {
 // ── 書式を含む問題ブロックに [html] マーカーを自動付与した GIFT を生成 ──
 function buildExportGift() {
   pruneImgStore();             // 削除済み画像をストアから掃除
-  return buildExportGiftFromRaw(getGiftText());
-}
-
-// 任意の内部テキスト（プレースホルダー id を含む）から GIFT 出力を組み立てる
-function buildExportGiftFromRaw(raw) {
+  const raw = getGiftText();   // プレースホルダー (id) を含む内部テキスト
+  // 空行区切りでブロック化（コメント行・$CATEGORY 行は保持）
   const blocks = raw.split(/\n[ \t]*\n/);
   const withMarkers = blocks.map(insertHtmlMarker).join('\n\n');
+  // 最後にプレースホルダーを実際の <img>/<audio>/<video> タグへ展開して出力
   return videoExpand(audioExpand(imgExpand(withMarkers)));
 }
 
@@ -2924,17 +2459,6 @@ giftEditor.addEventListener('paste', handlePaste);
 giftEditor.addEventListener('copy',  handleCopyCut);
 giftEditor.addEventListener('cut',   handleCopyCut);
 giftEditor.addEventListener('input', updateEditorPlaceholder);
-
-// アウトライン：直接入力時は 1500ms デバウンス更新、フォーカスアウト時は即時更新
-let _outlineDebounceTimer = null;
-giftEditor.addEventListener('input', () => {
-  if (_outlineDebounceTimer) clearTimeout(_outlineDebounceTimer);
-  _outlineDebounceTimer = setTimeout(() => { _outlineDebounceTimer = null; updateOutline(); }, 1500);
-});
-giftEditor.addEventListener('blur', () => {
-  if (_outlineDebounceTimer) { clearTimeout(_outlineDebounceTimer); _outlineDebounceTimer = null; }
-  updateOutline();
-});
 
 function handleCopyCut(e) {
   const ed = e.currentTarget;
@@ -3032,162 +2556,18 @@ function handlePaste(e) {
 
 // ── GIFT ソース表示パネル ──
 function downloadGiftSource() {
-  downloadGiftText(buildExportGift());
-}
-
-// GIFT テキストを .gift ファイルとしてダウンロードする
-function downloadGiftText(text, prefix) {
+  const text = buildExportGift();
   const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  // ファイル名に年月日時分秒を付与（例: quiz-20260621-000312.gift）
+  // ファイル名に年月日時分秒を付与（例: quiz-20260621000312.gift）
   const d = new Date();
   const z = n => String(n).padStart(2, '0');
   const ts = '' + d.getFullYear() + z(d.getMonth() + 1) + z(d.getDate())
-                + '-' + z(d.getHours()) + z(d.getMinutes()) + z(d.getSeconds());
-  a.href = url; a.download = (prefix || 'quiz') + '-' + ts + '.gift';
+                + z(d.getHours()) + z(d.getMinutes()) + z(d.getSeconds());
+  a.href = url; a.download = 'quiz-' + ts + '.gift';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
-// ═══════════════════════════════════════════════
-//  TeX を画像（base64 PNG）に変換して GIFT 出力
-//  TeX 非対応の Moodle へのインポート用。メニューから実行する。
-//  既存の画像 export パイプライン（imgRegister → imgExpand）に流すことで
-//  [html] マーカー付与や base64 の扱いを既存画像と統一する。
-// ═══════════════════════════════════════════════
-const TEX_SPAN_RE = /(\$\$[\s\S]*?\$\$|\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\])/g;
-
-// SVG 出力版 MathJax を読み込んだ隠し iframe を1つ用意して使い回す
-let _texSvgFrameReady = null;
-function ensureTexSvgFrame() {
-  if (_texSvgFrameReady) return _texSvgFrameReady;
-  _texSvgFrameReady = new Promise((resolve, reject) => {
-    const iframe = document.createElement('iframe');
-    iframe.setAttribute('aria-hidden', 'true');
-    iframe.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:10px;height:10px;border:0;visibility:hidden';
-    iframe.srcdoc =
-      '<!DOCTYPE html><html><head><meta charset="utf-8">' +
-      '<script>window.MathJax={tex:{inlineMath:[["\\\\(","\\\\)"]],displayMath:[["$$","$$"],["\\\\[","\\\\]"]],processEscapes:true},' +
-      'svg:{fontCache:"none"},startup:{typeset:false,ready:function(){MathJax.startup.defaultReady();' +
-      'parent.postMessage("gc-texsvg-ready","*");}}};<\/script>' +
-      '<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"><\/script>' +
-      '</head><body></body></html>';
-    const onMsg = (e) => {
-      if (e.source === iframe.contentWindow && e.data === 'gc-texsvg-ready') {
-        window.removeEventListener('message', onMsg);
-        // ready が body 解析前に発火する場合があるため body の出現を待つ
-        const waitBody = (tries) => {
-          const doc = iframe.contentDocument;
-          if (doc && doc.body) { resolve(iframe); return; }
-          if (tries <= 0) { resolve(iframe); return; }   // 最終的には解決（renderTex 側でも防御）
-          setTimeout(() => waitBody(tries - 1), 30);
-        };
-        waitBody(100);
-      }
-    };
-    window.addEventListener('message', onMsg);
-    document.body.appendChild(iframe);
-    setTimeout(() => reject(new Error('MathJax(SVG) load timeout')), 20000);
-  });
-  // 読み込み失敗時はキャッシュを破棄し、次回の実行で再試行できるようにする
-  _texSvgFrameReady.catch(() => { _texSvgFrameReady = null; });
-  return _texSvgFrameReady;
-}
-
-// 1つの TeX 文字列を PNG(dataURL) に変換する
-async function renderTexToPng(tex, display) {
-  const iframe = await ensureTexSvgFrame();
-  const win = iframe.contentWindow;
-  const doc = iframe.contentDocument;
-  const container = win.MathJax.tex2svg(tex, { display: !!display });
-  const svg = container.querySelector('svg');
-  if (!svg) throw new Error('SVG 生成に失敗: ' + tex);
-
-  const mount = doc.body || doc.documentElement;
-  mount.appendChild(container);          // 計測のため一時的に配置
-  const rect = svg.getBoundingClientRect();
-  let w = rect.width, h = rect.height;
-  // ベースライン合わせ用の vertical-align（ex → px 換算）
-  const hEx = parseFloat(svg.getAttribute('height')) || 0;          // 例: "2.452ex"
-  const vaEx = parseFloat((svg.style.verticalAlign || '').replace('ex', '')) || 0; // 例: "-0.566ex"
-  const exToPx = hEx ? (h / hEx) : 0;
-  const vaPx = vaEx * exToPx;
-
-  if (!w || !h) { mount.removeChild(container); throw new Error('数式サイズ取得に失敗: ' + tex); }
-
-  // 名前空間と明示 px サイズを付与してシリアライズ
-  if (!svg.getAttribute('xmlns')) svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-  if (!svg.getAttribute('xmlns:xlink')) svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
-  svg.setAttribute('width', w + 'px');
-  svg.setAttribute('height', h + 'px');
-  const svgStr = new XMLSerializer().serializeToString(svg);
-  mount.removeChild(container);
-
-  const svgUri = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgStr);
-  const scale = 3;   // 高解像度化
-  const png = await new Promise((res, rej) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width  = Math.max(1, Math.round(w * scale));
-      canvas.height = Math.max(1, Math.round(h * scale));
-      const ctx = canvas.getContext('2d');
-      ctx.setTransform(scale, 0, 0, scale, 0, 0);
-      ctx.drawImage(img, 0, 0, w, h);
-      try { res(canvas.toDataURL('image/png')); }
-      catch (err) { rej(err); }
-    };
-    img.onerror = () => rej(new Error('PNG 変換に失敗: ' + tex));
-    img.src = svgUri;
-  });
-  return { png, w: Math.round(w), h: Math.round(h), vaPx };
-}
-
-// メニューから呼ぶ：TeX を画像化した GIFT をダウンロード
-let _texExportBusy = false;
-async function exportGiftTexAsImages() {
-  closeTbMenu();
-  if (!window.GC_TEX_ENABLED) { alert(t('export.tex.disabled')); return; }
-  if (_texExportBusy) return;
-  const raw0 = getGiftText();
-  TEX_SPAN_RE.lastIndex = 0;
-  const matches = [...raw0.matchAll(TEX_SPAN_RE)];
-  if (matches.length === 0) {
-    alert(t('export.tex.none'));
-    return;
-  }
-  if (!window.confirm(t('export.tex.confirm', { n: matches.length }))) return;
-
-  _texExportBusy = true;
-  const registeredIds = [];
-  try {
-    await ensureTexSvgFrame();
-    let out = '', last = 0;
-    for (const m of matches) {
-      out += raw0.slice(last, m.index);
-      const whole = m[0];
-      const display = whole.startsWith('$$') || whole.startsWith('\\[');
-      const inner = whole.slice(2, -2).trim();
-      const { png, w, h, vaPx } = await renderTexToPng(inner, display);
-      const style = display
-        ? 'max-width:100%;'
-        : ('vertical-align:' + vaPx.toFixed(1) + 'px;');
-      const id = imgRegister(png, { width: String(w), height: String(h), style }).dataset.imgId;
-      registeredIds.push(id);
-      out += imgPh(id);
-      last = m.index + whole.length;
-    }
-    out += raw0.slice(last);
-    const finalText = buildExportGiftFromRaw(out);   // [html] マーカー付与＋画像展開
-    downloadGiftText(finalText, 'quiz-teximg');
-  } catch (e) {
-    alert(t('export.tex.fail') + '\n' + (e && e.message ? e.message : e));
-  } finally {
-    // この export 用に登録した一時画像をストアから掃除（エディタには無いため）
-    registeredIds.forEach(id => imgStore.delete(id));
-    _texExportBusy = false;
-  }
 }
 
 // ═══════════════════════════════════════════════
@@ -3201,32 +2581,6 @@ function mask(str) {
     .replace(/\\n/g, '\n');                          // GIFT の改行エスケープ \n を実改行へ
 }
 function demask(str) { if (str == null) return ''; return str.replace(/[\uE001-\uE007]/g, c => UNESC[c] || c); }
-
-// 文法チェック用：mask() と同じくエスケープを PUA へ退避するが、GIFT の改行
-// エスケープ \n を実改行へは変換しない（変換すると行数が元テキストと食い違い、
-// 警告の行番号・ジャンプ先・修正候補の対象行がずれるため）。\n は長さを保った
-// まま空白2文字へ無害化する。
-function maskKeepLines(str) {
-  return str
-    .replace(/\\([=~#{}:\\])/g, (m, c) => ESC[c])
-    .replace(/\\n/g, '  ');
-}
-
-// TeX 数式内の GIFT 制御文字（= ~ # { } :）とバックスラッシュ（\）は、
-// 問題構文／GIFTエスケープとして解釈しない。
-// 例: \( v_0 = \frac{V_{\max}[S]}{K_M + [S]} \) や
-// $$v_0 = \frac{V_{\max}[S]}{K_M + [S]}$$ の { } や = が
-// 選択肢・解答ブロックの記号として誤判定されるのを防ぐ。
-// さらにバックスラッシュも退避することで、mask() の GIFT エスケープ変換
-// （\n→改行、\\→\、\{ \}→{ }）が \neq・\nu・\nabla・行列の \\・集合の \{ \} など
-// TeX コマンドを壊さないようにする。このため parseBlock では mask より先に適用する。
-function maskTexMath(str) {
-  if (str == null) return '';
-  return String(str).replace(/(\$\$[\s\S]*?\$\$|\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\])/g, seg =>
-    seg.replace(/[=~#{}:\\]/g, c => ESC[c] || c)
-  );
-}
-
 
 // 各解答（=/~ の直後）に付くフォーマット指定子を取り除く。
 // Moodle から書き出すと選択肢・マッチング項目・数値解答の先頭に
@@ -3254,9 +2608,7 @@ function parseGIFT(rawText) {
 }
 
 function parseBlock(block) {
-  // maskTexMath を先に適用して数式スパン全体（バックスラッシュ含む）を退避し、
-  // その後で mask の GIFT エスケープ変換を走らせる（順序が重要）。
-  const masked = mask(maskTexMath(block));
+  const masked = mask(block);
   let title = '', rest = masked;
   const tMatch = masked.match(/^::([\s\S]*?)::\s*([\s\S]*)$/);
   if (tMatch) { title = demask(tMatch[1].trim()); rest = tMatch[2]; }
@@ -3424,11 +2776,7 @@ const TYPE_LABELS = {
 // ═══════════════════════════════════════════════
 function checkGIFTSyntax(text) {
   const warnings = [];
-  // 行番号を元テキストと一致させるため、\n を実改行に変換しない maskKeepLines を使う
-  const syntaxText = maskKeepLines(maskTexMath(text));
-  const lines = syntaxText.split('\n');
-  // 半角制御文字 → 全角変換マップ
-  const FULLWIDTH = { '=':'＝', '~':'〜', '#':'＃', '{':'｛', '}':'｝', ':':'：' };
+  const lines = text.split('\n');
   let insideBlock = false, braceDepth = 0;
   for (let i = 0; i < lines.length; i++) {
     const raw = lines[i];
@@ -3445,44 +2793,13 @@ function checkGIFTSyntax(text) {
     if (/^[ \t]*[{}]/.test(raw) && /^[ \t]*[{}][ \t]*$/.test(raw)) continue;
     if (trimmed.startsWith('\\')) continue;
     if (trimmed.startsWith('=') || trimmed.startsWith('~')) {
-      // 修正位置は「元テキスト行」基準で算出する（syntaxText は mask で長さが変わるため）。
-      // 元行に対し、長さを保ったまま TeX 数式とエスケープを無害化してから走査する。
-      const origRaw = text.split('\n')[i];
-      const oLead = origRaw.length - origRaw.trimStart().length;
-      const oTrim = origRaw.trimStart();
-      // (a) TeX 数式スパン全体を \x01 で潰す（長さ保持）→ 数式内の = { } を誤検出しない
-      let neu = oTrim.replace(/(\$\$[\s\S]*?\$\$|\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\])/g, seg => seg.replace(/[^\n]/g, '\x01'));
-      // (b) エスケープ済み \X（2文字）を \x01\x01 に（長さ保持）→ \= などを誤検出しない
-      neu = neu.replace(/\\./g, () => '\x01\x01');
-      // フィードバック（未エスケープの " #"）開始位置
-      const hashRel = neu.search(/\s#/);
-      const bodyEndRel = (hashRel === -1) ? neu.length : hashRel;
-      // 選択肢本文（先頭 =/~ を除く）で未エスケープの制御文字 = ~ { } を全収集
-      const positions = [];   // origRaw 上の実インデックス
-      const chars = [];
-      for (let p = 1; p < bodyEndRel; p++) {     // p=0 は先頭の選択肢記号 =/~
-        const c = neu[p];
-        if (c === '=' || c === '~' || c === '{' || c === '}') {
-          positions.push(oLead + p);
-          chars.push(oTrim[p]);
-        }
-      }
-      if (positions.length > 0) {
-        const origLine = origRaw;
-        const char = chars[0];
-        const wide = FULLWIDTH[char] || char;
-        const fixes = [];
-        if (positions.length === 1) {
-          fixes.push({ label: t('fix.escape',    {char}), action:'replaceAt', lineText:origLine, pos:positions[0], to:'\\'+char });
-          fixes.push({ label: t('fix.fullwidth', {wide}), action:'replaceAt', lineText:origLine, pos:positions[0], to:wide      });
-        } else {
-          fixes.push({ label: t('fix.escapeAll',    {n:positions.length}), action:'replaceAllAt', lineText:origLine, positions:positions.slice(), mode:'escape'    });
-          fixes.push({ label: t('fix.fullwidthAll', {n:positions.length}), action:'replaceAllAt', lineText:origLine, positions:positions.slice(), mode:'fullwidth' });
-        }
-        warnings.push({ line:i, severity:'warning',
-          message:t('warn.ctrlChar', {line:(i+1), char:char}) + (positions.length>1 ? t('warn.ctrlChar.multi', {n:positions.length}) : ''),
-          fixes
-        });
+      const withoutEscape = trimmed.replace(/\\./g, '\x00\x00');
+      // プレースホルダー id は制御文字を含まないためそのままスルー
+      const bodyPart = withoutEscape.replace(/\s+#.*$/, '').slice(1);
+      const ctrlMatch = bodyPart.match(/[=~{}]/);
+      if (ctrlMatch) {
+        const char = ctrlMatch[0];
+        warnings.push({ line:i, message:t('warn.ctrlChar', {line:(i+1), char:char}) });
       }
       continue;
     }
@@ -3504,108 +2821,13 @@ function checkGIFTSyntax(text) {
     // （Matching の右辺や複数行にまたがる選択肢の続きの可能性もあるので、警告は控えめに）
   }
 
-  // ── 波括弧 { } の不整合（error：インポート不可・解析破綻）──
-  checkBraceBalance(syntaxText, warnings);
   // ── 1問に複数の {...} がある場合の警告 ──
   // 標準GIFTでは1問につき空欄（回答ブロック）は1つ。複数並べても2つ目以降は
   // Moodleで空欄にならず {...} がそのまま本文に表示されてしまう（Cloze記法が別途必要）。
-  checkMultipleBlocks(syntaxText, warnings);
-  checkDupAndFeedback(syntaxText, warnings, text);
-  checkWeightSums(text, warnings);
+  checkMultipleBlocks(text, warnings);
+  checkDupAndFeedback(text, warnings);
   warnings.sort((a, b) => a.line - b.line);
   return warnings;
-}
-
-// 波括弧 { } の不整合を検出する（error）。
-// syntaxText は mask(maskTexMath(text)) 済みで、\{ \} や TeX 数式内の波括弧は
-// PUA に退避されているため、構造上の波括弧だけが残っている前提。
-// 深さスキャンで「余分な } 」と「閉じられていない { 」を error として報告する。
-function checkBraceBalance(syntaxText, warnings) {
-  const lines = syntaxText.split('\n');
-  const openStack = [];   // 未対応の { が現れた行番号（0始まり）
-  for (let i = 0; i < lines.length; i++) {
-    const raw = lines[i];
-    if (/^[ \t]*\/\//.test(raw)) continue;          // コメント行は無視
-    if (/^[ \t]*\$CATEGORY:/i.test(raw)) continue;  // カテゴリ行は無視
-    for (const ch of raw) {
-      if (ch === '{') {
-        openStack.push(i);
-      } else if (ch === '}') {
-        if (openStack.length === 0) {
-          // 対応する { が無い余分な }
-          warnings.push({ line:i, severity:'error', message:t('err.strayClose', {line:(i+1)}) });
-        } else {
-          openStack.pop();
-        }
-      }
-    }
-  }
-  // 閉じられずに残った {
-  for (const li of openStack) {
-    warnings.push({ line:li, severity:'error', message:t('err.unclosedOpen', {line:(li+1)}) });
-  }
-}
-// 100 から十分外れている場合に警告する。
-// Moodle は合計 100% を要求するが、標準分数（16.66667×6=100.00002 や
-// 33.33333×3=99.99999 など）はわずかに 100 からずれる。これらを誤検出しないよう、
-// 許容誤差は 0.001（0.1%）とする（標準分数の最大ずれ約 0.00003 ≪ 0.001 ≪
-// 33.33×3 の 0.01）。
-const WEIGHT_SUM_TOLERANCE = 0.001;
-function checkWeightSums(rawText, warnings) {
-  const lines = rawText.split('\n');
-  let blockStart = -1, blockLines = [];
-  const flush = () => {
-    if (blockStart >= 0 && blockLines.length) {
-      checkOneBlockWeightSum(blockLines.join('\n'), blockStart, warnings);
-    }
-    blockStart = -1; blockLines = [];
-  };
-  for (let i = 0; i < lines.length; i++) {
-    const raw = lines[i];
-    if (/^[ \t]*\/\//.test(raw)) continue;            // コメント行
-    if (/^[ \t]*\$CATEGORY:/i.test(raw)) continue;    // カテゴリ行
-    if (raw.trim() === '') { flush(); continue; }     // 空行＝ブロック区切り
-    if (blockStart < 0) blockStart = i;
-    blockLines.push(raw);
-  }
-  flush();
-}
-
-function checkOneBlockWeightSum(blockText, startLine, warnings) {
-  // パーサーと同じ前処理（TeX 数式・エスケープを退避）
-  const masked = mask(maskTexMath(blockText));
-  // 回答ブロック {...} を取り出す
-  const open = masked.indexOf('{');
-  if (open === -1) return;
-  let depth = 0, close = -1;
-  for (let i = open; i < masked.length; i++) {
-    if (masked[i] === '{') depth++;
-    else if (masked[i] === '}') { depth--; if (depth === 0) { close = i; break; } }
-  }
-  if (close === -1) return;
-  let body = masked.slice(open + 1, close);
-  // 全体解説（#### 以降）は選択肢ではないため除外する（解説中の = ~ を誤解析しない）
-  const gfIdx = body.indexOf('####');
-  if (gfIdx !== -1) body = body.slice(0, gfIdx);
-  // 単一の数値回答（{#...}）や T/F、空欄は対象外
-  if (/^\s*#/.test(body)) return;
-  const options = parseOptions(body);
-  if (options.length === 0) return;
-  const hasEq = options.some(o => o.sign === '=');
-  const hasPosWeight = options.some(o => o.weight != null && o.weight > 0);
-  // multiple-answer（= が無く、正の重みを持つ）問題のみ合計100%を要求
-  const isMulti = !hasEq && hasPosWeight;
-  if (!isMulti) return;
-  // 正の配点のみ合計（負の配点は誤答ペナルティで合計対象外）
-  const sum = options.reduce((s, o) => s + ((o.weight != null && o.weight > 0) ? o.weight : 0), 0);
-  if (Math.abs(sum - 100) > WEIGHT_SUM_TOLERANCE) {
-    // 小数の見栄えを整える（最大5桁、末尾ゼロ除去）
-    const sumStr = parseFloat(sum.toFixed(5)).toString();
-    warnings.push({
-      line: startLine, severity: 'warning',
-      message: t('warn.weightSum', { line: (startLine + 1), sum: sumStr })
-    });
-  }
 }
 
 // 各問題ブロック（空行区切り）内の未エスケープ {...} の数を数え、2つ以上なら警告
@@ -3615,17 +2837,11 @@ function checkMultipleBlocks(text, warnings) {
   // 空行区切りでブロック化（各ブロックの開始行番号を記録）
   let blockStart = -1;
   let blockLines = [];
-  // 数式スパン（\(...\)、$$...$$、\[...\]）内の { } と、エスケープされた \{ \} を
-  // 無害化する。長さを保つため { } は空白1個、\{ \} は空白2個へ置換する。
-  // これにより \frac{a}{b} などの数式の波括弧を本物の解答ブロックと誤カウントしない。
-  const neutralizeBraces = s => s
-    .replace(/(\$\$[\s\S]*?\$\$|\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\])/g, m => m.replace(/[{}]/g, ' '))
-    .replace(/\\[{}]/g, '  ');
   const flush = () => {
     if (blockStart < 0 || blockLines.length === 0) { blockStart = -1; blockLines = []; return; }
     const blockText = blockLines.map(o => o.text).join('\n');
-    // 数式内・エスケープ済みの波括弧を無害化してから { の出現位置を数える
-    const masked = neutralizeBraces(blockText);
+    // エスケープされた \{ \} を無害化してから { の出現位置を数える
+    const masked = blockText.replace(/\\[{}]/g, '  ');
     // トップレベルの { の数（ネストは考慮せず、深さ0から開く { を数える）
     let depth = 0, count = 0;
     for (const ch of masked) {
@@ -3637,7 +2853,7 @@ function checkMultipleBlocks(text, warnings) {
       let secondLine = blockStart;
       let depth2 = 0, seen = 0, found = false;
       for (const o of blockLines) {
-        const m = neutralizeBraces(o.text);
+        const m = o.text.replace(/\\[{}]/g, '  ');
         for (const ch of m) {
           if (ch === '{') { if (depth2 === 0) { seen++; if (seen === 2) { secondLine = o.line; found = true; break; } } depth2++; }
           else if (ch === '}') { if (depth2 > 0) depth2--; }
@@ -3645,7 +2861,7 @@ function checkMultipleBlocks(text, warnings) {
         if (found) break;
       }
       warnings.push({
-        line: secondLine, severity: 'warning',
+        line: secondLine,
         message: t('warn.multiBrace', {line:(secondLine + 1)})
       });
     }
@@ -3665,10 +2881,8 @@ function checkMultipleBlocks(text, warnings) {
 
 // 選択肢行を解析し、(1) フィードバック内の未エスケープ = / ~ と
 // (2) 同一符号・同一テキストの選択肢／別解の重複を検出する。
-function checkDupAndFeedback(text, warnings, rawText) {
+function checkDupAndFeedback(text, warnings) {
   const lines = text.split('\n');
-  const rawLines = rawText ? rawText.split('\n') : lines;
-  const FULLWIDTH = { '=':'＝', '~':'〜', '#':'＃', '{':'｛', '}':'｝', ':':'：' };
   let insideBlock = false, braceDepth = 0;
   // 現在の回答ブロック内で見た選択肢を記録（重複検出用）
   let seen = new Map();          // key: sign + '\x00' + text  → 最初の行番号
@@ -3705,44 +2919,10 @@ function checkDupAndFeedback(text, warnings, rawText) {
     const bodyPart = (hashIdx === -1 ? segAfterSign : segAfterSign.slice(0, hashIdx));
     const fbPart   = (hashIdx === -1 ? '' : segAfterSign.slice(hashIdx + 1));
 
-    // (1) フィードバック（# 以降）内の未エスケープ = / ~ を位置付きで全収集
-    // 位置は「元テキスト行」基準（rawLines[i]）で算出する
-    {
-      const oRaw = rawLines[i];
-      const oLead = oRaw.length - oRaw.trimStart().length;
-      const oTrim = oRaw.trimStart();
-      // 長さを保ったまま TeX 数式とエスケープを無害化
-      let neu = oTrim.replace(/(\$\$[\s\S]*?\$\$|\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\])/g, seg => seg.replace(/[^\n]/g, '\x01'));
-      neu = neu.replace(/\\./g, () => '\x01\x01');
-      const hashPos = neu.indexOf('#', 1);   // 先頭記号より後の最初の素の #
-      if (hashPos !== -1) {
-        const fbPositions = [];   // oRaw 上の実インデックス
-        const fbChars = [];
-        for (let p = hashPos + 1; p < neu.length; p++) {
-          const c = neu[p];
-          if (c === '=' || c === '~') {
-            fbPositions.push(oLead + p);
-            fbChars.push(oTrim[p]);
-          }
-        }
-        if (fbPositions.length > 0) {
-          const origLine = oRaw;
-          const char = fbChars[0];
-          const wide = FULLWIDTH[char] || char;
-          const fixes = [];
-          if (fbPositions.length === 1) {
-            fixes.push({ label: t('fix.escape',    {char}), action:'replaceAt', lineText:origLine, pos:fbPositions[0], to:'\\'+char });
-            fixes.push({ label: t('fix.fullwidth', {wide}), action:'replaceAt', lineText:origLine, pos:fbPositions[0], to:wide      });
-          } else {
-            fixes.push({ label: t('fix.escapeAll',    {n:fbPositions.length}), action:'replaceAllAt', lineText:origLine, positions:fbPositions.slice(), mode:'escape'    });
-            fixes.push({ label: t('fix.fullwidthAll', {n:fbPositions.length}), action:'replaceAllAt', lineText:origLine, positions:fbPositions.slice(), mode:'fullwidth' });
-          }
-          warnings.push({ line:i, severity:'warning',
-            message:t('warn.fbEquals', {line:(i+1), char:char}) + (fbPositions.length>1 ? t('warn.ctrlChar.multi', {n:fbPositions.length}) : ''),
-            fixes
-          });
-        }
-      }
+    // (1) フィードバック内の未エスケープ = / ~
+    const fbCtrl = fbPart.match(/[=~]/);
+    if (fbCtrl) {
+      warnings.push({ line:i, message:t('warn.fbEquals', {line:(i+1), char:fbCtrl[0]}) });
     }
 
     // (2) 選択肢・別解の重複（符号＋本文テキストが完全一致）
@@ -3751,258 +2931,32 @@ function checkDupAndFeedback(text, warnings, rawText) {
     const dispText = (dispRaw.indexOf('#') === -1 ? dispRaw : dispRaw.slice(0, dispRaw.indexOf('#'))).trim();
     const key = sign + '\x00' + bodyPart.trim();
     if (dispText !== '' && seen.has(key)) {
-      const origLine = rawLines[i];
-      warnings.push({ line:i, severity:'warning', message:t('warn.dupChoice', {line:(i+1), text:dispText}),
-        fixes: [
-          { label: t('fix.deleteLine'), action:'deleteLine', lineText:origLine },
-        ]
-      });
+      warnings.push({ line:i, message:t('warn.dupChoice', {line:(i+1), text:dispText}) });
     } else if (dispText !== '') {
       seen.set(key, i);
     }
   }
 }
 
-// ─── 修正ポップアップ ───────────────────────────────────────────
-function jumpAndShowFix(lineIndex, warnIdx) {
-  jumpToLine(lineIndex);
-  const w = window._syntaxWarnings && window._syntaxWarnings[warnIdx];
-  const rawText = window._syntaxWarnText || '';
-  const lineText = rawText.split('\n')[lineIndex] || '';
-  const popup = document.getElementById('fix-popup');
-  const preview = document.getElementById('fix-popup-preview');
-  const btnsEl = document.getElementById('fix-popup-buttons');
-  preview.textContent = lineText;
-  btnsEl.innerHTML = '';
-  const fixes = (w && w.fixes) || [];
-  if (fixes.length === 0) {
-    popup.style.display = 'none';
-    return;
-  }
-  fixes.forEach((fix, fi) => {
-    const btn = document.createElement('button');
-    btn.className = 'fix-btn';
-    btn.textContent = fix.label;
-    btn.onclick = () => applyFix(lineIndex, fix);
-    btnsEl.appendChild(btn);
-  });
-  popup.style.display = 'block';
-  // i18n 属性を再適用（言語切り替え後でも対応できるよう）
-  popup.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (key) el.textContent = t(key);
-  });
-}
-
-function closeFixPopup() {
-  document.getElementById('fix-popup').style.display = 'none';
-}
-
-function applyFix(lineIndex, fix) {
-  // エディタのテキストを取得し、対象行を修正してセットし直す
-  const lines = getGiftText().split('\n');
-  if (lineIndex < 0 || lineIndex >= lines.length) return;
-  const oldLine = lines[lineIndex];
-
-  // 安全策：検出時の行（fix.lineText）と現在の行が一致しない場合は
-  // 位置指定が無効になっている可能性があるため中止する（誤置換を防ぐ）
-  if (fix.lineText != null && fix.lineText !== oldLine) {
-    closeFixPopup();
-    refreshSyntaxWarnings();
-    return;
-  }
-
-  const escMap = { '=':'\\=', '~':'\\~', '#':'\\#', '{':'\\{', '}':'\\}', ':':'\\:' };
-  const wideMap = { '=':'＝', '~':'〜', '#':'＃', '{':'｛', '}':'｝', ':':'：' };
-
-  if (fix.action === 'deleteLine') {
-    lines.splice(lineIndex, 1);
-  } else if (fix.action === 'replaceAt') {
-    // 指定インデックス1文字だけを fix.to に置換
-    const p = fix.pos;
-    if (p != null && p >= 0 && p < oldLine.length) {
-      lines[lineIndex] = oldLine.slice(0, p) + fix.to + oldLine.slice(p + 1);
-    }
-  } else if (fix.action === 'replaceAllAt') {
-    // 複数インデックスをまとめて置換（後ろから処理してインデックスのずれを防ぐ）
-    const ps = (fix.positions || []).slice().sort((a, b) => b - a);
-    let s = oldLine;
-    for (const p of ps) {
-      if (p < 0 || p >= s.length) continue;
-      const ch = s[p];
-      const rep = (fix.mode === 'fullwidth') ? (wideMap[ch] || ch) : (escMap[ch] || ('\\' + ch));
-      s = s.slice(0, p) + rep + s.slice(p + 1);
-    }
-    lines[lineIndex] = s;
-  }
-
-  const newText = lines.join('\n');
-  setGiftText(newText);
-  closeFixPopup();
-  refreshSyntaxWarnings();
-}
-
-// 構文チェックを再実行し、警告リストの再描画と次警告へのジャンプを行う
-function refreshSyntaxWarnings() {
-  const newText = getGiftText();
-  const issues = checkGIFTSyntax(newText);
-  window._syntaxWarnings = issues;
-  window._syntaxWarnText = newText;
-  renderIssues(issues);
-  const next = issues[0];
-  if (next) jumpToLine(next.line);
-}
-
-// error / warning を色分けして表示する共通レンダラ。
-// hasError=true（error が1つでもある）の場合は継続ボタンを出さない。
-// error が無く warning だけなら「警告を承知で続行」ボタンを表示する。
-function renderIssues(issues) {
-  const errEl = document.getElementById('parse-error');
-  const warnEl = document.getElementById('parse-warning');
-  const errors = issues.filter(x => x.severity === 'error');
-  const warns  = issues.filter(x => x.severity !== 'error');
-  window._syntaxWarnings = issues;
-
-  // エラー表示
-  if (errors.length > 0) {
-    let h = '<div class="issue-head">' + t('err.heading', {n:errors.length}) + '</div><ul>';
-    issues.forEach((w, wi) => {
-      if (w.severity !== 'error') return;
-      h += '<li><span class="warn-link" onclick="jumpAndShowFix('+w.line+','+wi+')">' + escHtml(w.message) + '</span></li>';
-    });
-    h += '</ul><div class="warn-continue">' + t('err.mustfix') + '</div>';
-    errEl.innerHTML = h; errEl.style.display = 'block';
-  } else {
-    errEl.style.display = 'none';
-  }
-
-  // 警告表示
-  if (warns.length > 0) {
-    let h = '<div class="issue-head">' + t('warn.heading', {n:warns.length}) + '</div><ul>';
-    issues.forEach((w, wi) => {
-      if (w.severity === 'error') return;
-      h += '<li><span class="warn-link" onclick="jumpAndShowFix('+w.line+','+wi+')">' + escHtml(w.message) + '</span></li>';
-    });
-    h += '</ul><div class="warn-continue">' + t('warn.continue') + '</div>';
-    // error が無いときだけ「承知で続行」ボタンを出す
-    if (errors.length === 0) {
-      h += '<div class="warn-actions"><button type="button" class="btn btn-secondary btn-sm" onclick="proceedToListAnyway()">' + escHtml(t('warn.proceed')) + '</button></div>';
-    }
-    warnEl.innerHTML = h; warnEl.style.display = 'block';
-  } else {
-    warnEl.style.display = 'none';
-  }
-  return { hasError: errors.length > 0, hasWarning: warns.length > 0 };
-}
-
-// 警告を承知のうえで一覧へ進む
-function proceedToListAnyway() {
-  const text = getGiftText();
-  const parsed = parseGIFT(text);
-  if (parsed.length === 0) {
-    const errEl = document.getElementById('parse-error');
-    errEl.textContent = t('err.noQuestions'); errEl.style.display = 'block';
-    return;
-  }
-  parsedQuestions = parsed;
-  document.getElementById('parse-warning').style.display = 'none';
-  renderList(parsed);
-  showScreen('screen-list');
-}
-
-
 function jumpToLine(lineIndex) {
-  // focus() 後にブラウザが1フレームかけてレイアウトを確定させてから
-  // 座標計算・スクロールを行う。こうしないとアウトラインペインから
-  // フォーカスが移った直後の初回クリックでスクロールが効かない。
+  const lines = getEditorLines();
   giftEditor.focus();
-  requestAnimationFrame(() => _jumpToLineAfterFocus(lineIndex));
-}
-
-function _jumpToLineAfterFocus(lineIndex) {
-  const edLines = getEditorLines();
-  if (lineIndex < 0 || lineIndex >= edLines.length) {
-    giftEditor.classList.add('flash');
-    setTimeout(() => giftEditor.classList.remove('flash'), 600);
-    return;
+  const ln = lines[lineIndex];
+  const node = ln && ln.firstNode;
+  if (node) {
+    const el = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
+    if (el && el.scrollIntoView) el.scrollIntoView({ block: 'center' });
+    try {
+      const range = document.createRange();
+      if (node.nodeType === Node.TEXT_NODE) range.setStart(node, 0);
+      else range.setStartBefore(node);
+      range.collapse(true);
+      const sel = window.getSelection();
+      sel.removeAllRanges(); sel.addRange(range);
+    } catch(e) {}
   }
-
-  // lineIndex 行を含む近傍で firstNode が非 null の行を探す
-  // （空行は firstNode が null になりうる）
-  let targetNode = null;
-  for (let delta = 0; delta <= 3; delta++) {
-    for (const d of (delta === 0 ? [0] : [delta, -delta])) {
-      const idx = lineIndex + d;
-      if (idx >= 0 && idx < edLines.length && edLines[idx].firstNode) {
-        targetNode = edLines[idx].firstNode;
-        break;
-      }
-    }
-    if (targetNode) break;
-  }
-
-  if (targetNode) {
-    if (targetNode.nodeType === Node.TEXT_NODE) {
-      scrollEditorToTextNode(targetNode, 0);
-      try {
-        const range = document.createRange();
-        range.setStart(targetNode, 0);
-        range.collapse(true);
-        const sel = window.getSelection();
-        sel.removeAllRanges(); sel.addRange(range);
-      } catch(e) {}
-    } else {
-      scrollEditorToNode(targetNode);
-      setCursorBefore(targetNode);
-    }
-  }
-
   giftEditor.classList.add('flash');
   setTimeout(() => giftEditor.classList.remove('flash'), 600);
-}
-
-// エディタ（overflow:auto）の scrollTop を直接調整して、
-// 指定テキストノードの offset 位置をエディタ表示領域の中央付近に表示する。
-function scrollEditorToTextNode(textNode, offset) {
-  try {
-    const range = document.createRange();
-    range.setStart(textNode, Math.min(offset, textNode.length));
-    range.collapse(true);
-    const rects = range.getClientRects();
-    if (rects && rects.length > 0) {
-      _scrollEditorToClientY(rects[0].top);
-      return;
-    }
-  } catch(e) {}
-  // rect が取れない場合は親要素にフォールバック
-  scrollEditorToNode(textNode.parentElement);
-}
-
-function scrollEditorToNode(node) {
-  if (!node) return;
-  try {
-    const el = (node.nodeType === Node.TEXT_NODE) ? node.parentElement : node;
-    if (!el || !el.getBoundingClientRect) return;
-    _scrollEditorToClientY(el.getBoundingClientRect().top);
-  } catch(e) {}
-}
-
-function _scrollEditorToClientY(clientY) {
-  // clientY: viewport 座標での y
-  // エディタ内相対 y（現スクロール量込み）を計算し中央に寄せる
-  const edRect = giftEditor.getBoundingClientRect();
-  const relY = clientY - edRect.top + giftEditor.scrollTop;
-  giftEditor.scrollTop = Math.max(0, relY - giftEditor.clientHeight / 3);
-}
-
-function setCursorBefore(node) {
-  try {
-    const range = document.createRange();
-    range.setStartBefore(node);
-    range.collapse(true);
-    const sel = window.getSelection();
-    sel.removeAllRanges(); sel.addRange(range);
-  } catch(e) {}
 }
 
 function shuffle(arr) {
@@ -4046,173 +3000,9 @@ function navMarkClass(q, r) {
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const screen = document.getElementById(id);
-  screen.classList.add('active');
-  scheduleMathTypeset(screen);
+  document.getElementById(id).classList.add('active');
 }
-function loadDefaultConfirm() {
-  const current = getGiftText().trim();
-  const isEmpty = current === '' || current === (DEFAULT_GIFT_ALL[currentLang] || '').trim();
-  if (!isEmpty && !window.confirm(t('confirm.loadDefault'))) return;
-  loadDefault();
-}
-
-function loadDefault() {
-  setGiftText(getDefaultGift());
-  // サンプル読み込み時はファイル名表示を消してデフォルトラベルに戻す
-  const label = document.getElementById('input-label');
-  if (label) { label.removeAttribute('data-i18n'); label.textContent = t('input.label'); label.setAttribute('data-i18n','input.label'); }
-}
-
-// ─── ツールバーメニュー ───────────────────────────────────────
-function toggleTbMenu(e) {
-  e.stopPropagation();
-  const menu = document.getElementById('tb-menu');
-  menu.classList.toggle('open');
-}
-function closeTbMenu() {
-  document.getElementById('tb-menu').classList.remove('open');
-}
-// メニュー外クリックで閉じる
-document.addEventListener('click', function(e) {
-  const wrap = document.querySelector('.tb-menu-wrap');
-  if (wrap && !wrap.contains(e.target)) closeTbMenu();
-});
-
-// アウトライン表示（toggle）
-function openOutline() {
-  const wrap = document.querySelector('.textarea-wrap');
-  const isOpen = wrap.classList.contains('outline-open');
-  if (isOpen) {
-    closeOutline();
-  } else {
-    setOutlineOpen(true);
-  }
-}
-
-function closeOutline() {
-  setOutlineOpen(false);
-}
-
-// アウトライン表示の ON/OFF を実際に適用し、状態を保存し、メニュー表示を更新する
-function setOutlineOpen(open) {
-  const wrap = document.querySelector('.textarea-wrap');
-  const pane = document.getElementById('outline-pane');
-  if (open) {
-    wrap.classList.add('outline-open');
-    pane.style.display = 'flex';
-    syncOutlineHeight();
-    updateOutline();
-    startOutlineHeightSync();
-  } else {
-    wrap.classList.remove('outline-open');
-    pane.style.display = 'none';
-    stopOutlineHeightSync();
-  }
-  // メニュー項目のチェック表示を更新
-  const menuBtn = document.getElementById('menu-outline-btn');
-  if (menuBtn) menuBtn.classList.toggle('menu-checked', open);
-  // 状態を保存
-  try { localStorage.setItem('giftchecker_outline', open ? '1' : '0'); } catch(e) {}
-}
-
-// アウトラインペインの高さをエディタに合わせる
-function syncOutlineHeight() {
-  const pane = document.getElementById('outline-pane');
-  if (!pane || pane.style.display === 'none') return;
-  const h = giftEditor.offsetHeight;
-  pane.style.height = h + 'px';
-}
-
-// ResizeObserver でエディタの縦幅変化を監視してアウトラインに反映
-let _outlineRO = null;
-let _lastOutlineText = null;   // アウトライン最終構築時のテキスト（変化検出用）
-function startOutlineHeightSync() {
-  if (_outlineRO) return;   // 既に起動中
-  if (typeof ResizeObserver === 'undefined') return;
-  _outlineRO = new ResizeObserver(() => syncOutlineHeight());
-  _outlineRO.observe(giftEditor);
-}
-function stopOutlineHeightSync() {
-  if (_outlineRO) { _outlineRO.disconnect(); _outlineRO = null; }
-}
-
-// アウトラインリストを現在のテキストから再構築する
-function updateOutline() {
-  const pane = document.getElementById('outline-pane');
-  if (!pane || pane.style.display === 'none') return;
-
-  const rawText = getGiftText();
-  // 内容が前回と同じならリスト再構築をスキップ（不要な再描画と、
-  // クリック中のボタン消失を防ぐ）
-  if (rawText === _lastOutlineText) return;
-  _lastOutlineText = rawText;
-
-  const listEl = document.getElementById('outline-list');
-  listEl.innerHTML = '';
-
-  // parseGIFT で問題一覧を取得
-  const qs = parseGIFT(rawText);
-  if (qs.length === 0) {
-    const li = document.createElement('li');
-    li.style.cssText = 'padding:8px 10px;font-size:0.75rem;color:var(--text-muted)';
-    li.textContent = '問題が見つかりません';
-    listEl.appendChild(li);
-    return;
-  }
-
-  // 各問題ブロックの先頭行番号を特定する。
-  // parseGIFT と同じ規則（コメント行は除去・$CATEGORY 行は空行扱い・空行で区切り）で
-  // ブロックを走査し、qs のインデックスに対応付ける。「:: タイトル ::」行だけを
-  // 数える方式だと、タイトルの無い問題が混ざったときに対応がずれるため。
-  const rawLines = rawText.split('\n');
-  const blockStarts = [];   // qs のインデックスに対応するブロック先頭行番号
-  let inBlock = false;
-  for (let li = 0; li < rawLines.length; li++) {
-    const raw = rawLines[li];
-    if (/^[ \t]*\/\//.test(raw)) continue;                    // コメント行（parseGIFT は除去する）
-    const content = /^\s*\$CATEGORY:/i.test(raw) ? '' : raw;   // カテゴリ行は空行扱い
-    if (content.trim() === '') { inBlock = false; continue; }  // 空行＝ブロック区切り
-    if (!inBlock) { blockStarts.push(li); inBlock = true; }
-  }
-
-  qs.forEach((q, idx) => {
-    const lineNo = blockStarts[idx] ?? 0;
-    const titleText = q.title ? stripRich(q.title) : t('outline.noTitle');
-    const li = document.createElement('li');
-    const btn = document.createElement('button');
-    btn.type = 'button';
-
-    const numSpan = document.createElement('span');
-    numSpan.className = 'outline-num';
-    numSpan.textContent = '[' + (idx + 1) + ']';
-
-    const titleSpan = document.createElement('span');
-    titleSpan.className = 'outline-item-title';
-    titleSpan.textContent = titleText;
-
-    btn.appendChild(numSpan);
-    btn.appendChild(titleSpan);
-    // click ではなく mousedown + preventDefault を使う。
-    // click だとエディタから blur → updateOutline でリスト再構築が走り、
-    // クリック対象のボタンが消えて初回クリックが成立しないため。
-    // preventDefault でフォーカス移動を抑止し blur を発生させない。
-    btn.addEventListener('mousedown', (e) => {
-      e.preventDefault();
-      jumpToOutlineItem(lineNo, btn);
-    });
-    li.appendChild(btn);
-    listEl.appendChild(li);
-  });
-}
-
-// アウトライン項目クリック：エディタ内の該当行にジャンプ
-function jumpToOutlineItem(lineIndex, btn) {
-  // active 状態を切り替え
-  document.querySelectorAll('#outline-list button').forEach(b => b.classList.remove('outline-active'));
-  btn.classList.add('outline-active');
-  jumpToLine(lineIndex);
-}
+function loadDefault() { setGiftText(getDefaultGift()); }
 function goToInput() { showScreen('screen-input'); }
 function goToList() { showScreen('screen-list'); }
 
@@ -4223,21 +3013,14 @@ function loadList() {
   const warnEl = document.getElementById('parse-warning');
   errEl.style.display = 'none'; warnEl.style.display = 'none';
   if (!text.trim()) { errEl.textContent = t('err.empty'); errEl.style.display = 'block'; return; }
-
-  const issues = checkGIFTSyntax(text);
-  window._syntaxWarnText = text;
-  closeFixPopup();
-
-  if (issues.length > 0) {
-    const { hasError } = renderIssues(issues);
-    jumpToLine(issues[0].line);
-    // error があれば一覧へ進めない。warning だけなら renderIssues が出す
-    // 「承知で続行」ボタンから proceedToListAnyway() で進める。
-    if (hasError) return;
-    // warning だけの場合も、ここでは自動で進まずユーザーの選択を待つ
-    return;
+  const syntaxWarnings = checkGIFTSyntax(text);
+  if (syntaxWarnings.length > 0) {
+    jumpToLine(syntaxWarnings[0].line);
+    let html = t('warn.heading', {n:syntaxWarnings.length}) + '<ul>';
+    syntaxWarnings.forEach(w => { html += '<li><span class="warn-link" onclick="jumpToLine('+w.line+')">'+escHtml(w.message)+'</span></li>'; });
+    html += '</ul><div class="warn-continue">' + t('warn.continue') + '</div>';
+    warnEl.innerHTML = html; warnEl.style.display = 'block'; return;
   }
-
   const parsed = parseGIFT(text);
   if (parsed.length === 0) { errEl.textContent = t('err.noQuestions'); errEl.style.display = 'block'; return; }
   parsedQuestions = parsed;
@@ -4363,7 +3146,7 @@ function exportQuizHtml() {
   const a = document.createElement('a');
   const d = new Date(); const z = x => String(x).padStart(2,'0');
   const ts = '' + d.getFullYear() + z(d.getMonth()+1) + z(d.getDate())
-                + '-' + z(d.getHours()) + z(d.getMinutes()) + z(d.getSeconds());
+                + z(d.getHours()) + z(d.getMinutes()) + z(d.getSeconds());
   a.href = url; a.download = 'quiz-' + ts + '.html';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 1000);
@@ -4454,14 +3237,6 @@ function exportAnswerBody(q, rich, esc) {
 }
 
 // 完全な単一 HTML ドキュメントを組み立てる（スタイル内包）
-
-function exportMathJaxHead() {
-  // TeX 表示が OFF のときはエクスポート HTML にも MathJax を埋め込まない
-  if (!window.GC_TEX_ENABLED) return '';
-  return '<script>window.MathJax={tex:{inlineMath:[["\\\\(","\\\\)"]],displayMath:[["$$","$$"],["\\\\[","\\\\]"]],processEscapes:true},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}};</' + 'script>\n'
-       + '<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></' + 'script>\n';
-}
-
 function exportHtmlShell(qHtml, aHtml) {
   const lang = currentLang;
   const title = t('export.docTitle');
@@ -4488,8 +3263,7 @@ function exportHtmlShell(qHtml, aHtml) {
   ].join('');
   return '<!DOCTYPE html>\n<html lang="' + lang + '">\n<head>\n<meta charset="UTF-8">\n'
     + '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
-    + '<title>' + escHtml(title) + '</title>\n<style>' + css + '</style>\n'
-    + exportMathJaxHead() + '</head>\n<body>\n'
+    + '<title>' + escHtml(title) + '</title>\n<style>' + css + '</style>\n</head>\n<body>\n'
     + '<h1>' + escHtml(title) + '</h1>\n'
     + '<h2>' + escHtml(t('export.questionsHeading')) + '</h2>\n' + qHtml
     + '<h2>' + escHtml(t('export.answersHeading')) + '</h2>\n' + aHtml
@@ -4581,7 +3355,6 @@ function renderQuestion() {
   else if (q.type === 'matching') renderMatchingUI(q, container, saved);
   else if (q.type === 'essay') renderEssayUI(q, container, saved);
   else if (q.type === 'description') renderDescriptionUI(q, container);
-  scheduleMathTypeset(document.getElementById('screen-question'));
 }
 
 function renderChoicesUI(q, container, isMulti, saved) {
@@ -4820,13 +3593,6 @@ function renderResult(q, result) {
   const total = questions.length, num = currentIdx + 1, isLast = num === total;
   document.getElementById('r-header-sub').textContent = t('q.subtitle', {num:num, total:total, cat:(q.category ? '　|　'+q.category : '')});
 
-  // 問題番号・タイトル・問題タイプバッジ
-  const tagEl = document.getElementById('result-tag');
-  const titleStr = q.title ? escHtml(stripRich(q.title)) : '';
-  tagEl.innerHTML = '<span class="result-tag-num">' + escHtml(t('q.num', {num:num, total:total})) + '</span>'
-    + (titleStr ? '<span class="result-tag-title">' + titleStr + '</span>' : '')
-    + '<span class="type-badge t-' + q.type + '">' + t(TYPE_LABELS[q.type]) + '</span>';
-
   const rh = document.getElementById('result-header');
   const badge = document.getElementById('result-badge');
   const verdict = document.getElementById('result-verdict');
@@ -5048,7 +3814,7 @@ function showScoreScreen() {
     html += '<tr class="' + ROW_CLS[cls] + ' list-row" onclick="showReviewDetail(' + i + ')" style="cursor:pointer" title="'+escAttr(t('list.rowReview'))+'">'
       + '<td style="text-align:center;color:var(--text-muted)">' + origNum + '</td>'
       + '<td><span class="type-badge t-' + q.type + '">' + t(TYPE_LABELS[q.type]) + '</span></td>'
-      + '<td><span class="list-title">' + escHtml(stripRich(q.title)) + '</span></td>'
+      + '<td><span class="list-title">' + escHtml(q.title) + '</span></td>'
       + '<td style="color:var(--text-muted);font-size:0.85rem">' + escHtml(preview) + '</td>'
       + '<td style="text-align:center;color:' + (q.generalFeedback ? 'var(--correct)' : 'var(--border)') + '">' + hasExpl + '</td>'
       + '<td class="score-mark ' + MARK_CLS[cls] + '" style="text-align:center">' + MARK[cls] + '</td>'
@@ -5099,7 +3865,7 @@ function buildResultExportSummaryHtml() {
     html += '<tr class="' + ROW_CLS[cls] + '">'
       + '<td style="text-align:center;color:var(--text-muted)">' + origNum + '</td>'
       + '<td><span class="type-badge t-' + q.type + '">' + escHtml(t(TYPE_LABELS[q.type])) + '</span></td>'
-      + '<td><span class="list-title">' + escHtml(stripRich(q.title)) + '</span></td>'
+      + '<td><span class="list-title">' + escHtml(q.title) + '</span></td>'
       + '<td style="color:var(--text-muted);font-size:0.85rem">' + escHtml(preview) + '</td>'
       + '<td style="text-align:center;color:' + (q.generalFeedback ? 'var(--correct)' : 'var(--border)') + '">' + hasExpl + '</td>'
       + '<td class="score-mark ' + MARK_CLS[cls] + '" style="text-align:center">' + MARK[cls] + '</td>'
@@ -5220,8 +3986,7 @@ function buildResultExportShell(summaryHtml, wrongHtml, ungradedHtml) {
 
   return '<!DOCTYPE html>\n<html lang="' + lang + '">\n<head>\n<meta charset="UTF-8">\n'
     + '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
-    + '<title>' + escHtml(title) + '</title>\n<style>' + css + '</style>\n'
-    + exportMathJaxHead() + '</head>\n<body>\n'
+    + '<title>' + escHtml(title) + '</title>\n<style>' + css + '</style>\n</head>\n<body>\n'
     + '<h1>' + escHtml(title) + '</h1>\n'
     + summaryHtml + '\n'
     + '<h2>' + escHtml(t('resultExport.wrongHeading')) + '</h2>\n' + wrongHtml + '\n'
@@ -5257,7 +4022,7 @@ function exportResultHtml() {
   const d = new Date();
   const z = n => String(n).padStart(2, '0');
   const ts = '' + d.getFullYear() + z(d.getMonth() + 1) + z(d.getDate())
-                + '-' + z(d.getHours()) + z(d.getMinutes()) + z(d.getSeconds());
+                + z(d.getHours()) + z(d.getMinutes()) + z(d.getSeconds());
   a.href = url; a.download = 'result-' + ts + '.html';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 1000);
@@ -5397,44 +4162,6 @@ setGiftText(getDefaultGift());
 })();
 
 // ═══════════════════════════════════════════════
-//  TeX 表示トグル（専用キー giftchecker_tex・既定 OFF）
-//  ページ読み込み時点で <head> が giftchecker_tex を読んで MathJax を読み込むため、
-//  変更は再読み込みで反映する。
-// ═══════════════════════════════════════════════
-(function() {
-  const el = document.getElementById('tex-toggle');
-  if (!el) return;
-  // 現在の保存値を反映（既定 OFF）
-  let enabled = false;
-  try { enabled = (localStorage.getItem('giftchecker_tex') === '1'); } catch(e) {}
-  el.checked = enabled;
-  // TeX が OFF のときは「TeX を画像化して GIFT 出力」メニューを無効表示にする
-  if (!enabled) {
-    const btn = document.querySelector('#tb-menu [data-i18n="menu.exportTexImg"]');
-    if (btn) { btn.style.opacity = '0.45'; btn.style.cursor = 'not-allowed'; btn.title = t('export.tex.disabled'); }
-  }
-  el.addEventListener('change', () => {
-    try { localStorage.setItem('giftchecker_tex', el.checked ? '1' : '0'); } catch(e) {}
-    // 再読み込みが必要な旨を案内し、希望すればその場で reload
-    if (window.confirm(t('tex.reloadNeeded'))) {
-      location.reload();
-    }
-  });
-})();
-
-// ═══════════════════════════════════════════════
-//  アウトライン表示の復元（既定：ON）
-// ═══════════════════════════════════════════════
-(function() {
-  let open = true;   // 既定で ON
-  try {
-    const saved = localStorage.getItem('giftchecker_outline');
-    if (saved !== null) open = (saved === '1');
-  } catch(e) {}
-  setOutlineOpen(open);
-})();
-
-// ═══════════════════════════════════════════════
 //  ドラッグ＆ドロップ読み込み
 // ═══════════════════════════════════════════════
 (function() {
@@ -5485,11 +4212,7 @@ setGiftText(getDefaultGift());
         if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1); // UTF-8 BOM 除去
         setGiftText(text);
         const label = document.querySelector('label[for="gift-input"]');
-        if (label) {
-          // ファイル名部分は text-transform: uppercase の影響を受けないようスパンで囲む
-          const prefix = t('input.label.loaded', {name:'\x00'}).split('\x00');
-          label.innerHTML = escHtml(prefix[0]) + '<span class="label-filename">' + escHtml(file.name) + '</span>' + escHtml(prefix[1] || '');
-        }
+        if (label) label.textContent = t('input.label.loaded', {name:file.name});
       };
       textReader.onerror = function() {
         errEl.textContent = t('err.readFail');
