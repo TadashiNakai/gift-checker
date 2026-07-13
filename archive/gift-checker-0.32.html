@@ -4482,9 +4482,10 @@ function exportHtmlShell(qHtml, aHtml) {
     '.q-block,.a-block{margin:0 0 8px;padding:0}',
     '.q-num,.a-num{font-weight:700;color:#2c5b8f}',
     '.q-text{}',
-    // 選択肢は横並び。入りきらなければ折り返すが、各選択肢の間隔を詰める
+    // 選択肢は横並び。入りきらなければ選択肢の境目で折り返し、
+    // 1つの選択肢が長い場合はその内部でも折り返す（印刷時に途切れないように）
     '.opts-inline{margin:2px 0 2px 1.4em}',
-    '.opts-inline .opt{white-space:nowrap;display:inline-block}',
+    '.opts-inline .opt{display:inline-block;white-space:normal;overflow-wrap:break-word;word-break:break-word;vertical-align:top}',
     '.opts-inline.pool{color:#555}',
     '.answer-blank{color:#888;margin-left:0.5em}',
     '.ans-opt{font-weight:600}',
