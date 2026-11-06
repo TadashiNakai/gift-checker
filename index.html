@@ -1311,7 +1311,7 @@ if (window.GC_TEX_ENABLED) {
 // ═══════════════════════════════════════════════
 //  バージョン（ここ1箇所で管理。全ヘッダーに反映される）
 // ═══════════════════════════════════════════════
-const APP_VERSION = '0.32';
+const APP_VERSION = '0.33';
 
 // ═══════════════════════════════════════════════
 //  i18n（日本語／英語の言語切り替え）
@@ -4319,6 +4319,16 @@ function circledNum(n) {
   if (n >= 36 && n <= 50) return String.fromCodePoint(0x32B1 + (n - 36));
   return '(' + n + ')';
 }
+// 過去問などで、すべての選択肢の本文が丸数字（①〜㊿）で始まっているか判定する。
+// circledNum() が返す文字範囲と揃えている。一部の選択肢だけの場合は false。
+const CIRCLED_NUM_HEAD_RE = /^[\u2460-\u2473\u3251-\u325F\u32B1-\u32BF]/;
+function hasOwnCircledNums(texts) {
+  return texts.length > 0 && texts.every(s => CIRCLED_NUM_HEAD_RE.test(stripRich(s)));
+}
+// HTML 出力で選択肢の前に付ける番号。本文に丸数字があれば二重にならないよう付けない。
+function optMark(idx, ownNums) {
+  return ownNums ? '' : circledNum(idx + 1);
+}
 function exportQuizHtml() {
   // 一覧画面のシャッフル設定を反映した順序・選択肢で問題を準備する
   const doShuffleQ = document.getElementById('shuffle-q-toggle').checked;
@@ -4384,8 +4394,9 @@ function exportQuestionBody(q, rich, esc) {
   const sep = t('export.optSep');   // 選択肢間の区切り（日本語=全角空白／英語=em space）
   if (q.type === 'mc' || q.type === 'multi') {
     // ①選択肢1　②選択肢2 … を区切りスペースで連結
+    const ownNums = hasOwnCircledNums(q.choices.map(c => c.text));
     const opts = q.choices.map((c, idx) =>
-      '<span class="opt">' + circledNum(idx + 1) + rich(c.text) + '</span>');
+      '<span class="opt">' + optMark(idx, ownNums) + rich(c.text) + '</span>');
     h += '<div class="opts-inline">' + opts.join(sep) + '</div>';
   } else if (q.type === 'truefalse') {
     const opts = [
@@ -4400,8 +4411,9 @@ function exportQuestionBody(q, rich, esc) {
     const rights = q._rightOrder || q.pairs.map(p => p.right);
     const leftOpts = lefts.map((l, idx) =>
       '<span class="opt">' + circledLetter(idx) + rich(l) + '</span>');
+    const ownNums = hasOwnCircledNums(rights);
     const rightOpts = rights.map((r, idx) =>
-      '<span class="opt">' + circledNum(idx + 1) + rich(r) + '</span>');
+      '<span class="opt">' + optMark(idx, ownNums) + rich(r) + '</span>');
     h += '<div class="opts-inline">' + leftOpts.join(sep) + '</div>'
        + '<div class="opts-inline pool">' + rightOpts.join(sep) + '</div>';
   } else if (q.type === 'short' || q.type === 'numerical' || q.type === 'essay') {
@@ -4422,9 +4434,10 @@ function exportAnswerBody(q, rich, esc) {
   const sep = t('export.optSep');   // 解答内の区切りも問題側と統一
   if (q.type === 'mc' || q.type === 'multi') {
     // 正解の選択肢を「①水星」のように丸数字つきで列挙
+    const ownNums = hasOwnCircledNums(q.choices.map(c => c.text));
     const cor = [];
     q.choices.forEach((c, idx) => {
-      if (c.correct) cor.push('<span class="ans-opt">' + circledNum(idx + 1) + rich(c.text) + '</span>');
+      if (c.correct) cor.push('<span class="ans-opt">' + optMark(idx, ownNums) + rich(c.text) + '</span>');
     });
     h += cor.join(sep);
   } else if (q.type === 'truefalse') {
@@ -4447,9 +4460,10 @@ function exportAnswerBody(q, rich, esc) {
   } else if (q.type === 'matching') {
     // 「Ⓐ→③セ氏度」形式。右候補の丸数字は q._rightOrder の位置から求める。
     const rights = q._rightOrder || q.pairs.map(p => p.right);
+    const ownNums = hasOwnCircledNums(rights);
     const parts = q.pairs.map((p, idx) => {
       const num = rights.indexOf(p.right);   // 提示順での位置（0-based）
-      const numMark = num >= 0 ? circledNum(num + 1) : '';
+      const numMark = num >= 0 ? optMark(num, ownNums) : '';
       return '<span class="ans-opt">' + circledLetter(idx) + '→' + numMark + rich(p.right) + '</span>';
     });
     h += parts.join(sep);
